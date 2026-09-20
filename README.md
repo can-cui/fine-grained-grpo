@@ -15,7 +15,17 @@ Fine-Grained-GRPO/
 ├── rewards/
 │   └── .gitkeep
 └── test/
-    └── ...
+    ├── intonation/
+    │   ├── tone80.txt
+    │   └── tone80_label.txt
+    ├── mos/
+    │   └── mos50.txt
+    ├── pause/
+    │   ├── test_l2.txt
+    │   └── test_l2_label.txt
+    └── pronunciation/
+        ├── test_280.txt
+        └── test280_label.txt
 ```
 
 ### `models/`
@@ -39,6 +49,10 @@ Contains 80 test sentences for evaluating word-level intonation.
 - `tone80.txt`: original test sentences.
 - `tone80_label.txt`: test sentences annotated with prosodic boundaries where a rising or falling intonation is expected.
 
+For example:
+
+```text
+After three hours of discussion↗, they finally reached a final decision on the matter↘.
 ```
 
 Here, `↗` and `↘` indicate the expected rising and falling intonation, respectively.
