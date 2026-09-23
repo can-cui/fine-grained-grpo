@@ -48,33 +48,3 @@
 48	We are supposed to meet at the front gate at noon, aren't we?
 49	Do you really believe that he will actually show up on time for the meeting tomorrow?
 50	Do you really think she will show up on time for the meeting, or should we just start without her now?
-51	Did you finish all your homework before dinner, but why are you still worried about IT?
-52	Are we meeting on Tuesday afternoon, when everyone is free, or should we push it back to Wednesday morning?
-53	Where did you get that amazing leather jacket, and how much did you pay for it in the end?
-54	Why would you ever consider buying that old car if it has so many mechanical problems waiting to happen?
-55	Why would you choose to stay in the city, or would you rather move to the country?
-56	Why are you still standing here doing nothing, and I really need your help right now.
-57	Do you want to go to the movies with us tonight, or would you rather stay home and watch a movie?
-58	Do you want to go out for dinner tonight, or I can just cook something at home.
-59	She's already left for the airport, hasn't she, and did she remember to take her passport?
-60	She is really good at playing the piano, isn't she, but I still think she needs more practice.
-61	You already knew about the surprise party, didn't you, but why didn't you tell me?
-62	You already ate dinner, didn't you, or are you still feeling hungry?
-63	Please give me a call as soon as you arrive at the train station downtown later this evening.
-64	The professor who teaches this course is really strict about deadlines, isn't he?
-65	What an absolutely incredible view we have from the top of this mountain right now!
-66	How quickly the time has passed since we last met each other six months ago!
-67	That was honestly the most delicious meal I have ever had in my entire life!
-68	Isn't she just the sweetest person you have ever met?
-69	You have such an amazing talent for playing the piano, and it absolutely blows my mind every single time!
-70	Well… you know… I've got a new job in a big engineering firm. It's a management position.
-71	 I'm not exactly sure. I think there's a problem with the engine. Err… I wonder if you could give me a ride to the hotel tomorrow morning.
-72	No, John will be back then, and he'll get me home. Thank you Michael.
-73	Hi everyone.
-74	No no, not tonight. Let me see if I can arrange another night.
-75	On this day, students may dress up in fun clothes and there will be a march around the school.
-76	Oh, well, Like boys at his age, you know, I can't get him to do his homework without a struggle.
-77	Alright.
-78	I know. You said that in the ad. Do I need work experience?
-79	Sure thing! Can I ask about the pay?
-80	Now, whenever England is playing a big match, red and white covers every inch of every pub, a symbol of hope—the English flag.
