@@ -1,0 +1,204 @@
+================================================================================
+Test Summary (exp8 span_tone 3-class)
+  ckpt:  /train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/checkpoints/best_exp8_span_tone_3class0625.pt
+  vocab: /train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/vocab.json
+  stats: /train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/stats.npz
+================================================================================
+
+[Angel_vc]  样本数: 6478, tone标注词数: 12710, break词数: 67805
+  === Break (binary) ===
+    Accuracy  : 0.9967
+    Precision : 0.9927
+    Recall    : 0.9897
+    F1        : 0.9912
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0       55003        92
+      gt=1         131     12579
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.6839
+    Precision(macro): 0.7115
+    Recall(macro)   : 0.6541
+    F1(macro)       : 0.6621
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.9173  Recall: 0.7391  F1: 0.8186
+    Falling -> Precision: 0.6396  Recall: 0.8882  F1: 0.7437
+    Flat    -> Precision: 0.5775  Recall: 0.3349  F1: 0.4239
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising       2317       425       393
+      gt=falling        90      5086       550
+      gt=flat          119      2441      1289
+  === Joint ===
+    word_joint_acc : 0.6770  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9381  (所有valid词)
+    sent_break_acc : 0.9741
+    sent_tone_acc  : 0.5360
+    sent_joint_acc : 0.5249
+  === Bad cases ===
+    break FP=92, FN=131, tone_wrong=4018
+
+[Matt_vc]  样本数: 6478, tone标注词数: 12710, break词数: 67805
+  === Break (binary) ===
+    Accuracy  : 0.9967
+    Precision : 0.9923
+    Recall    : 0.9900
+    F1        : 0.9911
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0       54997        98
+      gt=1         127     12583
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.6308
+    Precision(macro): 0.6522
+    Recall(macro)   : 0.6654
+    F1(macro)       : 0.6485
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.7754  Recall: 0.8501  F1: 0.8110
+    Falling -> Precision: 0.7031  Recall: 0.5009  F1: 0.5850
+    Flat    -> Precision: 0.4782  Recall: 0.6454  F1: 0.5494
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising       2665       196       274
+      gt=falling       422      2868      2436
+      gt=flat          350      1015      2484
+  === Joint ===
+    word_joint_acc : 0.6248  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9282  (所有valid词)
+    sent_break_acc : 0.9744
+    sent_tone_acc  : 0.4585
+    sent_joint_acc : 0.4500
+  === Bad cases ===
+    break FP=98, FN=127, tone_wrong=4693
+
+[vc_all_train]  样本数: 122430, tone标注词数: 239967, break词数: 1282848
+  === Break (binary) ===
+    Accuracy  : 0.9967
+    Precision : 0.9925
+    Recall    : 0.9896
+    F1        : 0.9911
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0     1041079      1802
+      gt=1        2486    237481
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.6551
+    Precision(macro): 0.6624
+    Recall(macro)   : 0.6555
+    F1(macro)       : 0.6587
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.8013  Recall: 0.7632  F1: 0.7818
+    Falling -> Precision: 0.6787  Recall: 0.6969  F1: 0.6877
+    Flat    -> Precision: 0.5071  Recall: 0.5064  F1: 0.5068
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising      44827      5308      8602
+      gt=falling      5419     75367     27364
+      gt=flat         5695     30376     37009
+  === Joint ===
+    word_joint_acc : 0.6484  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9328  (所有valid词)
+    sent_break_acc : 0.9745
+    sent_tone_acc  : 0.5000
+    sent_joint_acc : 0.4907
+  === Bad cases ===
+    break FP=1802, FN=2486, tone_wrong=82764
+
+[vc_all_val]  样本数: 6804, tone标注词数: 13797, break词数: 72597
+  === Break (binary) ===
+    Accuracy  : 0.9971
+    Precision : 0.9983
+    Recall    : 0.9864
+    F1        : 0.9923
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0       58777        23
+      gt=1         188     13609
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.6614
+    Precision(macro): 0.6669
+    Recall(macro)   : 0.6600
+    F1(macro)       : 0.6631
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.8092  Recall: 0.7625  F1: 0.7851
+    Falling -> Precision: 0.6928  Recall: 0.6899  F1: 0.6914
+    Flat    -> Precision: 0.4988  Recall: 0.5275  F1: 0.5128
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising       2706       300       543
+      gt=falling       351      4303      1583
+      gt=flat          287      1608      2116
+  === Joint ===
+    word_joint_acc : 0.6535  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9338  (所有valid词)
+    sent_break_acc : 0.9721
+    sent_tone_acc  : 0.4878
+    sent_joint_acc : 0.4771
+  === Bad cases ===
+    break FP=23, FN=188, tone_wrong=4672
+
+[Felix]  样本数: 1645, tone标注词数: 3874, break词数: 25736
+  === Break (binary) ===
+    Accuracy  : 0.9907
+    Precision : 0.9556
+    Recall    : 0.9840
+    F1        : 0.9696
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0       21685       177
+      gt=1          62      3812
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.5114
+    Precision(macro): 0.4153
+    Recall(macro)   : 0.4078
+    F1(macro)       : 0.4014
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.3286  Recall: 0.3002  F1: 0.3138
+    Falling -> Precision: 0.3297  Recall: 0.1835  F1: 0.2357
+    Flat    -> Precision: 0.5875  Recall: 0.7396  F1: 0.6548
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising        163        77       303
+      gt=falling       124       213       824
+      gt=flat          209       356      1605
+  === Joint ===
+    word_joint_acc : 0.5031  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9183  (所有valid词)
+    sent_break_acc : 0.8888
+    sent_tone_acc  : 0.2863
+    sent_joint_acc : 0.2638
+  === Bad cases ===
+    break FP=177, FN=62, tone_wrong=1893
+
+[Lyra]  样本数: 2089, tone标注词数: 4755, break词数: 29016
+  === Break (binary) ===
+    Accuracy  : 0.9915
+    Precision : 0.9667
+    Recall    : 0.9821
+    F1        : 0.9743
+    Confusion Matrix  (rows=gt, cols=pred):
+              pred=0    pred=1
+      gt=0       24100       161
+      gt=1          85      4670
+  === Tone Overall (3-class: rising vs falling vs flat) ===
+    Accuracy        : 0.6132
+    Precision(macro): 0.6017
+    Recall(macro)   : 0.5997
+    F1(macro)       : 0.5919
+  === Tone Per-Class ===
+    Rising  -> Precision: 0.5457  Recall: 0.5869  F1: 0.5655
+    Falling -> Precision: 0.6583  Recall: 0.4619  F1: 0.5429
+    Flat    -> Precision: 0.6010  Recall: 0.7503  F1: 0.6674
+    Confusion Matrix  (rows=gt, cols=pred):
+                rising   falling      flat
+      gt=rising        233        32       132
+      gt=falling        70       940      1025
+      gt=flat          124       456      1743
+  === Joint ===
+    word_joint_acc : 0.6021  (有tone标注的词, break+tone 都对)
+    word_all_acc   : 0.9292  (所有valid词)
+    sent_break_acc : 0.9014
+    sent_tone_acc  : 0.3863
+    sent_joint_acc : 0.3595
+  === Bad cases ===
+    break FP=161, FN=85, tone_wrong=1839

@@ -1,0 +1,46 @@
+======================================================================
+rising<->falling 误判词 (阈值 rising=0.95 falling=0.97 flat=0.9)
+人标=人工真值, 机标=模型预测; 仅统计过阈值进入 precision 分母的词
+======================================================================
+falling 误判成 rising (人标falling, 机标rising): 5 条
+rising 误判成 falling (人标rising, 机标falling): 0 条
+合计: 5 条
+
+======================================================================
+人标【falling】-> 机标【rising】  共 5 条
+======================================================================
+
+ID: 11070101
+句子: Susan, I heard you are going to France.# How long will you be staying there?
+[词#0] 词: Susan,
+人标: falling  |  机标: rising
+置信度: p_rising=0.9591, p_falling=0.0139, p_flat=0.0271
+
+ID: 14350201
+句子: No, what's it about?
+[词#3] 词: about?
+人标: falling  |  机标: rising
+置信度: p_rising=0.9829, p_falling=0.0162, p_flat=0.0010
+
+ID: 16090005
+句子: But I still have hours of revision to complete!
+[词#8] 词: complete!
+人标: falling  |  机标: rising
+置信度: p_rising=0.9554, p_falling=0.0428, p_flat=0.0018
+
+ID: 24800004
+句子: Yes.# I learned a lot about things like food tasting.# We had to taste a dish and try to judge whether the public would like it.# As the training got more complex,# it became harder to be in agreement# and there was even some tense moments.# But it was worth it in the end.
+[词#38] 词: agreement#
+人标: falling  |  机标: rising
+置信度: p_rising=0.9646, p_falling=0.0105, p_flat=0.0249
+
+ID: 50001290
+句子: Zero two two, five one two.
+[词#2] 词: two,
+人标: falling  |  机标: rising
+置信度: p_rising=0.9543, p_falling=0.0031, p_flat=0.0425
+
+======================================================================
+人标【rising】-> 机标【falling】  共 0 条
+======================================================================
+

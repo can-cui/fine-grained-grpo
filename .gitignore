@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Experiment / training outputs
+sweep_filter/
+result/
+errors/
+
+# Audio data
+*.wav
+*.flac
+*.mp3
+
+# WhisperX auxiliary files
+whisperX-main/
+
+# Temporary files
+*.log
+fbk_tmp/

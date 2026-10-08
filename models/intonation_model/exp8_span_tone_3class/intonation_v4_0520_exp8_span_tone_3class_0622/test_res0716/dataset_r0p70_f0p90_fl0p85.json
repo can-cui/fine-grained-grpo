@@ -1,0 +1,6477 @@
+[
+  {
+    "ID": "14890301",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_14890301.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_14890301.wav",
+    "words": [
+      "Maybe",
+      "you're",
+      "right.#",
+      "I",
+      "will",
+      "talk",
+      "to",
+      "her",
+      "sometime."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        410
+      ],
+      [
+        0,
+        54
+      ],
+      [
+        54,
+        84
+      ],
+      [
+        84,
+        219
+      ],
+      [
+        219,
+        231
+      ],
+      [
+        231,
+        261
+      ],
+      [
+        261,
+        291
+      ],
+      [
+        291,
+        309
+      ],
+      [
+        309,
+        332
+      ],
+      [
+        332,
+        410
+      ]
+    ]
+  },
+  {
+    "ID": "50000298",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000298.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000298.wav",
+    "words": [
+      "P."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        80
+      ],
+      [
+        0,
+        80
+      ]
+    ]
+  },
+  {
+    "ID": "27590283",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590283.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590283.wav",
+    "words": [
+      "She",
+      "rolled",
+      "up",
+      "her",
+      "sleeves",
+      "to",
+      "work."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        251
+      ],
+      [
+        0,
+        46
+      ],
+      [
+        46,
+        82
+      ],
+      [
+        82,
+        98
+      ],
+      [
+        98,
+        118
+      ],
+      [
+        118,
+        168
+      ],
+      [
+        168,
+        186
+      ],
+      [
+        186,
+        251
+      ]
+    ]
+  },
+  {
+    "ID": "22230201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_22230201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_22230201.wav",
+    "words": [
+      "Well,",
+      "extension",
+      "is",
+      "given",
+      "only",
+      "for",
+      "medical",
+      "reasons.#",
+      "What's",
+      "your",
+      "problem?"
+    ],
+    "tone_labels": [
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        559
+      ],
+      [
+        0,
+        116
+      ],
+      [
+        116,
+        178
+      ],
+      [
+        178,
+        192
+      ],
+      [
+        192,
+        246
+      ],
+      [
+        246,
+        278
+      ],
+      [
+        278,
+        300
+      ],
+      [
+        300,
+        345
+      ],
+      [
+        345,
+        443
+      ],
+      [
+        443,
+        467
+      ],
+      [
+        467,
+        487
+      ],
+      [
+        487,
+        559
+      ]
+    ]
+  },
+  {
+    "ID": "21780969",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780969.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780969.wav",
+    "words": [
+      "Our",
+      "home?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        105
+      ],
+      [
+        0,
+        46
+      ],
+      [
+        46,
+        105
+      ]
+    ]
+  },
+  {
+    "ID": "21780522",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780522.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780522.wav",
+    "words": [
+      "He",
+      "has",
+      "called",
+      "you,",
+      "hasn't",
+      "he?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        223
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        48
+      ],
+      [
+        48,
+        84
+      ],
+      [
+        84,
+        102
+      ],
+      [
+        102,
+        179
+      ],
+      [
+        179,
+        223
+      ]
+    ]
+  },
+  {
+    "ID": "27580244",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580244.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580244.wav",
+    "words": [
+      "She",
+      "won't",
+      "tell",
+      "anyone,",
+      "will",
+      "she?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        229
+      ],
+      [
+        0,
+        36
+      ],
+      [
+        36,
+        66
+      ],
+      [
+        66,
+        102
+      ],
+      [
+        102,
+        149
+      ],
+      [
+        149,
+        177
+      ],
+      [
+        177,
+        229
+      ]
+    ]
+  },
+  {
+    "ID": "60000328",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000328.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000328.wav",
+    "words": [
+      "During",
+      "the",
+      "peace",
+      "negotiations,#",
+      "mediators",
+      "worked",
+      "to",
+      "build",
+      "trust",
+      "between",
+      "the",
+      "opposing",
+      "parties,#",
+      "helped",
+      "each",
+      "side",
+      "understand",
+      "the",
+      "other's",
+      "perspective,#",
+      "and",
+      "proposed",
+      "creative",
+      "solutions",
+      "to",
+      "seemingly",
+      "impossible",
+      "deadlocks."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        1478
+      ],
+      [
+        0,
+        52
+      ],
+      [
+        52,
+        66
+      ],
+      [
+        66,
+        100
+      ],
+      [
+        100,
+        262
+      ],
+      [
+        262,
+        332
+      ],
+      [
+        332,
+        360
+      ],
+      [
+        360,
+        376
+      ],
+      [
+        376,
+        408
+      ],
+      [
+        408,
+        455
+      ],
+      [
+        455,
+        497
+      ],
+      [
+        497,
+        515
+      ],
+      [
+        515,
+        565
+      ],
+      [
+        565,
+        669
+      ],
+      [
+        669,
+        703
+      ],
+      [
+        703,
+        729
+      ],
+      [
+        729,
+        781
+      ],
+      [
+        781,
+        841
+      ],
+      [
+        841,
+        859
+      ],
+      [
+        859,
+        891
+      ],
+      [
+        891,
+        1021
+      ],
+      [
+        1021,
+        1033
+      ],
+      [
+        1033,
+        1087
+      ],
+      [
+        1087,
+        1146
+      ],
+      [
+        1146,
+        1216
+      ],
+      [
+        1216,
+        1240
+      ],
+      [
+        1240,
+        1310
+      ],
+      [
+        1310,
+        1380
+      ],
+      [
+        1380,
+        1478
+      ]
+    ]
+  },
+  {
+    "ID": "20291101",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_20291101.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_20291101.wav",
+    "words": [
+      "okay."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        76
+      ],
+      [
+        0,
+        76
+      ]
+    ]
+  },
+  {
+    "ID": "60000370",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000370.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000370.wav",
+    "words": [
+      "The",
+      "museum",
+      "displays",
+      "ancient",
+      "pottery,",
+      "Renaissance",
+      "paintings,",
+      "and",
+      "modern",
+      "sculptures."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      0,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        663
+      ],
+      [
+        0,
+        32
+      ],
+      [
+        32,
+        94
+      ],
+      [
+        94,
+        168
+      ],
+      [
+        168,
+        200
+      ],
+      [
+        200,
+        312
+      ],
+      [
+        312,
+        374
+      ],
+      [
+        374,
+        493
+      ],
+      [
+        493,
+        513
+      ],
+      [
+        513,
+        563
+      ],
+      [
+        563,
+        663
+      ]
+    ]
+  },
+  {
+    "ID": "27580367",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580367.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580367.wav",
+    "words": [
+      "Rain",
+      "again?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        134
+      ],
+      [
+        0,
+        53
+      ],
+      [
+        53,
+        134
+      ]
+    ]
+  },
+  {
+    "ID": "40000474",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000474.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000474.wav",
+    "words": [
+      "His",
+      "amazing",
+      "goal",
+      "is",
+      "worthy",
+      "of",
+      "recall."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        296
+      ],
+      [
+        0,
+        36
+      ],
+      [
+        36,
+        85
+      ],
+      [
+        85,
+        139
+      ],
+      [
+        139,
+        151
+      ],
+      [
+        151,
+        202
+      ],
+      [
+        202,
+        220
+      ],
+      [
+        220,
+        296
+      ]
+    ]
+  },
+  {
+    "ID": "27580087",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580087.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580087.wav",
+    "words": [
+      "Do",
+      "you",
+      "want",
+      "to",
+      "lead",
+      "or",
+      "follow?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        239
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        40
+      ],
+      [
+        40,
+        58
+      ],
+      [
+        58,
+        76
+      ],
+      [
+        76,
+        152
+      ],
+      [
+        152,
+        172
+      ],
+      [
+        172,
+        239
+      ]
+    ]
+  },
+  {
+    "ID": "60000382",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000382.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000382.wav",
+    "words": [
+      "A",
+      "successful",
+      "business",
+      "requires",
+      "hard",
+      "work,",
+      "smart",
+      "decisions,",
+      "and",
+      "a",
+      "bit",
+      "of",
+      "luck."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        646
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        102
+      ],
+      [
+        102,
+        154
+      ],
+      [
+        154,
+        218
+      ],
+      [
+        218,
+        255
+      ],
+      [
+        255,
+        349
+      ],
+      [
+        349,
+        387
+      ],
+      [
+        387,
+        509
+      ],
+      [
+        509,
+        529
+      ],
+      [
+        529,
+        541
+      ],
+      [
+        541,
+        569
+      ],
+      [
+        569,
+        587
+      ],
+      [
+        587,
+        646
+      ]
+    ]
+  },
+  {
+    "ID": "27580252",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580252.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580252.wav",
+    "words": [
+      "You'd",
+      "like",
+      "some",
+      "tea,",
+      "wouldn't",
+      "you?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        207
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        58
+      ],
+      [
+        58,
+        80
+      ],
+      [
+        80,
+        118
+      ],
+      [
+        118,
+        157
+      ],
+      [
+        157,
+        207
+      ]
+    ]
+  },
+  {
+    "ID": "31010013",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_31010013.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_31010013.wav",
+    "words": [
+      "Just",
+      "enthusiasm",
+      "and",
+      "willingness",
+      "to",
+      "learn."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        322
+      ],
+      [
+        0,
+        46
+      ],
+      [
+        46,
+        159
+      ],
+      [
+        159,
+        179
+      ],
+      [
+        179,
+        244
+      ],
+      [
+        244,
+        260
+      ],
+      [
+        260,
+        322
+      ]
+    ]
+  },
+  {
+    "ID": "23760101",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_23760101.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_23760101.wav",
+    "words": [
+      "Anna,",
+      "do",
+      "you",
+      "know",
+      "Susan?"
+    ],
+    "tone_labels": [
+      0,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        242
+      ],
+      [
+        0,
+        105
+      ],
+      [
+        105,
+        125
+      ],
+      [
+        125,
+        143
+      ],
+      [
+        143,
+        167
+      ],
+      [
+        167,
+        242
+      ]
+    ]
+  },
+  {
+    "ID": "21781067",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21781067.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21781067.wav",
+    "words": [
+      "That",
+      "easy?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        132
+      ],
+      [
+        0,
+        63
+      ],
+      [
+        63,
+        132
+      ]
+    ]
+  },
+  {
+    "ID": "12640301",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_12640301.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_12640301.wav",
+    "words": [
+      "Certainly,",
+      "ma'am."
+    ],
+    "tone_labels": [
+      1,
+      0
+    ],
+    "break_labels": [
+      1,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        148
+      ],
+      [
+        0,
+        85
+      ],
+      [
+        85,
+        148
+      ]
+    ]
+  },
+  {
+    "ID": "27590139",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590139.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590139.wav",
+    "words": [
+      "Remember",
+      "to",
+      "bolt",
+      "the",
+      "door",
+      "at",
+      "night."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        233
+      ],
+      [
+        0,
+        64
+      ],
+      [
+        64,
+        80
+      ],
+      [
+        80,
+        111
+      ],
+      [
+        111,
+        125
+      ],
+      [
+        125,
+        159
+      ],
+      [
+        159,
+        171
+      ],
+      [
+        171,
+        233
+      ]
+    ]
+  },
+  {
+    "ID": "50000094",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000094.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000094.wav",
+    "words": [
+      "Join!"
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        98
+      ],
+      [
+        0,
+        98
+      ]
+    ]
+  },
+  {
+    "ID": "50001393",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50001393.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50001393.wav",
+    "words": [
+      "Two",
+      "eight",
+      "four,",
+      "five",
+      "three",
+      "two."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        349
+      ],
+      [
+        0,
+        38
+      ],
+      [
+        38,
+        98
+      ],
+      [
+        98,
+        188
+      ],
+      [
+        188,
+        238
+      ],
+      [
+        238,
+        282
+      ],
+      [
+        282,
+        349
+      ]
+    ]
+  },
+  {
+    "ID": "30170013",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30170013.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30170013.wav",
+    "words": [
+      "They",
+      "will",
+      "have",
+      "more",
+      "freedom",
+      "in",
+      "answering."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        257
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        48
+      ],
+      [
+        48,
+        74
+      ],
+      [
+        74,
+        106
+      ],
+      [
+        106,
+        161
+      ],
+      [
+        161,
+        183
+      ],
+      [
+        183,
+        257
+      ]
+    ]
+  },
+  {
+    "ID": "20780101",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_20780101.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_20780101.wav",
+    "words": [
+      "Good",
+      "morning,",
+      "madam.#",
+      "I",
+      "am",
+      "your",
+      "guide",
+      "for",
+      "this",
+      "trip."
+    ],
+    "tone_labels": [
+      -1,
+      2,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        371
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        68
+      ],
+      [
+        68,
+        176
+      ],
+      [
+        176,
+        192
+      ],
+      [
+        192,
+        206
+      ],
+      [
+        206,
+        228
+      ],
+      [
+        228,
+        272
+      ],
+      [
+        272,
+        292
+      ],
+      [
+        292,
+        317
+      ],
+      [
+        317,
+        371
+      ]
+    ]
+  },
+  {
+    "ID": "21780893",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780893.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780893.wav",
+    "words": [
+      "My",
+      "day?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        106
+      ],
+      [
+        0,
+        41
+      ],
+      [
+        41,
+        106
+      ]
+    ]
+  },
+  {
+    "ID": "50000098",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000098.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000098.wav",
+    "words": [
+      "Close."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        106
+      ],
+      [
+        0,
+        106
+      ]
+    ]
+  },
+  {
+    "ID": "21780999",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780999.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780999.wav",
+    "words": [
+      "Your",
+      "opinion?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        112
+      ],
+      [
+        0,
+        39
+      ],
+      [
+        39,
+        112
+      ]
+    ]
+  },
+  {
+    "ID": "30080009",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30080009.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30080009.wav",
+    "words": [
+      "If",
+      "you've",
+      "ever",
+      "felt",
+      "that",
+      "there",
+      "is",
+      "more",
+      "to",
+      "life",
+      "than",
+      "boring",
+      "jobs,#",
+      "then",
+      "why",
+      "not",
+      "subscribe",
+      "to",
+      "it?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        595
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        62
+      ],
+      [
+        62,
+        90
+      ],
+      [
+        90,
+        122
+      ],
+      [
+        122,
+        140
+      ],
+      [
+        140,
+        166
+      ],
+      [
+        166,
+        182
+      ],
+      [
+        182,
+        210
+      ],
+      [
+        210,
+        228
+      ],
+      [
+        228,
+        258
+      ],
+      [
+        258,
+        278
+      ],
+      [
+        278,
+        316
+      ],
+      [
+        316,
+        413
+      ],
+      [
+        413,
+        435
+      ],
+      [
+        435,
+        459
+      ],
+      [
+        459,
+        483
+      ],
+      [
+        483,
+        533
+      ],
+      [
+        533,
+        555
+      ],
+      [
+        555,
+        595
+      ]
+    ]
+  },
+  {
+    "ID": "27590443",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590443.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590443.wav",
+    "words": [
+      "The",
+      "insect",
+      "is",
+      "only",
+      "five",
+      "millimeters",
+      "long."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        313
+      ],
+      [
+        0,
+        32
+      ],
+      [
+        32,
+        92
+      ],
+      [
+        92,
+        110
+      ],
+      [
+        110,
+        142
+      ],
+      [
+        142,
+        184
+      ],
+      [
+        184,
+        251
+      ],
+      [
+        251,
+        313
+      ]
+    ]
+  },
+  {
+    "ID": "40000515",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000515.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000515.wav",
+    "words": [
+      "The",
+      "neighbors",
+      "are",
+      "having",
+      "a",
+      "loud",
+      "row."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        265
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        86
+      ],
+      [
+        86,
+        102
+      ],
+      [
+        102,
+        134
+      ],
+      [
+        134,
+        154
+      ],
+      [
+        154,
+        199
+      ],
+      [
+        199,
+        265
+      ]
+    ]
+  },
+  {
+    "ID": "21781003",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21781003.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21781003.wav",
+    "words": [
+      "Worth",
+      "it?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        92
+      ],
+      [
+        0,
+        49
+      ],
+      [
+        49,
+        92
+      ]
+    ]
+  },
+  {
+    "ID": "14430301",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_14430301.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_14430301.wav",
+    "words": [
+      "No",
+      "problem."
+    ],
+    "tone_labels": [
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        110
+      ],
+      [
+        0,
+        35
+      ],
+      [
+        35,
+        110
+      ]
+    ]
+  },
+  {
+    "ID": "21780638",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780638.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780638.wav",
+    "words": [
+      "Was",
+      "the",
+      "movie",
+      "funny",
+      "or",
+      "boring?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        253
+      ],
+      [
+        0,
+        32
+      ],
+      [
+        32,
+        42
+      ],
+      [
+        42,
+        80
+      ],
+      [
+        80,
+        167
+      ],
+      [
+        167,
+        183
+      ],
+      [
+        183,
+        253
+      ]
+    ]
+  },
+  {
+    "ID": "40000565",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000565.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000565.wav",
+    "words": [
+      "His",
+      "comment",
+      "is",
+      "an",
+      "insult."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        201
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        95
+      ],
+      [
+        95,
+        109
+      ],
+      [
+        109,
+        125
+      ],
+      [
+        125,
+        201
+      ]
+    ]
+  },
+  {
+    "ID": "27580197",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580197.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580197.wav",
+    "words": [
+      "Did",
+      "the",
+      "strategy",
+      "work",
+      "or",
+      "backfire?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        257
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        38
+      ],
+      [
+        38,
+        94
+      ],
+      [
+        94,
+        161
+      ],
+      [
+        161,
+        175
+      ],
+      [
+        175,
+        257
+      ]
+    ]
+  },
+  {
+    "ID": "27580381",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580381.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580381.wav",
+    "words": [
+      "Still",
+      "open?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        118
+      ],
+      [
+        0,
+        57
+      ],
+      [
+        57,
+        118
+      ]
+    ]
+  },
+  {
+    "ID": "50000095",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000095.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000095.wav",
+    "words": [
+      "Bold."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        92
+      ],
+      [
+        0,
+        92
+      ]
+    ]
+  },
+  {
+    "ID": "30820011",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30820011.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30820011.wav",
+    "words": [
+      "Indian",
+      "films",
+      "are",
+      "also",
+      "enjoyed",
+      "outside",
+      "India."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        360
+      ],
+      [
+        0,
+        60
+      ],
+      [
+        60,
+        111
+      ],
+      [
+        111,
+        135
+      ],
+      [
+        135,
+        175
+      ],
+      [
+        175,
+        237
+      ],
+      [
+        237,
+        302
+      ],
+      [
+        302,
+        360
+      ]
+    ]
+  },
+  {
+    "ID": "50000155",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000155.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000155.wav",
+    "words": [
+      "Design!"
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        108
+      ],
+      [
+        0,
+        108
+      ]
+    ]
+  },
+  {
+    "ID": "10490201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_10490201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_10490201.wav",
+    "words": [
+      "Why?#",
+      "Has",
+      "he",
+      "been",
+      "into",
+      "your",
+      "flower",
+      "garden",
+      "again?"
+    ],
+    "tone_labels": [
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        401
+      ],
+      [
+        0,
+        96
+      ],
+      [
+        96,
+        120
+      ],
+      [
+        120,
+        142
+      ],
+      [
+        142,
+        187
+      ],
+      [
+        187,
+        217
+      ],
+      [
+        217,
+        243
+      ],
+      [
+        243,
+        289
+      ],
+      [
+        289,
+        339
+      ],
+      [
+        339,
+        401
+      ]
+    ]
+  },
+  {
+    "ID": "27590104",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590104.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590104.wav",
+    "words": [
+      "Heath",
+      "plants",
+      "thrive",
+      "in",
+      "poor",
+      "soil."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        262
+      ],
+      [
+        0,
+        42
+      ],
+      [
+        42,
+        89
+      ],
+      [
+        89,
+        145
+      ],
+      [
+        145,
+        161
+      ],
+      [
+        161,
+        198
+      ],
+      [
+        198,
+        262
+      ]
+    ]
+  },
+  {
+    "ID": "21780527",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780527.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780527.wav",
+    "words": [
+      "It",
+      "doesn't",
+      "work,",
+      "does",
+      "it?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        193
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        68
+      ],
+      [
+        68,
+        124
+      ],
+      [
+        124,
+        158
+      ],
+      [
+        158,
+        193
+      ]
+    ]
+  },
+  {
+    "ID": "21780657",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780657.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780657.wav",
+    "words": [
+      "This",
+      "Friday?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        125
+      ],
+      [
+        0,
+        50
+      ],
+      [
+        50,
+        125
+      ]
+    ]
+  },
+  {
+    "ID": "50000416",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000416.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000416.wav",
+    "words": [
+      "O",
+      "J",
+      "V."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        127
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        63
+      ],
+      [
+        63,
+        127
+      ]
+    ]
+  },
+  {
+    "ID": "50000261",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000261.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000261.wav",
+    "words": [
+      "Absolutely!"
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        124
+      ],
+      [
+        0,
+        124
+      ]
+    ]
+  },
+  {
+    "ID": "21780795",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780795.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780795.wav",
+    "words": [
+      "Her",
+      "opinion?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        110
+      ],
+      [
+        0,
+        31
+      ],
+      [
+        31,
+        110
+      ]
+    ]
+  },
+  {
+    "ID": "27580387",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580387.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580387.wav",
+    "words": [
+      "Your",
+      "final",
+      "answer?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        147
+      ],
+      [
+        0,
+        40
+      ],
+      [
+        40,
+        84
+      ],
+      [
+        84,
+        147
+      ]
+    ]
+  },
+  {
+    "ID": "27590007",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590007.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590007.wav",
+    "words": [
+      "The",
+      "storefront",
+      "looks",
+      "modern."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        204
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        99
+      ],
+      [
+        99,
+        134
+      ],
+      [
+        134,
+        204
+      ]
+    ]
+  },
+  {
+    "ID": "21780507",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780507.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780507.wav",
+    "words": [
+      "They",
+      "have",
+      "already",
+      "left,",
+      "haven't",
+      "they?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        247
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        58
+      ],
+      [
+        58,
+        104
+      ],
+      [
+        104,
+        165
+      ],
+      [
+        165,
+        197
+      ],
+      [
+        197,
+        247
+      ]
+    ]
+  },
+  {
+    "ID": "20640801",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_20640801.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_20640801.wav",
+    "words": [
+      "I",
+      "just",
+      "found",
+      "it",
+      "online."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        181
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        52
+      ],
+      [
+        52,
+        85
+      ],
+      [
+        85,
+        105
+      ],
+      [
+        105,
+        181
+      ]
+    ]
+  },
+  {
+    "ID": "50001023",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50001023.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50001023.wav",
+    "words": [
+      "Twenty-fifth,",
+      "six",
+      "hundred",
+      "and",
+      "sixth."
+    ],
+    "tone_labels": [
+      0,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        339
+      ],
+      [
+        0,
+        156
+      ],
+      [
+        156,
+        189
+      ],
+      [
+        189,
+        245
+      ],
+      [
+        245,
+        269
+      ],
+      [
+        269,
+        339
+      ]
+    ]
+  },
+  {
+    "ID": "50000017",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000017.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000017.wav",
+    "words": [
+      "Fearful."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        98
+      ],
+      [
+        0,
+        98
+      ]
+    ]
+  },
+  {
+    "ID": "12430201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_12430201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_12430201.wav",
+    "words": [
+      "I'm",
+      "sorry",
+      "you",
+      "feel",
+      "that",
+      "way,#",
+      "but",
+      "my",
+      "mother",
+      "insists",
+      "that",
+      "he",
+      "come."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        571
+      ],
+      [
+        0,
+        50
+      ],
+      [
+        50,
+        108
+      ],
+      [
+        108,
+        134
+      ],
+      [
+        134,
+        170
+      ],
+      [
+        170,
+        196
+      ],
+      [
+        196,
+        276
+      ],
+      [
+        276,
+        300
+      ],
+      [
+        300,
+        326
+      ],
+      [
+        326,
+        382
+      ],
+      [
+        382,
+        470
+      ],
+      [
+        470,
+        490
+      ],
+      [
+        490,
+        508
+      ],
+      [
+        508,
+        571
+      ]
+    ]
+  },
+  {
+    "ID": "50000171",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000171.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000171.wav",
+    "words": [
+      "Do",
+      "good."
+    ],
+    "tone_labels": [
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        118
+      ],
+      [
+        0,
+        49
+      ],
+      [
+        49,
+        118
+      ]
+    ]
+  },
+  {
+    "ID": "40000601",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000601.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000601.wav",
+    "words": [
+      "He",
+      "is",
+      "a",
+      "rebel",
+      "in",
+      "his",
+      "youth."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        197
+      ],
+      [
+        0,
+        34
+      ],
+      [
+        34,
+        52
+      ],
+      [
+        52,
+        64
+      ],
+      [
+        64,
+        113
+      ],
+      [
+        113,
+        125
+      ],
+      [
+        125,
+        145
+      ],
+      [
+        145,
+        197
+      ]
+    ]
+  },
+  {
+    "ID": "50000243",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000243.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000243.wav",
+    "words": [
+      "Trust",
+      "fully."
+    ],
+    "tone_labels": [
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        133
+      ],
+      [
+        0,
+        62
+      ],
+      [
+        62,
+        133
+      ]
+    ]
+  },
+  {
+    "ID": "24480501",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_24480501.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_24480501.wav",
+    "words": [
+      "Really?#",
+      "I",
+      "don't",
+      "know",
+      "her.#",
+      "Can",
+      "you",
+      "give",
+      "a",
+      "description",
+      "of",
+      "her?"
+    ],
+    "tone_labels": [
+      0,
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        448
+      ],
+      [
+        0,
+        108
+      ],
+      [
+        108,
+        118
+      ],
+      [
+        118,
+        142
+      ],
+      [
+        142,
+        165
+      ],
+      [
+        165,
+        241
+      ],
+      [
+        241,
+        265
+      ],
+      [
+        265,
+        283
+      ],
+      [
+        283,
+        313
+      ],
+      [
+        313,
+        321
+      ],
+      [
+        321,
+        393
+      ],
+      [
+        393,
+        403
+      ],
+      [
+        403,
+        448
+      ]
+    ]
+  },
+  {
+    "ID": "30680016",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30680016.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30680016.wav",
+    "words": [
+      "On",
+      "the",
+      "days,",
+      "you're",
+      "not",
+      "pushing",
+      "yourself",
+      "hard."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        288
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        46
+      ],
+      [
+        46,
+        80
+      ],
+      [
+        80,
+        107
+      ],
+      [
+        107,
+        131
+      ],
+      [
+        131,
+        173
+      ],
+      [
+        173,
+        222
+      ],
+      [
+        222,
+        288
+      ]
+    ]
+  },
+  {
+    "ID": "50000208",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000208.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000208.wav",
+    "words": [
+      "Harvest."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        107
+      ],
+      [
+        0,
+        107
+      ]
+    ]
+  },
+  {
+    "ID": "21781061",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21781061.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21781061.wav",
+    "words": [
+      "My",
+      "mistake?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        120
+      ],
+      [
+        0,
+        37
+      ],
+      [
+        37,
+        120
+      ]
+    ]
+  },
+  {
+    "ID": "13110201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_13110201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_13110201.wav",
+    "words": [
+      "Uh,",
+      "I",
+      "ran",
+      "out",
+      "of",
+      "the",
+      "house",
+      "so",
+      "fast",
+      "in",
+      "the",
+      "morning.#",
+      "I",
+      "forgot",
+      "it."
+    ],
+    "tone_labels": [
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        606
+      ],
+      [
+        0,
+        134
+      ],
+      [
+        134,
+        152
+      ],
+      [
+        152,
+        201
+      ],
+      [
+        201,
+        225
+      ],
+      [
+        225,
+        239
+      ],
+      [
+        239,
+        257
+      ],
+      [
+        257,
+        301
+      ],
+      [
+        301,
+        331
+      ],
+      [
+        331,
+        383
+      ],
+      [
+        383,
+        399
+      ],
+      [
+        399,
+        413
+      ],
+      [
+        413,
+        496
+      ],
+      [
+        496,
+        512
+      ],
+      [
+        512,
+        564
+      ],
+      [
+        564,
+        606
+      ]
+    ]
+  },
+  {
+    "ID": "30980002",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30980002.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30980002.wav",
+    "words": [
+      "Our",
+      "yearly",
+      "young",
+      "person's",
+      "short",
+      "story",
+      "competition",
+      "is",
+      "open",
+      "now."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        508
+      ],
+      [
+        0,
+        36
+      ],
+      [
+        36,
+        88
+      ],
+      [
+        88,
+        122
+      ],
+      [
+        122,
+        179
+      ],
+      [
+        179,
+        215
+      ],
+      [
+        215,
+        257
+      ],
+      [
+        257,
+        387
+      ],
+      [
+        387,
+        413
+      ],
+      [
+        413,
+        447
+      ],
+      [
+        447,
+        508
+      ]
+    ]
+  },
+  {
+    "ID": "21780809",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780809.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780809.wav",
+    "words": [
+      "The",
+      "bigger",
+      "one?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        113
+      ],
+      [
+        0,
+        26
+      ],
+      [
+        26,
+        68
+      ],
+      [
+        68,
+        113
+      ]
+    ]
+  },
+  {
+    "ID": "12070101",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_12070101.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_12070101.wav",
+    "words": [
+      "Where's",
+      "our",
+      "son,",
+      "Julie?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        193
+      ],
+      [
+        0,
+        54
+      ],
+      [
+        54,
+        76
+      ],
+      [
+        76,
+        123
+      ],
+      [
+        123,
+        193
+      ]
+    ]
+  },
+  {
+    "ID": "40000636",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000636.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000636.wav",
+    "words": [
+      "The",
+      "hospital",
+      "transport",
+      "is",
+      "for",
+      "invalids."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        281
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        80
+      ],
+      [
+        80,
+        144
+      ],
+      [
+        144,
+        159
+      ],
+      [
+        159,
+        183
+      ],
+      [
+        183,
+        281
+      ]
+    ]
+  },
+  {
+    "ID": "30530001",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30530001.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30530001.wav",
+    "words": [
+      "Thank",
+      "you",
+      "for",
+      "calling",
+      "Cornford",
+      "Museum."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        278
+      ],
+      [
+        0,
+        38
+      ],
+      [
+        38,
+        54
+      ],
+      [
+        54,
+        72
+      ],
+      [
+        72,
+        123
+      ],
+      [
+        123,
+        193
+      ],
+      [
+        193,
+        278
+      ]
+    ]
+  },
+  {
+    "ID": "14850201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_14850201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_14850201.wav",
+    "words": [
+      "Why",
+      "do",
+      "you",
+      "bother",
+      "with",
+      "it",
+      "when",
+      "you",
+      "can",
+      "get",
+      "very",
+      "good",
+      "deals",
+      "on",
+      "second-hand",
+      "cars",
+      "these",
+      "days?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        689
+      ],
+      [
+        0,
+        50
+      ],
+      [
+        50,
+        70
+      ],
+      [
+        70,
+        92
+      ],
+      [
+        92,
+        142
+      ],
+      [
+        142,
+        174
+      ],
+      [
+        174,
+        196
+      ],
+      [
+        196,
+        222
+      ],
+      [
+        222,
+        242
+      ],
+      [
+        242,
+        268
+      ],
+      [
+        268,
+        306
+      ],
+      [
+        306,
+        350
+      ],
+      [
+        350,
+        377
+      ],
+      [
+        377,
+        443
+      ],
+      [
+        443,
+        467
+      ],
+      [
+        467,
+        543
+      ],
+      [
+        543,
+        589
+      ],
+      [
+        589,
+        615
+      ],
+      [
+        615,
+        689
+      ]
+    ]
+  },
+  {
+    "ID": "21780843",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780843.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780843.wav",
+    "words": [
+      "Her",
+      "answer?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        112
+      ],
+      [
+        0,
+        47
+      ],
+      [
+        47,
+        112
+      ]
+    ]
+  },
+  {
+    "ID": "50000707",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000707.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000707.wav",
+    "words": [
+      "Ninety",
+      "thousand,",
+      "thirty-eight",
+      "thousand",
+      "and",
+      "ninety."
+    ],
+    "tone_labels": [
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        404
+      ],
+      [
+        0,
+        62
+      ],
+      [
+        62,
+        175
+      ],
+      [
+        175,
+        245
+      ],
+      [
+        245,
+        310
+      ],
+      [
+        310,
+        332
+      ],
+      [
+        332,
+        404
+      ]
+    ]
+  },
+  {
+    "ID": "40000496",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000496.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000496.wav",
+    "words": [
+      "Could",
+      "you",
+      "relay",
+      "this",
+      "message",
+      "to",
+      "the",
+      "manager?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        275
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        50
+      ],
+      [
+        50,
+        96
+      ],
+      [
+        96,
+        124
+      ],
+      [
+        124,
+        170
+      ],
+      [
+        170,
+        186
+      ],
+      [
+        186,
+        198
+      ],
+      [
+        198,
+        275
+      ]
+    ]
+  },
+  {
+    "ID": "40000526",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000526.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000526.wav",
+    "words": [
+      "Experts",
+      "will",
+      "survey",
+      "the",
+      "damage",
+      "after",
+      "the",
+      "storm."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        329
+      ],
+      [
+        0,
+        66
+      ],
+      [
+        66,
+        90
+      ],
+      [
+        90,
+        134
+      ],
+      [
+        134,
+        148
+      ],
+      [
+        148,
+        224
+      ],
+      [
+        224,
+        252
+      ],
+      [
+        252,
+        267
+      ],
+      [
+        267,
+        329
+      ]
+    ]
+  },
+  {
+    "ID": "27590460",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27590460.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27590460.wav",
+    "words": [
+      "Suzy",
+      "is",
+      "coming",
+      "over",
+      "later."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        245
+      ],
+      [
+        0,
+        82
+      ],
+      [
+        82,
+        96
+      ],
+      [
+        96,
+        147
+      ],
+      [
+        147,
+        167
+      ],
+      [
+        167,
+        245
+      ]
+    ]
+  },
+  {
+    "ID": "12480401",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_12480401.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_12480401.wav",
+    "words": [
+      "No,",
+      "but",
+      "I",
+      "don't",
+      "mind",
+      "having",
+      "one",
+      "more",
+      "jacket."
+    ],
+    "tone_labels": [
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        378
+      ],
+      [
+        0,
+        90
+      ],
+      [
+        90,
+        116
+      ],
+      [
+        116,
+        135
+      ],
+      [
+        135,
+        169
+      ],
+      [
+        169,
+        211
+      ],
+      [
+        211,
+        263
+      ],
+      [
+        263,
+        281
+      ],
+      [
+        281,
+        309
+      ],
+      [
+        309,
+        378
+      ]
+    ]
+  },
+  {
+    "ID": "20160801",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_20160801.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_20160801.wav",
+    "words": [
+      "That's",
+      "something.#",
+      "What",
+      "about",
+      "the",
+      "other",
+      "one?"
+    ],
+    "tone_labels": [
+      -1,
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        317
+      ],
+      [
+        0,
+        54
+      ],
+      [
+        54,
+        163
+      ],
+      [
+        163,
+        191
+      ],
+      [
+        191,
+        221
+      ],
+      [
+        221,
+        243
+      ],
+      [
+        243,
+        273
+      ],
+      [
+        273,
+        317
+      ]
+    ]
+  },
+  {
+    "ID": "31000007",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_31000007.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_31000007.wav",
+    "words": [
+      "One",
+      "member",
+      "of",
+      "our",
+      "group",
+      "returned",
+      "home",
+      "within",
+      "the",
+      "first",
+      "week."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        404
+      ],
+      [
+        0,
+        42
+      ],
+      [
+        42,
+        86
+      ],
+      [
+        86,
+        105
+      ],
+      [
+        105,
+        119
+      ],
+      [
+        119,
+        159
+      ],
+      [
+        159,
+        205
+      ],
+      [
+        205,
+        253
+      ],
+      [
+        253,
+        292
+      ],
+      [
+        292,
+        310
+      ],
+      [
+        310,
+        344
+      ],
+      [
+        344,
+        404
+      ]
+    ]
+  },
+  {
+    "ID": "21780550",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780550.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780550.wav",
+    "words": [
+      "You",
+      "don't",
+      "like",
+      "horror",
+      "movies,",
+      "do",
+      "you?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      2,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        247
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        52
+      ],
+      [
+        52,
+        80
+      ],
+      [
+        80,
+        116
+      ],
+      [
+        116,
+        175
+      ],
+      [
+        175,
+        199
+      ],
+      [
+        199,
+        247
+      ]
+    ]
+  },
+  {
+    "ID": "60000204",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000204.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000204.wav",
+    "words": [
+      "The",
+      "candidate's",
+      "platform",
+      "focused",
+      "on",
+      "improving",
+      "public",
+      "education,#",
+      "creating",
+      "affordable",
+      "housing",
+      "initiatives,#",
+      "and",
+      "investing",
+      "in",
+      "sustainable",
+      "infrastructure",
+      "projects."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        1062
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        84
+      ],
+      [
+        84,
+        148
+      ],
+      [
+        148,
+        196
+      ],
+      [
+        196,
+        212
+      ],
+      [
+        212,
+        264
+      ],
+      [
+        264,
+        306
+      ],
+      [
+        306,
+        435
+      ],
+      [
+        435,
+        491
+      ],
+      [
+        491,
+        547
+      ],
+      [
+        547,
+        599
+      ],
+      [
+        599,
+        725
+      ],
+      [
+        725,
+        741
+      ],
+      [
+        741,
+        811
+      ],
+      [
+        811,
+        825
+      ],
+      [
+        825,
+        906
+      ],
+      [
+        906,
+        974
+      ],
+      [
+        974,
+        1062
+      ]
+    ]
+  },
+  {
+    "ID": "50000511",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000511.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000511.wav",
+    "words": [
+      "Z",
+      "R",
+      "V",
+      "E"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        173
+      ],
+      [
+        0,
+        70
+      ],
+      [
+        70,
+        85
+      ],
+      [
+        85,
+        121
+      ],
+      [
+        121,
+        173
+      ]
+    ]
+  },
+  {
+    "ID": "60000079",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000079.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000079.wav",
+    "words": [
+      "The",
+      "modern",
+      "apartment",
+      "offers",
+      "spacious",
+      "rooms,",
+      "large",
+      "windows,",
+      "and",
+      "a",
+      "private",
+      "balcony."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        653
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        68
+      ],
+      [
+        68,
+        134
+      ],
+      [
+        134,
+        176
+      ],
+      [
+        176,
+        232
+      ],
+      [
+        232,
+        341
+      ],
+      [
+        341,
+        379
+      ],
+      [
+        379,
+        499
+      ],
+      [
+        499,
+        517
+      ],
+      [
+        517,
+        527
+      ],
+      [
+        527,
+        573
+      ],
+      [
+        573,
+        653
+      ]
+    ]
+  },
+  {
+    "ID": "40000258",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000258.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000258.wav",
+    "words": [
+      "How",
+      "did",
+      "Warren",
+      "Buffet",
+      "get",
+      "started",
+      "investing",
+      "in",
+      "the",
+      "stock",
+      "market?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        403
+      ],
+      [
+        0,
+        28
+      ],
+      [
+        28,
+        46
+      ],
+      [
+        46,
+        86
+      ],
+      [
+        86,
+        130
+      ],
+      [
+        130,
+        154
+      ],
+      [
+        154,
+        211
+      ],
+      [
+        211,
+        279
+      ],
+      [
+        279,
+        291
+      ],
+      [
+        291,
+        305
+      ],
+      [
+        305,
+        335
+      ],
+      [
+        335,
+        403
+      ]
+    ]
+  },
+  {
+    "ID": "23910701",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_23910701.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_23910701.wav",
+    "words": [
+      "What",
+      "are",
+      "you",
+      "going",
+      "to",
+      "do",
+      "to",
+      "him",
+      "if",
+      "you",
+      "find",
+      "him?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        300
+      ],
+      [
+        0,
+        36
+      ],
+      [
+        36,
+        52
+      ],
+      [
+        52,
+        68
+      ],
+      [
+        68,
+        97
+      ],
+      [
+        97,
+        115
+      ],
+      [
+        115,
+        141
+      ],
+      [
+        141,
+        159
+      ],
+      [
+        159,
+        194
+      ],
+      [
+        194,
+        206
+      ],
+      [
+        206,
+        224
+      ],
+      [
+        224,
+        256
+      ],
+      [
+        256,
+        300
+      ]
+    ]
+  },
+  {
+    "ID": "30340001",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30340001.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30340001.wav",
+    "words": [
+      "Sammy",
+      "Vance",
+      "knows",
+      "there's",
+      "nothing",
+      "worse",
+      "than",
+      "feeling",
+      "left",
+      "out."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        420
+      ],
+      [
+        0,
+        60
+      ],
+      [
+        60,
+        108
+      ],
+      [
+        108,
+        137
+      ],
+      [
+        137,
+        181
+      ],
+      [
+        181,
+        229
+      ],
+      [
+        229,
+        265
+      ],
+      [
+        265,
+        293
+      ],
+      [
+        293,
+        335
+      ],
+      [
+        335,
+        374
+      ],
+      [
+        374,
+        420
+      ]
+    ]
+  },
+  {
+    "ID": "30720009",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30720009.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30720009.wav",
+    "words": [
+      "They",
+      "are",
+      "full",
+      "of",
+      "facts."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        205
+      ],
+      [
+        0,
+        42
+      ],
+      [
+        42,
+        64
+      ],
+      [
+        64,
+        105
+      ],
+      [
+        105,
+        123
+      ],
+      [
+        123,
+        205
+      ]
+    ]
+  },
+  {
+    "ID": "50001186",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50001186.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50001186.wav",
+    "words": [
+      "Seven",
+      "three",
+      "eight",
+      "seven,",
+      "eight",
+      "triple",
+      "five."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        390
+      ],
+      [
+        0,
+        62
+      ],
+      [
+        62,
+        121
+      ],
+      [
+        121,
+        155
+      ],
+      [
+        155,
+        246
+      ],
+      [
+        246,
+        280
+      ],
+      [
+        280,
+        326
+      ],
+      [
+        326,
+        390
+      ]
+    ]
+  },
+  {
+    "ID": "21780683",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780683.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780683.wav",
+    "words": [
+      "My",
+      "turn?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        105
+      ],
+      [
+        0,
+        44
+      ],
+      [
+        44,
+        105
+      ]
+    ]
+  },
+  {
+    "ID": "50000794",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000794.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000794.wav",
+    "words": [
+      "Fifty",
+      "million,",
+      "seventy-eight",
+      "million",
+      "and",
+      "fifty."
+    ],
+    "tone_labels": [
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        400
+      ],
+      [
+        0,
+        52
+      ],
+      [
+        52,
+        157
+      ],
+      [
+        157,
+        239
+      ],
+      [
+        239,
+        310
+      ],
+      [
+        310,
+        330
+      ],
+      [
+        330,
+        400
+      ]
+    ]
+  },
+  {
+    "ID": "27580072",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580072.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580072.wav",
+    "words": [
+      "Do",
+      "you",
+      "listen",
+      "to",
+      "podcasts",
+      "or",
+      "audiobooks?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        328
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        50
+      ],
+      [
+        50,
+        82
+      ],
+      [
+        82,
+        96
+      ],
+      [
+        96,
+        197
+      ],
+      [
+        197,
+        219
+      ],
+      [
+        219,
+        328
+      ]
+    ]
+  },
+  {
+    "ID": "21780753",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780753.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780753.wav",
+    "words": [
+      "Too",
+      "sweet?"
+    ],
+    "tone_labels": [
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        112
+      ],
+      [
+        0,
+        43
+      ],
+      [
+        43,
+        112
+      ]
+    ]
+  },
+  {
+    "ID": "14610101",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_14610101.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_14610101.wav",
+    "words": [
+      "Excuse",
+      "me,",
+      "can",
+      "you",
+      "do",
+      "me",
+      "a",
+      "favor?"
+    ],
+    "tone_labels": [
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        294
+      ],
+      [
+        0,
+        60
+      ],
+      [
+        60,
+        113
+      ],
+      [
+        113,
+        137
+      ],
+      [
+        137,
+        159
+      ],
+      [
+        159,
+        181
+      ],
+      [
+        181,
+        211
+      ],
+      [
+        211,
+        223
+      ],
+      [
+        223,
+        294
+      ]
+    ]
+  },
+  {
+    "ID": "14590201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_14590201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_14590201.wav",
+    "words": [
+      "A",
+      "party",
+      "on",
+      "a",
+      "weekday?#",
+      "Why",
+      "not",
+      "have",
+      "it",
+      "on",
+      "Saturday?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        430
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        86
+      ],
+      [
+        86,
+        102
+      ],
+      [
+        102,
+        114
+      ],
+      [
+        114,
+        223
+      ],
+      [
+        223,
+        249
+      ],
+      [
+        249,
+        277
+      ],
+      [
+        277,
+        305
+      ],
+      [
+        305,
+        327
+      ],
+      [
+        327,
+        345
+      ],
+      [
+        345,
+        430
+      ]
+    ]
+  },
+  {
+    "ID": "60000485",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000485.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000485.wav",
+    "words": [
+      "Laughter",
+      "brightens",
+      "days,",
+      "lightens",
+      "burdens,",
+      "and",
+      "warms",
+      "hearts."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      0,
+      -1,
+      0,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        533
+      ],
+      [
+        0,
+        70
+      ],
+      [
+        70,
+        126
+      ],
+      [
+        126,
+        224
+      ],
+      [
+        224,
+        276
+      ],
+      [
+        276,
+        379
+      ],
+      [
+        379,
+        397
+      ],
+      [
+        397,
+        447
+      ],
+      [
+        447,
+        533
+      ]
+    ]
+  },
+  {
+    "ID": "30630019",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30630019.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30630019.wav",
+    "words": [
+      "Thanks",
+      "again",
+      "for",
+      "watching",
+      "today."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        210
+      ],
+      [
+        0,
+        48
+      ],
+      [
+        48,
+        81
+      ],
+      [
+        81,
+        101
+      ],
+      [
+        101,
+        141
+      ],
+      [
+        141,
+        210
+      ]
+    ]
+  },
+  {
+    "ID": "50000284",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_50000284.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_50000284.wav",
+    "words": [
+      "B."
+    ],
+    "tone_labels": [
+      1
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        77
+      ],
+      [
+        0,
+        77
+      ]
+    ]
+  },
+  {
+    "ID": "60000495",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_60000495.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_60000495.wav",
+    "words": [
+      "The",
+      "mind",
+      "creates",
+      "ideas,",
+      "solves",
+      "problems,",
+      "and",
+      "shapes",
+      "destiny."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      0,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        558
+      ],
+      [
+        0,
+        32
+      ],
+      [
+        32,
+        72
+      ],
+      [
+        72,
+        126
+      ],
+      [
+        126,
+        249
+      ],
+      [
+        249,
+        295
+      ],
+      [
+        295,
+        406
+      ],
+      [
+        406,
+        426
+      ],
+      [
+        426,
+        472
+      ],
+      [
+        472,
+        558
+      ]
+    ]
+  },
+  {
+    "ID": "30440004",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_30440004.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_30440004.wav",
+    "words": [
+      "With",
+      "about",
+      "seven",
+      "hundred",
+      "meters",
+      "left,",
+      "Johnny,",
+      "the",
+      "younger",
+      "of",
+      "the",
+      "two",
+      "brothers,#",
+      "was",
+      "leading",
+      "by",
+      "some",
+      "distance."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1,
+      1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        781
+      ],
+      [
+        0,
+        38
+      ],
+      [
+        38,
+        80
+      ],
+      [
+        80,
+        122
+      ],
+      [
+        122,
+        154
+      ],
+      [
+        154,
+        196
+      ],
+      [
+        196,
+        282
+      ],
+      [
+        282,
+        361
+      ],
+      [
+        361,
+        381
+      ],
+      [
+        381,
+        427
+      ],
+      [
+        427,
+        441
+      ],
+      [
+        441,
+        457
+      ],
+      [
+        457,
+        479
+      ],
+      [
+        479,
+        571
+      ],
+      [
+        571,
+        595
+      ],
+      [
+        595,
+        637
+      ],
+      [
+        637,
+        665
+      ],
+      [
+        665,
+        695
+      ],
+      [
+        695,
+        781
+      ]
+    ]
+  },
+  {
+    "ID": "21150201",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21150201.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21150201.wav",
+    "words": [
+      "Mom,",
+      "will",
+      "grandpa",
+      "and",
+      "grandma",
+      "pick",
+      "us",
+      "up",
+      "at",
+      "London",
+      "Gatwick",
+      "Airport?"
+    ],
+    "tone_labels": [
+      2,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        518
+      ],
+      [
+        0,
+        116
+      ],
+      [
+        116,
+        140
+      ],
+      [
+        140,
+        203
+      ],
+      [
+        203,
+        215
+      ],
+      [
+        215,
+        269
+      ],
+      [
+        269,
+        299
+      ],
+      [
+        299,
+        321
+      ],
+      [
+        321,
+        339
+      ],
+      [
+        339,
+        355
+      ],
+      [
+        355,
+        393
+      ],
+      [
+        393,
+        443
+      ],
+      [
+        443,
+        518
+      ]
+    ]
+  },
+  {
+    "ID": "21240901",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21240901.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21240901.wav",
+    "words": [
+      "How",
+      "about",
+      "location?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        175
+      ],
+      [
+        0,
+        46
+      ],
+      [
+        46,
+        78
+      ],
+      [
+        78,
+        175
+      ]
+    ]
+  },
+  {
+    "ID": "27580445",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580445.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580445.wav",
+    "words": [
+      "You've",
+      "been",
+      "here",
+      "before?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        143
+      ],
+      [
+        0,
+        32
+      ],
+      [
+        32,
+        50
+      ],
+      [
+        50,
+        70
+      ],
+      [
+        70,
+        143
+      ]
+    ]
+  },
+  {
+    "ID": "21780642",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780642.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780642.wav",
+    "words": [
+      "Should",
+      "I",
+      "call",
+      "or",
+      "send",
+      "an",
+      "email?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        251
+      ],
+      [
+        0,
+        42
+      ],
+      [
+        42,
+        54
+      ],
+      [
+        54,
+        145
+      ],
+      [
+        145,
+        159
+      ],
+      [
+        159,
+        185
+      ],
+      [
+        185,
+        197
+      ],
+      [
+        197,
+        251
+      ]
+    ]
+  },
+  {
+    "ID": "40000553",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000553.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000553.wav",
+    "words": [
+      "Add",
+      "a",
+      "few",
+      "drops",
+      "of",
+      "vanilla",
+      "extract."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        292
+      ],
+      [
+        0,
+        36
+      ],
+      [
+        36,
+        52
+      ],
+      [
+        52,
+        84
+      ],
+      [
+        84,
+        135
+      ],
+      [
+        135,
+        149
+      ],
+      [
+        149,
+        213
+      ],
+      [
+        213,
+        292
+      ]
+    ]
+  },
+  {
+    "ID": "21780578",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_21780578.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_21780578.wav",
+    "words": [
+      "She",
+      "is",
+      "studying",
+      "hard,",
+      "isn't",
+      "she?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      1,
+      -1,
+      0
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        265
+      ],
+      [
+        0,
+        40
+      ],
+      [
+        40,
+        54
+      ],
+      [
+        54,
+        114
+      ],
+      [
+        114,
+        187
+      ],
+      [
+        187,
+        215
+      ],
+      [
+        215,
+        265
+      ]
+    ]
+  },
+  {
+    "ID": "40000319",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000319.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000319.wav",
+    "words": [
+      "I",
+      "like",
+      "to",
+      "collect",
+      "stamps."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      2
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        215
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        58
+      ],
+      [
+        58,
+        74
+      ],
+      [
+        74,
+        123
+      ],
+      [
+        123,
+        215
+      ]
+    ]
+  },
+  {
+    "ID": "27580033",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580033.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580033.wav",
+    "words": [
+      "Is",
+      "his",
+      "name",
+      "John",
+      "or",
+      "James?"
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        274
+      ],
+      [
+        0,
+        30
+      ],
+      [
+        30,
+        50
+      ],
+      [
+        50,
+        83
+      ],
+      [
+        83,
+        168
+      ],
+      [
+        168,
+        186
+      ],
+      [
+        186,
+        274
+      ]
+    ]
+  },
+  {
+    "ID": "27580333",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_27580333.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_27580333.wav",
+    "words": [
+      "Already?"
+    ],
+    "tone_labels": [
+      0
+    ],
+    "break_labels": [
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        96
+      ],
+      [
+        0,
+        96
+      ]
+    ]
+  },
+  {
+    "ID": "40000001",
+    "fbk": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Adrian/EnUs_kaoshiyuan_male_40000001.npy",
+    "wav_path": "/yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav/EnUs_kaoshiyuan_male_40000001.wav",
+    "words": [
+      "We",
+      "did",
+      "use",
+      "it",
+      "for",
+      "a",
+      "while."
+    ],
+    "tone_labels": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      1
+    ],
+    "break_labels": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "word_boundaries": [
+      [
+        0,
+        230
+      ],
+      [
+        0,
+        40
+      ],
+      [
+        40,
+        93
+      ],
+      [
+        93,
+        117
+      ],
+      [
+        117,
+        131
+      ],
+      [
+        131,
+        155
+      ],
+      [
+        155,
+        166
+      ],
+      [
+        166,
+        230
+      ]
+    ]
+  }
+]

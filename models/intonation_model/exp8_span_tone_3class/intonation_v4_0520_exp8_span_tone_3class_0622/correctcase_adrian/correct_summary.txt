@@ -1,0 +1,11 @@
+================================================================================
+Correct Case Summary (exp8 span_tone 3-class, tone-only, break ignored)
+  ckpt:   /train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/checkpoints/best_exp8_span_tone_3class0625.pt
+  gt_txt: /yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/tone_ori.txt
+================================================================================
+
+[adrian]  含tone标注句: 6478, tone全对句: 4940  (sent_tone_acc=0.7626)
+
+总正确句 (去重): 4940
+匹配到 GT 原文: 4940
+GT 中缺失:      0
