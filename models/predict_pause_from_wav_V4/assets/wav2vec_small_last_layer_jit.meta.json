@@ -1,0 +1,36 @@
+{
+  "checkpoint_arch": "wav2vec2",
+  "conv_kernels": [
+    10,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "conv_strides": [
+    5,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "fairseq_path": "/yrfs5/tts/sjliu18/02_front_end_tools/multiMFA_preL2_process/Pre_L123/iflytek-tts-exp/fairseq/__init__.py",
+  "feature_dim": 768,
+  "format_version": 3,
+  "python_version": "3.6.15",
+  "removed_weight_norm_modules": [
+    "encoder.transformer.pos_conv_embed.conv"
+  ],
+  "sample_rate": 16000,
+  "source_checkpoint": "/yrfs5/tts/ycxu5/Pre_L123/wav2vec_small/wav2vec_small.pt",
+  "source_checkpoint_sha256": "c66c39eaed1b79a61ea8573f71e08f6641ff156b6a8f458cfaab53877dfa4a26",
+  "torch_version": "1.10.1+cu102",
+  "torchaudio_version": "0.10.1+cu102",
+  "torchscript_sha256": "692c9b6ee8544065db1eb4bebf39718238022c8422c50e5a2a1a2f2d272f6203",
+  "trace_device": "cuda",
+  "weight_norm_max_abs_error": 0.0
+}

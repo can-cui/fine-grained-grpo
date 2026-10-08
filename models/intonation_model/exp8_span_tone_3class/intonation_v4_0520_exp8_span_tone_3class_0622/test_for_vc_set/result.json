@@ -1,0 +1,350 @@
+{
+  "ckpt": "/train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/checkpoints/best_exp8_span_tone_3class0625.pt",
+  "vocab": "/train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/vocab.json",
+  "stats": "/train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/stats.npz",
+  "encoder_type": "bilstm",
+  "results": {
+    "Angel_vc": {
+      "path": "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Angel_F_CZ.json",
+      "metrics": {
+        "break_acc": 0.996711156994322,
+        "break_prec": 0.9927393260200458,
+        "break_rec": 0.9896931549960661,
+        "break_f1": 0.9912139001615382,
+        "break_confusion_matrix": [
+          [
+            55003,
+            92
+          ],
+          [
+            131,
+            12579
+          ]
+        ],
+        "tone_acc": 0.6838709677419355,
+        "tone_prec_macro": 0.7114523255396925,
+        "tone_rec_macro": 0.6540654233991564,
+        "tone_f1_macro": 0.6620675651827532,
+        "tone_prec_rising": 0.9172604908946952,
+        "tone_rec_rising": 0.7390749601275917,
+        "tone_f1_rising": 0.8185832891715245,
+        "tone_prec_falling": 0.6395875251509054,
+        "tone_rec_falling": 0.88822913028292,
+        "tone_f1_falling": 0.743675976019886,
+        "tone_prec_flat": 0.5775089605734767,
+        "tone_rec_flat": 0.3348921797869577,
+        "tone_f1_flat": 0.4239434303568492,
+        "tone_confusion_matrix": [
+          [
+            2317,
+            425,
+            393
+          ],
+          [
+            90,
+            5086,
+            550
+          ],
+          [
+            119,
+            2441,
+            1289
+          ]
+        ],
+        "sent_break_acc": 0.9740660697746218,
+        "sent_tone_acc": 0.5359678913244829,
+        "sent_joint_acc": 0.5248533497993207,
+        "word_joint_acc": 0.6770259638080252,
+        "word_all_acc": 0.9381019098886513,
+        "n_sents": 6478,
+        "n_tone_words": 12710,
+        "n_break_words": 67805
+      }
+    },
+    "Matt_vc": {
+      "path": "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Matt_M_TY.json",
+      "metrics": {
+        "break_acc": 0.9966816606444953,
+        "break_prec": 0.9922719028467787,
+        "break_rec": 0.9900078678206137,
+        "break_f1": 0.9911385924146351,
+        "break_confusion_matrix": [
+          [
+            54997,
+            98
+          ],
+          [
+            127,
+            12583
+          ]
+        ],
+        "tone_acc": 0.6307631785995279,
+        "tone_prec_macro": 0.6522477155574463,
+        "tone_rec_macro": 0.6654384621789063,
+        "tone_f1_macro": 0.6484664299516366,
+        "tone_prec_rising": 0.7753855106197265,
+        "tone_rec_rising": 0.8500797448165869,
+        "tone_f1_rising": 0.8110164333536214,
+        "tone_prec_falling": 0.7031135082127973,
+        "tone_rec_falling": 0.5008732099196647,
+        "tone_f1_falling": 0.5850076491585926,
+        "tone_prec_flat": 0.4782441278398152,
+        "tone_rec_flat": 0.6453624318004677,
+        "tone_f1_flat": 0.549375207342696,
+        "tone_confusion_matrix": [
+          [
+            2665,
+            196,
+            274
+          ],
+          [
+            422,
+            2868,
+            2436
+          ],
+          [
+            350,
+            1015,
+            2484
+          ]
+        ],
+        "sent_break_acc": 0.9743748070392096,
+        "sent_tone_acc": 0.4584748379129361,
+        "sent_joint_acc": 0.4499845631367706,
+        "word_joint_acc": 0.6247836349331235,
+        "word_all_acc": 0.9282206326967037,
+        "n_sents": 6478,
+        "n_tone_words": 12710,
+        "n_break_words": 67805
+      }
+    },
+    "vc_all_train": {
+      "path": "/train29/tts/permanent/jyxu24/vc_data/split/train.json",
+      "metrics": {
+        "break_acc": 0.996657437202225,
+        "break_prec": 0.9924691683069837,
+        "break_rec": 0.9896402421999692,
+        "break_f1": 0.9910526864893062,
+        "break_confusion_matrix": [
+          [
+            1041079,
+            1802
+          ],
+          [
+            2486,
+            237481
+          ]
+        ],
+        "tone_acc": 0.6551025766042831,
+        "tone_prec_macro": 0.6623809469949812,
+        "tone_rec_macro": 0.6554913252544216,
+        "tone_f1_macro": 0.6587408911482967,
+        "tone_prec_rising": 0.801326397454461,
+        "tone_rec_rising": 0.7631816401927235,
+        "tone_f1_rising": 0.7817890092258323,
+        "tone_prec_falling": 0.6786701605568612,
+        "tone_rec_falling": 0.6968747110494683,
+        "tone_f1_falling": 0.6876519723906369,
+        "tone_prec_flat": 0.5071462829736211,
+        "tone_rec_flat": 0.5064176245210728,
+        "tone_f1_flat": 0.5067816918284208,
+        "tone_confusion_matrix": [
+          [
+            44827,
+            5308,
+            8602
+          ],
+          [
+            5419,
+            75367,
+            27364
+          ],
+          [
+            5695,
+            30376,
+            37009
+          ]
+        ],
+        "sent_break_acc": 0.9744507065261783,
+        "sent_tone_acc": 0.5000081679326962,
+        "sent_joint_acc": 0.4907457322551662,
+        "word_joint_acc": 0.6483516483516484,
+        "word_all_acc": 0.9328166704083415,
+        "n_sents": 122430,
+        "n_tone_words": 239967,
+        "n_break_words": 1282848
+      }
+    },
+    "vc_all_val": {
+      "path": "/train29/tts/permanent/jyxu24/vc_data/split/test.json",
+      "metrics": {
+        "break_acc": 0.9970935438103503,
+        "break_prec": 0.99831279342723,
+        "break_rec": 0.986373849387548,
+        "break_f1": 0.9923074118633562,
+        "break_confusion_matrix": [
+          [
+            58777,
+            23
+          ],
+          [
+            188,
+            13609
+          ]
+        ],
+        "tone_acc": 0.6613756613756614,
+        "tone_prec_macro": 0.6669449761026452,
+        "tone_rec_macro": 0.6599775212564402,
+        "tone_f1_macro": 0.6630945402704992,
+        "tone_prec_rising": 0.8092105263157895,
+        "tone_rec_rising": 0.7624683009298394,
+        "tone_f1_rising": 0.7851443493399101,
+        "tone_prec_falling": 0.6928030912896475,
+        "tone_rec_falling": 0.6899150232483566,
+        "tone_f1_falling": 0.6913560411311054,
+        "tone_prec_flat": 0.4988213107024988,
+        "tone_rec_flat": 0.5275492395911244,
+        "tone_f1_flat": 0.5127832303404822,
+        "tone_confusion_matrix": [
+          [
+            2706,
+            300,
+            543
+          ],
+          [
+            351,
+            4303,
+            1583
+          ],
+          [
+            287,
+            1608,
+            2116
+          ]
+        ],
+        "sent_break_acc": 0.9720752498530276,
+        "sent_tone_acc": 0.4878012933568489,
+        "sent_joint_acc": 0.47707231040564374,
+        "word_joint_acc": 0.6535478727259549,
+        "word_all_acc": 0.9338402413322865,
+        "n_sents": 6804,
+        "n_tone_words": 13797,
+        "n_break_words": 72597
+      }
+    },
+    "Felix": {
+      "path": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Felix_data.json",
+      "metrics": {
+        "break_acc": 0.9907133975753808,
+        "break_prec": 0.9556279769365755,
+        "break_rec": 0.9839958699019101,
+        "break_f1": 0.9696044766628513,
+        "break_confusion_matrix": [
+          [
+            21685,
+            177
+          ],
+          [
+            62,
+            3812
+          ]
+        ],
+        "tone_acc": 0.5113577697470315,
+        "tone_prec_macro": 0.41527736429220835,
+        "tone_rec_macro": 0.4077593435892955,
+        "tone_f1_macro": 0.4014492856165937,
+        "tone_prec_rising": 0.3286290322580645,
+        "tone_rec_rising": 0.3001841620626151,
+        "tone_f1_rising": 0.31376323387872956,
+        "tone_prec_falling": 0.32972136222910214,
+        "tone_rec_falling": 0.1834625322997416,
+        "tone_f1_falling": 0.23574986164914222,
+        "tone_prec_flat": 0.5874816983894583,
+        "tone_rec_flat": 0.7396313364055299,
+        "tone_f1_flat": 0.6548347613219094,
+        "tone_confusion_matrix": [
+          [
+            163,
+            77,
+            303
+          ],
+          [
+            124,
+            213,
+            824
+          ],
+          [
+            209,
+            356,
+            1605
+          ]
+        ],
+        "sent_break_acc": 0.8887537993920973,
+        "sent_tone_acc": 0.286322188449848,
+        "sent_joint_acc": 0.26382978723404255,
+        "word_joint_acc": 0.5030975735673723,
+        "word_all_acc": 0.9183245259558594,
+        "n_sents": 1645,
+        "n_tone_words": 3874,
+        "n_break_words": 25736
+      }
+    },
+    "Lyra": {
+      "path": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Lyra_data.json",
+      "metrics": {
+        "break_acc": 0.9915219189412737,
+        "break_prec": 0.9666735665493686,
+        "break_rec": 0.982124079915878,
+        "break_f1": 0.9743375756311288,
+        "break_confusion_matrix": [
+          [
+            24100,
+            161
+          ],
+          [
+            85,
+            4670
+          ]
+        ],
+        "tone_acc": 0.6132492113564669,
+        "tone_prec_macro": 0.6016550784625138,
+        "tone_rec_macro": 0.5997136945044791,
+        "tone_f1_macro": 0.5919494616485032,
+        "tone_prec_rising": 0.5456674473067916,
+        "tone_rec_rising": 0.5869017632241813,
+        "tone_f1_rising": 0.5655339805825242,
+        "tone_prec_falling": 0.6582633053221288,
+        "tone_rec_falling": 0.4619164619164619,
+        "tone_f1_falling": 0.5428818943112907,
+        "tone_prec_flat": 0.6010344827586207,
+        "tone_rec_flat": 0.7503228583727938,
+        "tone_f1_flat": 0.6674325100516945,
+        "tone_confusion_matrix": [
+          [
+            233,
+            32,
+            132
+          ],
+          [
+            70,
+            940,
+            1025
+          ],
+          [
+            124,
+            456,
+            1743
+          ]
+        ],
+        "sent_break_acc": 0.9013882240306367,
+        "sent_tone_acc": 0.38630923887027285,
+        "sent_joint_acc": 0.3595021541407372,
+        "word_joint_acc": 0.6021030494216614,
+        "word_all_acc": 0.9292459332781914,
+        "n_sents": 2089,
+        "n_tone_words": 4755,
+        "n_break_words": 29016
+      }
+    }
+  }
+}

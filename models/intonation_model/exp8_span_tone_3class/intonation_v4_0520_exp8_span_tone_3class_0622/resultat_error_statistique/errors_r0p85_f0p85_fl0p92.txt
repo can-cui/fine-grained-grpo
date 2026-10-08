@@ -1,0 +1,1183 @@
+======================================================================
+机标->人标 误判词 (阈值 rising=0.85 falling=0.85 flat=0.92)
+人标=人工真值, 机标=模型预测; 仅统计过阈值进入 precision 分母的词
+======================================================================
+机标->人标 误判统计:
+  rising->falling: 15
+  rising->flat: 26
+  falling->rising: 1
+  falling->flat: 97
+  flat->rising: 6
+  flat->falling: 46
+合计: 191 条
+
+======================================================================
+机标【rising】-> 人标【falling】  共 15 条
+======================================================================
+
+ID: 11070101
+句子: Susan, I heard you are going to France.# How long will you be staying there?
+[词#0] 词: Susan,
+机标: rising  |  人标: falling
+置信度: p_rising=0.9591, p_falling=0.0139, p_flat=0.0271
+
+ID: 13430301
+句子: Okay, my friend, sort it out between you.
+[词#2] 词: friend,
+机标: rising  |  人标: falling
+置信度: p_rising=0.8958, p_falling=0.0124, p_flat=0.0918
+
+ID: 14350201
+句子: No, what's it about?
+[词#3] 词: about?
+机标: rising  |  人标: falling
+置信度: p_rising=0.9829, p_falling=0.0162, p_flat=0.0010
+
+ID: 15430201
+句子: No, I want to spend the night at grandma's house.
+[词#0] 词: No,
+机标: rising  |  人标: falling
+置信度: p_rising=0.9446, p_falling=0.0036, p_flat=0.0517
+
+ID: 16090005
+句子: But I still have hours of revision to complete!
+[词#8] 词: complete!
+机标: rising  |  人标: falling
+置信度: p_rising=0.9554, p_falling=0.0428, p_flat=0.0018
+
+ID: 20560901
+句子: That's very interesting.# When will you be available for employment?
+[词#9] 词: employment?
+机标: rising  |  人标: falling
+置信度: p_rising=0.9075, p_falling=0.0895, p_flat=0.0031
+
+ID: 21390102
+句子: People don't have to deal with forest fires or droughts here,# but as you can see from where the seawater hits the land,# this coastline has been badly damaged.
+[词#22] 词: land,#
+机标: rising  |  人标: falling
+置信度: p_rising=0.9008, p_falling=0.0362, p_flat=0.0630
+
+ID: 24430601
+句子: That's fun.# Good, who else?
+[词#1] 词: fun.#
+机标: rising  |  人标: falling
+置信度: p_rising=0.9321, p_falling=0.0262, p_flat=0.0417
+
+ID: 24800004
+句子: Yes.# I learned a lot about things like food tasting.# We had to taste a dish and try to judge whether the public would like it.# As the training got more complex,# it became harder to be in agreement# and there was even some tense moments.# But it was worth it in the end.
+[词#38] 词: agreement#
+机标: rising  |  人标: falling
+置信度: p_rising=0.9646, p_falling=0.0105, p_flat=0.0249
+
+ID: 30550009
+句子: It is believed that by walking the birds,# they can get used to living in cages around people.
+[词#7] 词: birds,#
+机标: rising  |  人标: falling
+置信度: p_rising=0.9334, p_falling=0.0046, p_flat=0.0620
+
+ID: 50000280
+句子: Understood!
+[词#0] 词: Understood!
+机标: rising  |  人标: falling
+置信度: p_rising=0.9047, p_falling=0.0910, p_flat=0.0043
+
+ID: 50001290
+句子: Zero two two, five one two.
+[词#2] 词: two,
+机标: rising  |  人标: falling
+置信度: p_rising=0.9543, p_falling=0.0031, p_flat=0.0425
+
+ID: 60000284
+句子: During the artist's retrospective exhibition,# visitors could trace the evolution of her style over five decades,# see rarely displayed works from her private collection,# and watch a documentary about her creative process.
+[词#4] 词: exhibition,#
+机标: rising  |  人标: falling
+置信度: p_rising=0.8504, p_falling=0.0973, p_flat=0.0522
+
+ID: 60000339
+句子: To appreciate the complexity of the award-winning film,# viewers should pay attention to the subtle visual symbolism,# listen for recurring musical themes that underscore emotional moments,# and consider how the director's personal history influenced the story.
+[词#7] 词: film,#
+机标: rising  |  人标: falling
+置信度: p_rising=0.8522, p_falling=0.0750, p_flat=0.0729
+
+ID: 60000371
+句子: With a deep breath,# he stepped onto the stage, faced the audience, and began to speak.
+[词#3] 词: breath,#
+机标: rising  |  人标: falling
+置信度: p_rising=0.9249, p_falling=0.0631, p_flat=0.0120
+
+======================================================================
+机标【rising】-> 人标【flat】  共 26 条
+======================================================================
+
+ID: 10520101
+句子: You have to go now, Judy, or you'll miss your flight.# It's an hour's drive to the airport.
+[词#5] 词: Judy,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9311, p_falling=0.0071, p_flat=0.0618
+
+ID: 11280101
+句子: I'm sorry I was late for class today, Doctor Simpson.
+[词#9] 词: Simpson.
+机标: rising  |  人标: flat
+置信度: p_rising=0.9206, p_falling=0.0313, p_flat=0.0480
+
+ID: 12590401
+句子: Well, that happened to be the time when I went into Tsinghua University.
+[词#0] 词: Well,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9447, p_falling=0.0192, p_flat=0.0361
+
+ID: 14050401
+句子: Well, mentally determined anyway.
+[词#3] 词: anyway.
+机标: rising  |  人标: flat
+置信度: p_rising=0.9854, p_falling=0.0033, p_flat=0.0113
+
+ID: 15360201
+句子: You could use mine.# It's on the bookshelf over there.
+[词#3] 词: mine.#
+机标: rising  |  人标: flat
+置信度: p_rising=0.9941, p_falling=0.0004, p_flat=0.0055
+
+ID: 22150401
+句子: And, what's wrong?# Did you register at home?
+[词#0] 词: And,
+机标: rising  |  人标: flat
+置信度: p_rising=0.8697, p_falling=0.0128, p_flat=0.1175
+
+ID: 22460601
+句子: No, I think that's okay.# What do you talk about in the group?
+[词#4] 词: okay.#
+机标: rising  |  人标: flat
+置信度: p_rising=0.9567, p_falling=0.0030, p_flat=0.0403
+
+ID: 23630401
+句子: What about you?# Has the work on your house finished yet?
+[词#10] 词: yet?
+机标: rising  |  人标: flat
+置信度: p_rising=0.9942, p_falling=0.0000, p_flat=0.0058
+
+ID: 25360008
+句子: Seeing the beach become clean again and knowing we're leaving a healthier planet for our kids.# Small actions can make a big difference, right?
+[词#23] 词: right?
+机标: rising  |  人标: flat
+置信度: p_rising=0.9928, p_falling=0.0003, p_flat=0.0069
+
+ID: 27580214
+句子: It's not raining, is it?
+[词#4] 词: it?
+机标: rising  |  人标: flat
+置信度: p_rising=0.9989, p_falling=0.0000, p_flat=0.0011
+
+ID: 30350014
+句子: Well, thank you for listening.
+[词#0] 词: Well,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9959, p_falling=0.0002, p_flat=0.0039
+
+ID: 50000874
+句子: Three billion, and seventy billion and three.
+[词#1] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9554, p_falling=0.0031, p_flat=0.0416
+
+ID: 50000893
+句子: Twenty-two billion, and six billion and twenty-two.
+[词#1] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9412, p_falling=0.0085, p_flat=0.0504
+
+ID: 50000952
+句子: Eighty-one billion, forty-seven billion and eighty-one.
+[词#1] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9017, p_falling=0.0086, p_flat=0.0896
+
+ID: 50000961
+句子: Ninety billion, thirty-eight billion and ninety.
+[词#1] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9966, p_falling=0.0001, p_flat=0.0033
+
+ID: 50000976
+句子: And five billion, twenty-three billion five hundred.
+[词#2] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9927, p_falling=0.0002, p_flat=0.0071
+
+ID: 50000990
+句子: And nineteen billion, and nine billion one hundred.
+[词#2] 词: billion,
+机标: rising  |  人标: flat
+置信度: p_rising=0.8871, p_falling=0.0037, p_flat=0.1092
+
+ID: 50001008
+句子: Tenth, ninety- first.
+[词#0] 词: Tenth,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9462, p_falling=0.0007, p_flat=0.0531
+
+ID: 50001044
+句子: Forty- sixth, nine hundred and ninetieth.
+[词#1] 词: sixth,
+机标: rising  |  人标: flat
+置信度: p_rising=0.8601, p_falling=0.0107, p_flat=0.1292
+
+ID: 60000140
+句子: To maintain health, doctors recommend regular check-ups, balanced diet, and physical activity.
+[词#8] 词: diet,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9345, p_falling=0.0126, p_flat=0.0529
+
+ID: 60000217
+句子: During the cooking class,# students learned to properly sharpen their knives,# mastered the technique of making a classic sauce,# and prepared a three- course meal from scratch.
+[词#18] 词: sauce,#
+机标: rising  |  人标: flat
+置信度: p_rising=0.8800, p_falling=0.0153, p_flat=0.1047
+
+ID: 60000423
+句子: During the celebration, fireworks lit up the sky,# music filled the air, and everyone rejoiced.
+[词#11] 词: air,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9764, p_falling=0.0005, p_flat=0.0231
+
+ID: 60000454
+句子: To write a letter, you need paper, a pen, and something meaningful to say.
+[词#6] 词: paper,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9994, p_falling=0.0000, p_flat=0.0006
+
+ID: 60000454
+句子: To write a letter, you need paper, a pen, and something meaningful to say.
+[词#8] 词: pen,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9994, p_falling=0.0000, p_flat=0.0006
+
+ID: 60000583
+句子: I keep my hair clean by washing it, drying it, and combing it gently.
+[词#7] 词: it,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9687, p_falling=0.0040, p_flat=0.0273
+
+ID: 60000583
+句子: I keep my hair clean by washing it, drying it, and combing it gently.
+[词#9] 词: it,
+机标: rising  |  人标: flat
+置信度: p_rising=0.9519, p_falling=0.0002, p_flat=0.0478
+
+======================================================================
+机标【falling】-> 人标【rising】  共 1 条
+======================================================================
+
+ID: 60000193
+句子: The successful museum exhibit attracted record crowds# due to its interactive displays,# its careful curation of rare artifacts,# and its engaging audio guide narrated by a famous actor.
+[词#11] 词: displays,#
+机标: falling  |  人标: rising
+置信度: p_rising=0.0763, p_falling=0.9160, p_flat=0.0077
+
+======================================================================
+机标【falling】-> 人标【flat】  共 97 条
+======================================================================
+
+ID: 10190301
+句子: Alright.
+[词#0] 词: Alright.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.9105, p_flat=0.0892
+
+ID: 11470401
+句子: Okay, I hate going to stores.
+[词#5] 词: stores.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9467, p_flat=0.0533
+
+ID: 12270301
+句子: Great, let's meet at the counter.
+[词#5] 词: counter.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8653, p_flat=0.1347
+
+ID: 12590201
+句子: In Tsinghua University.
+[词#2] 词: University.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0006, p_falling=0.9189, p_flat=0.0805
+
+ID: 13240201
+句子: Okay, I know a good place for drinking cocktails near my house,# and it offers big discounts on beer every Friday.
+[词#20] 词: Friday.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9789, p_flat=0.0210
+
+ID: 13700201
+句子: Sorry, Jenny, I won't be able to get to it until I finish moving to my new apartment.
+[词#17] 词: apartment.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0012, p_falling=0.8878, p_flat=0.1109
+
+ID: 14580401
+句子: Maybe we can ask around at our school.
+[词#7] 词: school.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8801, p_flat=0.1197
+
+ID: 15660201
+句子: It stands for' lost',# so just write in what you have lost.
+[词#11] 词: lost.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9081, p_flat=0.0918
+
+ID: 16290001
+句子: Oh, Mia, I'll be graduating from college soon,# but I have not found a job yet.
+[词#1] 词: Mia,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.9958, p_flat=0.0040
+
+ID: 19060002
+句子: Sandwiches, please, by the way,# could you please get some hamburgers for Adele?# She is coming this evening.
+[词#17] 词: evening.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0005, p_falling=0.8876, p_flat=0.1119
+
+ID: 20020501
+句子: Right.# Look, are you here alone?# Would you like to join us?
+[词#1] 词: Look,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0048, p_falling=0.8801, p_flat=0.1151
+
+ID: 20270101
+句子: Hi, I don't think we've met before.# I'm Mike.
+[词#0] 词: Hi,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0092, p_falling=0.8736, p_flat=0.1172
+
+ID: 20660401
+句子: Yes, I'm calling to cancel a meeting we scheduled for this afternoon.
+[词#11] 词: afternoon.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0028, p_falling=0.8703, p_flat=0.1268
+
+ID: 20740501
+句子: Busy packing.
+[词#1] 词: packing.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0010, p_falling=0.8700, p_flat=0.1291
+
+ID: 20780101
+句子: Good morning, madam.# I am your guide for this trip.
+[词#1] 词: morning,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9994, p_flat=0.0005
+
+ID: 20810101
+句子: Let's go kite- flying, Judy.# It's such a lovely day.
+[词#9] 词: day.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0003, p_falling=0.8925, p_flat=0.1073
+
+ID: 20880602
+句子: I don't think I want to spend a year and a half out there on my own.# I mean, without Rachel and the kids.# I mean, I don't see much of them now as it is.
+[词#35] 词: is.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0022, p_falling=0.8664, p_flat=0.1315
+
+ID: 20910301
+句子: Oh, I see.# You better have it if you want to pass that course.
+[词#2] 词: see.#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9292, p_flat=0.0708
+
+ID: 20940701
+句子: What classes do you think are still open?
+[词#7] 词: open?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0006, p_falling=0.8669, p_flat=0.1325
+
+ID: 21010501
+句子: No, actually, I'm going to meet with Professor Smith at ten past two.# You may continue our project discussion with Michael.
+[词#12] 词: two.#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9262, p_flat=0.0737
+
+ID: 21040701
+句子: Um, let me think.# Oh, I know just a person,# an old colleague of mine, Jim Thomas.# He is coming here to do some research this summer,# from June to August.
+[词#26] 词: summer,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8792, p_flat=0.1207
+
+ID: 21100601
+句子: Yes.# He never goes there,# and we'll lock the door just to be safe.
+[词#4] 词: there,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8641, p_flat=0.1359
+
+ID: 21240101
+句子: Fairfield Rentals, how can I help you?
+[词#1] 词: Rentals,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9875, p_flat=0.0124
+
+ID: 21310401
+句子: How did that happen?
+[词#3] 词: happen?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8702, p_flat=0.1297
+
+ID: 21400301
+句子: Wow, that's an impressive list.# I've already decided to study at King's College London.# I just want to attend a college close to my home.
+[词#13] 词: London.#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0010, p_falling=0.8915, p_flat=0.1075
+
+ID: 21690301
+句子: Why?# What's going on?
+[词#3] 词: on?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0072, p_falling=0.8706, p_flat=0.1222
+
+ID: 21850201
+句子: Wow, that's the day after tomorrow!# But why so suddenly?
+[词#5] 词: tomorrow!#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8551, p_flat=0.1449
+
+ID: 21850201
+句子: Wow, that's the day after tomorrow!# But why so suddenly?
+[词#9] 词: suddenly?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9788, p_flat=0.0211
+
+ID: 21870801
+句子: Cool!# Can I have a look?
+[词#0] 词: Cool!#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9883, p_flat=0.0115
+
+ID: 22040301
+句子: Yes, we have to go to a party at Mark's cousin's house.# Mark had told me about it a couple of weeks ago,# but it slipped my mind.
+[词#27] 词: mind.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9906, p_flat=0.0093
+
+ID: 22520401
+句子: My father advised me to learn computer science,# while my mom suggested business management.# But I have a strong passion for modern medicine.
+[词#22] 词: medicine.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0009, p_falling=0.8652, p_flat=0.1339
+
+ID: 22960101
+句子: Our guest today is Amy Rowntree,# who's a fashion designer?# So, what skills does a fashion designer need?
+[词#17] 词: need?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0030, p_falling=0.8660, p_flat=0.1310
+
+ID: 24580201
+句子: Tell me, how did they respond?
+[词#5] 词: respond?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9979, p_flat=0.0021
+
+ID: 24920006
+句子: I think the hardest of all was getting the crew together.# Funding came a close second.# The screenplay was the easiest as I had written one for school# but hadn't used it.# And my parents let me shoot at our house# so we didn't have to worry about the venue,# saving us the extra cost of renting.
+[词#56] 词: renting.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0004, p_falling=0.8613, p_flat=0.1382
+
+ID: 26330005
+句子: Oh, she's always so generous.# Remember the table lamp she sent us last year,# and the dinner plates?
+[词#4] 词: generous.#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0009, p_falling=0.9709, p_flat=0.0282
+
+ID: 26600007
+句子: Literary style.# Think classic authors, a bit classic, maybe a French hat or a scarf,# but no need for period costumes.
+[词#7] 词: classic,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8570, p_flat=0.1429
+
+ID: 27070002
+句子: Yes, I've given all the designers the notice by telephone.
+[词#9] 词: telephone.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9241, p_flat=0.0758
+
+ID: 27580008
+句子: Did you go to Paris or London?
+[词#6] 词: London?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0030, p_falling=0.9772, p_flat=0.0198
+
+ID: 27580142
+句子: Should we lower the price or offer a discount?
+[词#8] 词: discount?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8771, p_flat=0.1228
+
+ID: 27580176
+句子: Was the damage minor or major?
+[词#5] 词: major?
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9262, p_flat=0.0737
+
+ID: 27590226
+句子: Indiana is known for its cornfields.
+[词#5] 词: cornfields.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9387, p_flat=0.0612
+
+ID: 27590346
+句子: Lowering taxes was a key election promise.
+[词#6] 词: promise.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.9133, p_flat=0.0865
+
+ID: 30030003
+句子: My name is Christina.
+[词#3] 词: Christina.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9145, p_flat=0.0854
+
+ID: 30040008
+句子: A police officer has been hurt assisting drivers in north ride.
+[词#10] 词: ride.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0010, p_falling=0.8599, p_flat=0.1390
+
+ID: 30040010
+句子: The roof of town hall station has fallen in,# causing delays for passengers.
+[词#8] 词: in,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8718, p_flat=0.1281
+
+ID: 30190012
+句子: Therefore, he painted the birds he observed a lot.
+[词#0] 词: Therefore,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0338, p_falling=0.8820, p_flat=0.0842
+
+ID: 30220011
+句子: They must drink water all the time.
+[词#6] 词: time.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9455, p_flat=0.0544
+
+ID: 30250004
+句子: Right now, the answer is not very easily.
+[词#1] 词: now,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9986, p_flat=0.0014
+
+ID: 30260003
+句子: Firstly, please do remember to put on some comfortable shoes.
+[词#9] 词: shoes.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0004, p_falling=0.8779, p_flat=0.1217
+
+ID: 30300014
+句子: With your help, we can turn this vision into reality.
+[词#9] 词: reality.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0021, p_falling=0.8549, p_flat=0.1430
+
+ID: 30360014
+句子: If you're interested, we'd like you to post your photos to us here at Star Radio,# twenty four Woodstock Square, London.
+[词#20] 词: London.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0016, p_falling=0.9161, p_flat=0.0823
+
+ID: 30510011
+句子: Check out fluent you.
+[词#3] 词: you.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9159, p_flat=0.0841
+
+ID: 30540007
+句子: With extensive experience in exploring the impacts of AI on education,# Doctor Chen has valuable insights to share.
+[词#10] 词: education,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0003, p_falling=0.9072, p_flat=0.0925
+
+ID: 30590008
+句子: I needed to collect some samples to analyze.
+[词#7] 词: analyze.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8596, p_flat=0.1402
+
+ID: 30670006
+句子: We want you to write about your favorite place in Britain.
+[词#10] 词: Britain.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8513, p_flat=0.1485
+
+ID: 30680012
+句子: Another common error is over training.
+[词#5] 词: training.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8937, p_flat=0.1063
+
+ID: 30740006
+句子: Now about prices, the full price of each course is four hundred and twenty five pounds,# but the college is offering special discounts for groups.
+[词#15] 词: pounds,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0005, p_falling=0.9308, p_flat=0.0687
+
+ID: 30940003
+句子: There's an exhibition from November fifteen to December sixteen,# nine A M to seven P M# but it closes on mondays during the time.
+[词#15] 词: M#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9152, p_flat=0.0847
+
+ID: 31010015
+句子: Spaces are limited to ensure each student receives personal attention, so register early.
+[词#9] 词: attention,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0003, p_falling=0.9746, p_flat=0.0251
+
+ID: 40000112
+句子: To sum it up,# where there's mental distress,# there's often digestive upset, too.
+[词#12] 词: too.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0006, p_falling=0.9222, p_flat=0.0772
+
+ID: 40000193
+句子: They want it to tear us up and make us new.
+[词#10] 词: new.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9326, p_flat=0.0674
+
+ID: 40000323
+句子: He makes a collect call from the payphone.
+[词#7] 词: payphone.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8608, p_flat=0.1391
+
+ID: 40000351
+句子: A white dove is released at the ceremony.
+[词#7] 词: ceremony.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8631, p_flat=0.1369
+
+ID: 40000428
+句子: Her joy is patent in her smile.
+[词#6] 词: smile.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8663, p_flat=0.1336
+
+ID: 40000465
+句子: She writes a letter of protest to the newspaper.
+[词#8] 词: newspaper.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8609, p_flat=0.1390
+
+ID: 40000606
+句子: He rebels against the strict rules.
+[词#5] 词: rules.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9516, p_flat=0.0483
+
+ID: 40000731
+句子: He is a learned scholar in ancient history.
+[词#7] 词: history.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8781, p_flat=0.1217
+
+ID: 50000165
+句子: Peace!
+[词#0] 词: Peace!
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9776, p_flat=0.0224
+
+ID: 50000241
+句子: Support others.
+[词#1] 词: others.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0012, p_falling=0.9505, p_flat=0.0483
+
+ID: 50000495
+句子: W V T N
+[词#3] 词: N
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8714, p_flat=0.1284
+
+ID: 50000503
+句子: X S C
+[词#2] 词: C
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9980, p_flat=0.0020
+
+ID: 50000553
+句子: Forty, seven hundred and forty-three.
+[词#0] 词: Forty,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0008, p_falling=0.9191, p_flat=0.0801
+
+ID: 50000574
+句子: Sixty-one, one hundred and sixty-four.
+[词#4] 词: sixty-four.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8623, p_flat=0.1376
+
+ID: 50000612
+句子: Ninety-nine, four hundred.
+[词#2] 词: hundred.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8828, p_flat=0.1170
+
+ID: 50000619
+句子: Two thousand, and eighty thousand and two.
+[词#6] 词: two.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0005, p_falling=0.8777, p_flat=0.1218
+
+ID: 50000661
+句子: Forty-four thousand, eighty-four thousand and forty-four.
+[词#5] 词: forty-four.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.8510, p_flat=0.1489
+
+ID: 50000687
+句子: Seventy thousand, fifty-eight thousand and seventy.
+[词#5] 词: seventy.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.9985, p_flat=0.0015
+
+ID: 50000697
+句子: Eighty thousand, forty-eight thousand and eighty.
+[词#5] 词: eighty.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.9471, p_flat=0.0527
+
+ID: 50000744
+句子: And ninety thousand, and one thousand nine hundred.
+[词#2] 词: thousand,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0061, p_falling=0.8915, p_flat=0.1024
+
+ID: 50000866
+句子: And forty million, and six million four hundred.
+[词#7] 词: hundred.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=0.8645, p_flat=0.1355
+
+ID: 50000884
+句子: Thirteen billion, and fifteen billion and thirteen.
+[词#6] 词: thirteen.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8612, p_flat=0.1387
+
+ID: 50000961
+句子: Ninety billion, thirty-eight billion and ninety.
+[词#5] 词: ninety.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0011, p_falling=0.8995, p_flat=0.0993
+
+ID: 50001028
+句子: Thirtieth, two hundred and eleventh.
+[词#4] 词: eleventh.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9074, p_flat=0.0925
+
+ID: 50001057
+句子: Fifty- ninth, four thousandth.
+[词#3] 词: thousandth.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9070, p_flat=0.0929
+
+ID: 50001133
+句子: Fifty-three point five three,# eight hundred and seventeen point one seven.
+[词#10] 词: seven.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0006, p_falling=0.9150, p_flat=0.0844
+
+ID: 50001146
+句子: Zero three double nine, four triple one.
+[词#3] 词: nine,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0005, p_falling=0.9206, p_flat=0.0790
+
+ID: 50001188
+句子: Seven seven one eight, eight triple seven.
+[词#6] 词: seven.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0003, p_falling=0.9494, p_flat=0.0503
+
+ID: 50001217
+句子: Four six one zero, triple zero two.
+[词#3] 词: zero,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0028, p_falling=0.9492, p_flat=0.0479
+
+ID: 50001218
+句子: Four seven zero two, triple one two.
+[词#3] 词: two,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0016, p_falling=0.9811, p_flat=0.0173
+
+ID: 50001241
+句子: Eight four eight zero, triple seven four.
+[词#3] 词: zero,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9699, p_flat=0.0300
+
+ID: 50001418
+句子: Four three two seven double three.
+[词#5] 词: three.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0002, p_falling=0.8513, p_flat=0.1486
+
+ID: 50001442
+句子: Zero three, two five, four seven, six nine, nine one.
+[词#3] 词: five,
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9815, p_flat=0.0184
+
+ID: 60000103
+句子: The mountain resort offers hiking trails, skiing slopes, and cozy cabins.
+[词#10] 词: cabins.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0000, p_falling=1.0000, p_flat=0.0000
+
+ID: 60000161
+句子: Early in the morning,# the park fills with joggers, dog walkers, and elderly people practicing tai chi.
+[词#3] 词: morning,#
+机标: falling  |  人标: flat
+置信度: p_rising=0.0023, p_falling=0.9977, p_flat=0.0001
+
+ID: 60000246
+句子: During the harvest festival,# farmers display their largest pumpkins,# bakers compete for the best apple pie,# and children enjoy hayrides and corn mazes.
+[词#22] 词: mazes.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0011, p_falling=0.8501, p_flat=0.1488
+
+ID: 60000303
+句子: A successful community college offers affordable pathways to four-year degrees,# provides job training programs that lead directly to employment,# and supports students who need help with basic skills.
+[词#27] 词: skills.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0003, p_falling=0.9152, p_flat=0.0844
+
+ID: 60000439
+句子: To make a salad,# you need fresh greens, colorful vegetables, and a tasty dressing.
+[词#13] 词: dressing.
+机标: falling  |  人标: flat
+置信度: p_rising=0.0001, p_falling=0.9184, p_flat=0.0816
+
+======================================================================
+机标【flat】-> 人标【rising】  共 6 条
+======================================================================
+
+ID: 20460601
+句子: I smelt the flowers,# looked at the birds, and yeah, I picked many tree leaves.# I will make bookmarks with them.# Look!
+[词#21] 词: Look!
+机标: flat  |  人标: rising
+置信度: p_rising=0.0001, p_falling=0.0203, p_flat=0.9797
+
+ID: 21500101
+句子: Your dog is simply adorable.# Can I pet him?
+[词#8] 词: him?
+机标: flat  |  人标: rising
+置信度: p_rising=0.0246, p_falling=0.0077, p_flat=0.9676
+
+ID: 22191001
+句子: Cash, please.# Do you need my passport or identification card?
+[词#0] 词: Cash,
+机标: flat  |  人标: rising
+置信度: p_rising=0.0046, p_falling=0.0130, p_flat=0.9824
+
+ID: 30130012
+句子: She is not just a role model,# but someone I love.
+[词#6] 词: model,#
+机标: flat  |  人标: rising
+置信度: p_rising=0.0002, p_falling=0.0153, p_flat=0.9844
+
+ID: 50000845
+句子: And one million, twenty-seven million one hundred.
+[词#2] 词: million,
+机标: flat  |  人标: rising
+置信度: p_rising=0.0393, p_falling=0.0002, p_flat=0.9605
+
+ID: 50001448
+句子: Zero nine, three one, five three, seven five, nine seven.
+[词#1] 词: nine,
+机标: flat  |  人标: rising
+置信度: p_rising=0.0167, p_falling=0.0356, p_flat=0.9477
+
+======================================================================
+机标【flat】-> 人标【falling】  共 46 条
+======================================================================
+
+ID: 12530401
+句子: But I deal with sales there,# just like what I hope to do here.
+[词#5] 词: there,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0383, p_flat=0.9616
+
+ID: 13080101
+句子: Maria, I need to meet my niece at the railway station at six twenty.# She called me a quarter ago.# I just had an emergency meeting.
+[词#19] 词: ago.#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0015, p_falling=0.0696, p_flat=0.9289
+
+ID: 13240201
+句子: Okay, I know a good place for drinking cocktails near my house,# and it offers big discounts on beer every Friday.
+[词#11] 词: house,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0503, p_flat=0.9495
+
+ID: 14740201
+句子: Don't worry, you'll look amazing when I'm done!
+[词#7] 词: done!
+机标: flat  |  人标: falling
+置信度: p_rising=0.0077, p_falling=0.0071, p_flat=0.9853
+
+ID: 14880201
+句子: Well, it's about twenty miles,# but it doesn't seem that far.# The road is good and my car has never been trapped in heavy traffic,# so the rides never annoy me.
+[词#24] 词: traffic,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0436, p_flat=0.9564
+
+ID: 15030101
+句子: Barbara, the weather is supposed to be great this weekend.# Would you like to go hiking with us on Sunday?
+[词#9] 词: weekend.#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0080, p_flat=0.9920
+
+ID: 20090401
+句子: Well, I don't like training early in the morning,# so I start at ten.
+[词#8] 词: morning,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0012, p_falling=0.0496, p_flat=0.9492
+
+ID: 20980501
+句子: I was, but now I'm getting tired of it.# I'm ready for the real world.
+[词#14] 词: world.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0006, p_falling=0.0274, p_flat=0.9720
+
+ID: 21650201
+句子: You're right.# Are you free on Wednesday?
+[词#1] 词: right.#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0043, p_flat=0.9957
+
+ID: 22220501
+句子: These red and those gold ones are about equal.# The purple ones don't sell often,# since you definitely need more confidence to wear them.
+[词#23] 词: them.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0793, p_flat=0.9204
+
+ID: 22600401
+句子: Wow, technology is evolving so quickly.# But I've read concerns about these chatbots from some educators since bots can provide grade A essays in no time.
+[词#25] 词: time.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0694, p_flat=0.9305
+
+ID: 23180701
+句子: So, when can I join the club and start practicing with the team?
+[词#0] 词: So,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0134, p_flat=0.9866
+
+ID: 25760017
+句子: Not really.# My husband always insists we watch science fiction movies,# but I prefer documentaries.
+[词#10] 词: movies,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0360, p_flat=0.9638
+
+ID: 26140003
+句子: You bet, there will be places for you to get water and some sports drinks,# but I'll also pack you some energy bars.
+[词#14] 词: drinks,#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0303, p_flat=0.9697
+
+ID: 27070002
+句子: Yes, I've given all the designers the notice by telephone.
+[词#0] 词: Yes,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0363, p_flat=0.9637
+
+ID: 27480005
+句子: How are you finding life here?# Have you adjusted to the new environment?
+[词#5] 词: here?#
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0312, p_flat=0.9688
+
+ID: 27580167
+句子: Did you understand everything or just part of it?
+[词#8] 词: it?
+机标: flat  |  人标: falling
+置信度: p_rising=0.0006, p_falling=0.0568, p_flat=0.9426
+
+ID: 30020011
+句子: The children will participate in art, outdoor play, games and much more.
+[词#5] 词: art,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0692, p_flat=0.9307
+
+ID: 30160005
+句子: During the football season,# whenever there is a big match,# all the flags for local football teams,# such as Liverpool and Newcastle are hung outside every window,# or even spelled proudly on T-shirts or scarves.
+[词#34] 词: scarves.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0782, p_flat=0.9218
+
+ID: 30170007
+句子: The topics may include weather, customer service, movies, T V shows, local sports or latest news.
+[词#7] 词: movies,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0163, p_flat=0.9837
+
+ID: 30250007
+句子: This is compared to half of students who had looked for a job by this time two years ago.
+[词#18] 词: ago.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0016, p_falling=0.0474, p_flat=0.9509
+
+ID: 30430009
+句子: The staff often decorate the library by arranging the books by color and size,# to create funny and clever pictures.
+[词#19] 词: pictures.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0554, p_flat=0.9445
+
+ID: 30500006
+句子: When Zhu took the first photo with her phone of people reading on the subway.
+[词#14] 词: subway.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0665, p_flat=0.9334
+
+ID: 30910010
+句子: The translations weren't perfect.
+[词#3] 词: perfect.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0526, p_flat=0.9473
+
+ID: 40000044
+句子: Still, Troi did not need her abilities to tell her that there were more here than meet the eye,# and she could not discount the possibility that the blue skinned woman had enough control over her emotions that she could fool her empathetic sense.
+[词#43] 词: sense.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0582, p_flat=0.9417
+
+ID: 40000094
+句子: Designed with you in mind.# Made out of four separate sections,# each section can move independently from each other to enhance the flexibility and to give you unrestricted movement.
+[词#28] 词: movement.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0548, p_flat=0.9451
+
+ID: 40000245
+句子: Or more simply, the arena, outside of the family, the state, and the market where people associate to advance common interests.
+[词#20] 词: interests.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0719, p_flat=0.9280
+
+ID: 40000498
+句子: She asked me to relay her apologies to you.
+[词#8] 词: you.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0746, p_flat=0.9252
+
+ID: 50000282
+句子: Perfect!
+[词#0] 词: Perfect!
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0152, p_flat=0.9848
+
+ID: 50000319
+句子: C U G T
+[词#3] 词: T
+机标: flat  |  人标: falling
+置信度: p_rising=0.0038, p_falling=0.0592, p_flat=0.9369
+
+ID: 50000330
+句子: E V H.
+[词#2] 词: H.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0141, p_falling=0.0115, p_flat=0.9744
+
+ID: 50000606
+句子: Ninety-three, six hundred and ninety-six.
+[词#0] 词: Ninety-three,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0166, p_falling=0.0180, p_flat=0.9654
+
+ID: 50000624
+句子: Seven thousand, and thirty thousand and seven.
+[词#1] 词: thousand,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0373, p_flat=0.9625
+
+ID: 50000699
+句子: Eighty-two thousand, forty-six thousand and eighty-two.
+[词#5] 词: eighty-two.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0766, p_flat=0.9233
+
+ID: 50000805
+句子: Sixty-one million, sixty-seven million and sixty-one.
+[词#5] 词: sixty-one.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0002, p_falling=0.0718, p_flat=0.9280
+
+ID: 50000835
+句子: Ninety-one million, thirty-seven million and ninety-one.
+[词#5] 词: ninety-one.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0533, p_flat=0.9466
+
+ID: 50001069
+句子: Seventy- first, seven millionth.
+[词#3] 词: millionth.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0118, p_falling=0.0658, p_flat=0.9224
+
+ID: 50001219
+句子: Four one zero seven, triple three two.
+[词#6] 词: two.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0441, p_flat=0.9558
+
+ID: 50001275
+句子: Two triple four, triple four eight.
+[词#5] 词: eight.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0006, p_falling=0.0507, p_flat=0.9488
+
+ID: 50001326
+句子: Two zero six, eight seven eight.
+[词#5] 词: eight.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0012, p_falling=0.0407, p_flat=0.9581
+
+ID: 50001363
+句子: Two one one, triple four.
+[词#4] 词: four.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0711, p_flat=0.9289
+
+ID: 50001364
+句子: Two one nine, triple eight.
+[词#2] 词: nine,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0026, p_falling=0.0026, p_flat=0.9948
+
+ID: 50001364
+句子: Two one nine, triple eight.
+[词#4] 词: eight.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0513, p_flat=0.9486
+
+ID: 50001442
+句子: Zero three, two five, four seven, six nine, nine one.
+[词#7] 词: nine,
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0408, p_flat=0.9592
+
+ID: 60000215
+句子: To master the art of photography,# one must understand the technical aspects of the camera,# develop an eye for composition and light,# and learn to capture genuine emotion in subjects.
+[词#29] 词: subjects.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0001, p_falling=0.0608, p_flat=0.9392
+
+ID: 60000449
+句子: To build a sandcastle,# you need wet sand, a bucket, and a creative spirit.
+[词#13] 词: spirit.
+机标: flat  |  人标: falling
+置信度: p_rising=0.0000, p_falling=0.0631, p_flat=0.9369
+

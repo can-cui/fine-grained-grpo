@@ -1,0 +1,16 @@
+{
+  "file_type": "LMDB",
+  "train": [
+    {
+      "lmdb_path": "/train29/tts/permanent/yhchen70/yrfs5/data/data_process/dpo/v3code/enus_yiqun_no_pause_1200_20260810_lmdb/temp/lmdb_newCode",
+      "key_path": "/train29/tts/permanent/yhchen70/yrfs5/data/data_process/dpo/v3code/enus_yiqun_no_pause_1200_20260810_lmdb/temp/lmdb_newCode.spkid.key",
+      "pause_label_xlsx": "/ng-mix02/tts/permanent/yhchen70/data/gemini_fake_yewu_6000/Gemini_no_pause/Part1【Gemini_no_pause】.xlsx",
+      "external_wav_root": "/ng-mix02/tts/permanent/yhchen70/data/gemini_fake_yewu_6000/Gemini_no_pause/wav",
+      "pause_token": "<PAUSE>",
+      "ratio": 1.0,
+      "times": 1
+    }
+  ],
+  "valid": [],
+  "test": []
+}

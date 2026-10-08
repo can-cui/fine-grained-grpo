@@ -1,0 +1,28 @@
+======================================================================
+rising<->falling 误判词 (阈值 rising=0.96 falling=0.95 flat=0.9)
+人标=人工真值, 机标=模型预测; 仅统计过阈值进入 precision 分母的词
+======================================================================
+falling 误判成 rising (人标falling, 机标rising): 2 条
+rising 误判成 falling (人标rising, 机标falling): 0 条
+合计: 2 条
+
+======================================================================
+人标【falling】-> 机标【rising】  共 2 条
+======================================================================
+
+ID: 14350201
+句子: No, what's it about?
+[词#3] 词: about?
+人标: falling  |  机标: rising
+置信度: p_rising=0.9829, p_falling=0.0162, p_flat=0.0010
+
+ID: 24800004
+句子: Yes.# I learned a lot about things like food tasting.# We had to taste a dish and try to judge whether the public would like it.# As the training got more complex,# it became harder to be in agreement# and there was even some tense moments.# But it was worth it in the end.
+[词#38] 词: agreement#
+人标: falling  |  机标: rising
+置信度: p_rising=0.9646, p_falling=0.0105, p_flat=0.0249
+
+======================================================================
+人标【rising】-> 机标【falling】  共 0 条
+======================================================================
+
