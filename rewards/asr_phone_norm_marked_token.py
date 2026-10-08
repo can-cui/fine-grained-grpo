@@ -14,14 +14,13 @@ import re
 from difflib import SequenceMatcher
 
 # 音素ASR模型路径
-# PHONEME_MODEL_DIR = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr/model/huper_recognizer"
-PHONEME_MODEL_DIR = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr/model/best_by_target_metrics_0623"
+PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
 TARGET_SAMPLE_RATE = 16000
 SAMPLE_RATE = 16000  # WhisperX uses 16kHz
 
 # WhisperX模型路径
-WHISPERX_DIR = "/train34/tts/permanent/cancui11/RL/models/whisperX-main/whisperX-main"
-WHISPERX_MAIN_DIR = "/train34/tts/permanent/cancui11/RL/models/whisperX-main"
+WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
+WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
 # 添加路径
 sys.path.insert(0, WHISPERX_DIR)
@@ -74,7 +73,7 @@ WORD_SEPARATOR_TOKENS = {"", ""}  # 需要根据实际tokenizer设置
 
 def _normalize_word(word):
     """标准化词（去标点、小写），用于模糊匹配。"""
-    return re.sub(r'[^\w]', '', word.lower())
+    return re.sub(r'[^/w]', '', word.lower())
 
 
 def _merge_whisperx_to_user_words(user_words, whisperx_segments):

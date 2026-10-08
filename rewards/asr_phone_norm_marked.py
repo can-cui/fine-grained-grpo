@@ -14,8 +14,7 @@ import re
 from difflib import SequenceMatcher
 
 # 音素ASR模型路径
-# PHONEME_MODEL_DIR = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr/model/huper_recognizer"
-PHONEME_MODEL_DIR = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr/model/best_by_target_metrics_0623"
+PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
 TARGET_SAMPLE_RATE = 16000
 
 # Huper phoneme model 音素集合

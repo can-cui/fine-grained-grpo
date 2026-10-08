@@ -11,15 +11,15 @@ import re
 import json
 
 # WhisperX模型路径
-WHISPERX_DIR = "/train34/tts/permanent/cancui11/RL/models/whisperX-main/whisperX-main"
-WHISPERX_MAIN_DIR = "/train34/tts/permanent/cancui11/RL/models/whisperX-main"
+WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
+WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
 # 停顿预测模型路径
-PAUSE_PACKAGE_ROOT = "/train34/tts/permanent/cancui11/RL/models/predict_pause_from_wav_V4"
+PAUSE_PACKAGE_ROOT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4"
 PAUSE_CHECKPOINT = "/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2/checkpoints/checkpoint_last.pt"
-WAV2VEC_JIT_PATH = "/train34/tts/permanent/cancui11/RL/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.pt"
-WAV2VEC_META_PATH = "/train34/tts/permanent/cancui11/RL/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.meta.json"
-PAUSE_USER_DIR = "/train34/tts/permanent/cancui11/RL/models/predict_pause_from_wav_V4/pause_user_dir"
+WAV2VEC_JIT_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.pt"
+WAV2VEC_META_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.meta.json"
+PAUSE_USER_DIR = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/pause_user_dir"
 
 # 模型配置
 MAX_FRAMES = 600
@@ -37,7 +37,7 @@ def _normalize_word(word):
     """标准化词（去标点、小写），用于模糊匹配。"""
     if word == "…":
         return "…"
-    return re.sub(r'[^\w]', '', word.lower())
+    return re.sub(r'[^/w]', '', word.lower())
 
 
 def _merge_whisperx_to_user_words(user_words, whisperx_segments):
