@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""为 V2-V5 构造共享 train、考试院评测和原 LMDB MFA 评测 split。"""
+"""Build shared train, examination-authority evaluation, and original-LMDB MFA evaluation splits for V2-V5."""
 
 import argparse
 import hashlib
@@ -44,9 +44,9 @@ def stable_half_up(value):
 
 
 def stratified_take(rows, count, positive_count, seed, label):
-    """按 source_index 分层，从正负句中分别抽取精确数量。"""
+    """Stratify by source_index and sample exact counts from positive and negative sentences separately."""
     if count < 0 or positive_count < 0 or positive_count > count:
-        raise ValueError(f"{label}: 非法抽样数量 count={count}, positive={positive_count}")
+        raise ValueError(f"{label}: invalid sample count={count}, positive={positive_count}")
     grouped = {True: defaultdict(list), False: defaultdict(list)}
     for row in rows:
         grouped[bool(row["positive_utterance"])][row["source_index"]].append(row)
@@ -56,8 +56,8 @@ def stratified_take(rows, count, positive_count, seed, label):
         available = sum(len(values) for values in grouped[status].values())
         if targets[status] > available:
             raise ValueError(
-                f"{label}: {'正' if status else '负'}停顿句需要 {targets[status]} 条，"
-                f"实际只有 {available} 条"
+                f"{label}: need {targets[status]} {'positive' if status else 'negative'} pause sentences, "
+                f"but only {available} are available"
             )
         allocation = base.allocate_strata(grouped[status], targets[status])
         for source_index in sorted(grouped[status]):
@@ -67,7 +67,7 @@ def stratified_take(rows, count, positive_count, seed, label):
     random.Random(seed + 999983).shuffle(selected)
     selected_ids = {row["utt_id"] for row in selected}
     if len(selected_ids) != count:
-        raise AssertionError(f"{label}: 抽样后 utt_id 数量异常")
+        raise AssertionError(f"{label}: unexpected utt_id count after sampling")
     return selected, [row for row in rows if row["utt_id"] not in selected_ids]
 
 
@@ -97,20 +97,20 @@ def sha256_lines(values):
 def legacy_main():
     args = parse_args()
     if args.valid_count <= 0 or args.test_count <= 0:
-        raise ValueError("valid-count 和 test-count 必须大于 0")
+        raise ValueError("valid-count and test-count must be greater than 0")
     if args.lmdb_source_index_min > args.lmdb_source_index_max:
-        raise ValueError("LMDB source_index 范围非法")
+        raise ValueError("Invalid LMDB source_index range")
     manifest = Path(args.merged_manifest).resolve()
     output_root = Path(args.output_root).resolve()
     if not manifest.is_file():
-        raise FileNotFoundError(f"找不到合并 manifest：{manifest}")
+        raise FileNotFoundError(f"Merged manifest not found: {manifest}")
     output_root.mkdir(parents=True, exist_ok=True)
 
     input_records, skipped_records = base.load_manifest(manifest)
     records, pre_split_skipped = base.filter_splittable_records(input_records)
     skipped_records.extend(pre_split_skipped)
     if not records:
-        raise ValueError("过滤后没有可划分记录")
+        raise ValueError("No records remain to split after filtering")
     rows = base.build_split_rows(records)
     positive_count = sum(bool(row["positive_utterance"]) for row in rows)
     global_positive_ratio = positive_count / len(rows)
@@ -123,7 +123,7 @@ def legacy_main():
     required = args.valid_count + args.test_count
     if len(m2_rows) < required or len(lmdb_rows) < required:
         raise ValueError(
-            f"评测候选不足：m2={len(m2_rows)}, lmdb={len(lmdb_rows)}, 每组需要={required}"
+            f"Insufficient evaluation candidates: m2={len(m2_rows)}, lmdb={len(lmdb_rows)}, required per group={required}"
         )
 
     valid_m2_manual_rows, test_m2_manual_rows, _m2_remaining, m2_targets = select_eval_pool(
@@ -142,11 +142,11 @@ def legacy_main():
     ]
     eval_ids = [row["utt_id"] for row in eval_rows]
     if len(eval_ids) != len(set(eval_ids)):
-        raise AssertionError("考试院和 part00-04 评测集合出现 utt_id 重叠")
+        raise AssertionError("The examination-authority and part00-04 evaluation sets contain overlapping utt_id values")
     eval_id_set = set(eval_ids)
     train_rows = [row for row in rows if row["utt_id"] not in eval_id_set]
     if not train_rows:
-        raise ValueError("扣除评测集后 train 为空")
+        raise ValueError("Training set is empty after removing evaluation sets")
 
     split_map = {
         "train": [row["record"] for row in train_rows],
@@ -163,7 +163,7 @@ def legacy_main():
             output_root, split, split_map[split], args, skipped_records, skipped_path
         )
         if result is None:
-            raise AssertionError(f"{split}: 未生成")
+            raise AssertionError(f"{split}: was not generated")
         counters, sources = result
         reports[split] = {
             "counters": dict(counters),
@@ -183,8 +183,8 @@ def legacy_main():
     }
     if wrong_counts:
         raise RuntimeError(
-            f"评测 split 在音频编码阶段发生跳过，无法保持固定数量：{wrong_counts}；"
-            "请检查 prepare_skipped_records.jsonl 后修复源记录"
+            f"Samples were skipped during audio encoding, so the fixed evaluation split sizes cannot be maintained: {wrong_counts}; "
+            "check prepare_skipped_records.jsonl and fix the source records"
         )
 
     train_positive_ratio = (

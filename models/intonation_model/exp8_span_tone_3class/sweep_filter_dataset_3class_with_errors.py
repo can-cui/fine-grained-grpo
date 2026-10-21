@@ -1,28 +1,28 @@
 """
-sweep_filter_dataset_3class.py — exp8_3class: 三阈值组合扫描 + 高精度筛选 dataset.json
+sweep_filter_dataset_3class.py — exp8_3class: Scan combinations of three thresholds and filter dataset.json for high precision
 
-在二分类 sweep_filter_dataset.py 基础上改为三分类版本:
-  - rising/falling/flat 阈值各传一个列表, 做笛卡尔积组合
-  - 每个组合都跑一遍筛选, 输出一份与输入同格式的 dataset.json
-  - 输出只给文件夹路径, 文件名按阈值自动命名:
-        dataset_r{rising}_f{falling}_fl{flat}.json   (小数点 -> p, 如 dataset_r0p90_f0p80_fl0p70.json)
-  - 末尾打印一张对比表: 每个组合的留存率 + rising/falling/flat precision + 各类词数
+Adapted from the binary-classification sweep_filter_dataset.py for three classes:
+  - Pass a list of thresholds for rising/falling/flat; all Cartesian-product combinations are tested.
+  - Filter the dataset for each combination and output a dataset.json in the same format as the input.
+  - Provide only an output directory; filenames are generated from the thresholds:
+        dataset_r{rising}_f{falling}_fl{flat}.json   (decimal points become p, e.g. dataset_r0p90_f0p80_fl0p70.json)
+  - Print a comparison table at the end with retention rate, precision for each class, and word counts by class.
 
-判定逻辑 (三分类 softmax):
-  对每个有 tone 标注的词 (tone_labels[i] ∈ {0=rising, 1=falling, 2=flat}):
+Decision logic (three-class softmax):
+  For each word with a tone label (tone_labels[i] ∈ {0=rising, 1=falling, 2=flat}):
     c = argmax(P_rising, P_falling, P_flat)
-    若 P(c) >= threshold[c] 且 原标签 == c  -> 该词过关
-    否则 (置信度不足 或 预测与标签矛盾)    -> 该词不过关
-  整条样本: 所有 tone 词都过关 -> 保留; 任一词不过关 -> 整条丢弃。
-  (默认) 没有任何 rising/falling/flat 词的样本不保留, 可用 --keep-no-tone 改变。
+    If P(c) >= threshold[c] and the original label == c, the word passes.
+    Otherwise (confidence too low or prediction conflicts with the label), the word fails.
+  Keep a sample only if every tone word passes; discard it if any word fails.
+  By default, samples without rising/falling/flat words are discarded; use --keep-no-tone to change this.
 
-用法:
+Usage:
     python sweep_filter_dataset_3class.py \\
-        --ckpt   <模型路径>            \\
-        --vocab  <vocab.json 路径>     \\
-        --stats  <stats.npz 路径>      \\
-        --input  <输入 dataset.json>   \\
-        --output-dir <输出文件夹>      \\
+        --ckpt   <checkpoint path>       \\
+        --vocab  <vocab.json path>       \\
+        --stats  <stats.npz path>        \\
+        --input  <input dataset.json>    \\
+        --output-dir <output directory> \\
         --rising-thresholds  0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95 \\
         --falling-thresholds 0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95 \\
         --flat-thresholds    0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95
@@ -45,7 +45,7 @@ TONE_NAMES = ["rising", "falling", "flat"]
 
 
 def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
-    """返回 (kept_samples: list, stats: dict, csv_rows: list)。逐词判定, 整条去留。
+    """Return (kept_samples: list, stats: dict, csv_rows: list). Decide per word and keep or discard each whole sample.
 
     thresholds: (T_rising, T_falling, T_flat)
     """
@@ -289,31 +289,31 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
 
 
 def _fmt_thr(x):
-    """0.96 -> '0p96' 用于文件名"""
+    """Convert 0.96 to '0p96' for use in a filename."""
     return f"{x:.2f}".replace(".", "p")
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ckpt", required=True, help="训练好的 best model checkpoint 路径")
-    parser.add_argument("--vocab", required=True, help="vocab.json 路径")
-    parser.add_argument("--stats", required=True, help="stats.npz 路径")
-    parser.add_argument("--input", required=True, help="输入 dataset.json")
+    parser.add_argument("--ckpt", required=True, help="Path to the trained best-model checkpoint")
+    parser.add_argument("--vocab", required=True, help="Path to vocab.json")
+    parser.add_argument("--stats", required=True, help="Path to stats.npz")
+    parser.add_argument("--input", required=True, help="Input dataset.json")
     parser.add_argument("--output-dir", required=True,
-                        help="输出文件夹 (每个阈值组合一份 dataset_r{r}_f{f}_fl{fl}.json)")
+                        help="Output directory (one dataset_r{r}_f{f}_fl{fl}.json per threshold combination)")
     parser.add_argument("--rising-thresholds", type=str, default="0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95",
-                        help="rising 阈值列表, 逗号分隔。P(rising)>=T 且标签==rising 才过关")
+                        help="Comma-separated rising thresholds. A word passes if P(rising)>=T and its label is rising")
     parser.add_argument("--falling-thresholds", type=str, default="0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95",
-                        help="falling 阈值列表, 逗号分隔。P(falling)>=T 且标签==falling 才过关")
+                        help="Comma-separated falling thresholds. A word passes if P(falling)>=T and its label is falling")
     parser.add_argument("--flat-thresholds", type=str, default="0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95",
-                        help="flat 阈值列表, 逗号分隔。P(flat)>=T 且标签==flat 才过关")
+                        help="Comma-separated flat thresholds. A word passes if P(flat)>=T and its label is flat")
     parser.add_argument("--keep-no-tone", action="store_true",
-                        help="保留没有任何 rising/falling/flat 词的样本 (默认丢弃)")
+                        help="Keep samples without rising/falling/flat words (discarded by default)")
     parser.add_argument("--batch-size", type=int, default=C.BATCH_SIZE)
     parser.add_argument("--encoder-type", type=str, default=C.ENCODER_TYPE,
                         choices=["bilstm", "bilstm_residual", "transformer"])
     parser.add_argument("--save-csv", action="store_true",
-                        help="保存每个组合的 csv 文件 (默认只保存 sweep_summary.csv)")
+                        help="Save a CSV file for each combination (by default, only sweep_summary.csv is saved)")
     args = parser.parse_args()
 
     rising_ts = [float(t.strip()) for t in args.rising_thresholds.split(",") if t.strip()]
@@ -323,7 +323,7 @@ def main():
     print(f"[sweep] rising_thresholds={rising_ts}")
     print(f"[sweep] falling_thresholds={falling_ts}")
     print(f"[sweep] flat_thresholds={flat_ts}")
-    print(f"[sweep] 共 {len(combos)} 组组合, keep_no_tone={args.keep_no_tone}")
+    print(f"[sweep] Testing {len(combos)} combinations, keep_no_tone={args.keep_no_tone}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"[sweep] device={device}")
@@ -344,7 +344,7 @@ def main():
     ckpt = torch.load(args.ckpt, map_location=device)
     model.load_state_dict(ckpt["state_dict"])
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"  参数量: {n_params / 1e6:.2f}M, encoder_type={args.encoder_type}")
+    print(f"  Parameters: {n_params / 1e6:.2f}M, encoder_type={args.encoder_type}")
     if "epoch" in ckpt:
         print(f"  ckpt epoch: {ckpt['epoch']}, best_score: {ckpt.get('best_score', 'N/A')}")
 
@@ -394,40 +394,40 @@ def main():
                   for p, l in directions}
         with open(err_path, "w", encoding="utf-8") as fp:
             fp.write("=" * 70 + "\n")
-            fp.write(f"机标->人标 误判词 (阈值 rising={r} falling={f} flat={fl})\n")
-            fp.write("人标=人工真值, 机标=模型预测; 仅统计过阈值进入 precision 分母的词\n")
+            fp.write(f"Model-to-manual misclassified words (thresholds rising={r} falling={f} flat={fl})\n")
+            fp.write("Manual labels are ground truth and model labels are predictions; only words passing the threshold and included in the precision denominator are counted\n")
             fp.write("=" * 70 + "\n")
-            fp.write("机标->人标 误判统计:\n")
+            fp.write("Model-to-manual misclassification summary:\n")
             for p, l in directions:
                 fp.write(f"  {p}->{l}: {counts[f'{p}->{l}']}\n")
-            fp.write(f"合计: {len(error_rows)} 条\n\n")
+            fp.write(f"Total: {len(error_rows)} records\n\n")
 
             for p, l in directions:
                 etype = f"{p}->{l}"
                 rows = [e for e in error_rows if e["error_type"] == etype]
                 fp.write("=" * 70 + "\n")
-                fp.write(f"机标【{p}】-> 人标【{l}】  共 {len(rows)} 条\n")
+                fp.write(f"Model [{p}] -> manual [{l}]: {len(rows)} records\n")
                 fp.write("=" * 70 + "\n\n")
                 for e in rows:
                     fp.write(f"ID: {e['id']}\n")
-                    fp.write(f"句子: {e['sentence']}\n")
-                    fp.write(f"[词#{e['word_idx']}] 词: {e['word']}\n")
-                    fp.write(f"机标: {e['pred_label']}  |  人标: {e['manual_label']}\n")
-                    fp.write(f"置信度: p_rising={e['p_rising']}, "
+                    fp.write(f"Sentence: {e['sentence']}\n")
+                    fp.write(f"[Word #{e['word_idx']}] Word: {e['word']}\n")
+                    fp.write(f"Model label: {e['pred_label']}  |  Manual label: {e['manual_label']}\n")
+                    fp.write(f"Confidence: p_rising={e['p_rising']}, "
                              f"p_falling={e['p_falling']}, p_flat={e['p_flat']}\n\n")
 
-        print(f"[result] 输入样本: {fstats['n_total']}")
-        print(f"[result] 保留样本: {fstats['n_kept']}  (keep_rate={fstats['keep_rate']:.4f})")
-        print(f"[result] 丢弃-灰区: {fstats['n_drop_gray']}, "
-              f"预测矛盾: {fstats['n_drop_mismatch']}, 无tone词: {fstats['n_drop_no_tone']}")
-        print(f"[result] rising  词: {fstats['n_kept_rising']}/{fstats['n_total_rising']} "
-              f"(保有率={fstats['rising_keep_rate']:.4f}, precision={fstats['rising_precision']:.4f})")
-        print(f"[result] falling 词: {fstats['n_kept_falling']}/{fstats['n_total_falling']} "
-              f"(保有率={fstats['falling_keep_rate']:.4f}, precision={fstats['falling_precision']:.4f})")
-        print(f"[result] flat    词: {fstats['n_kept_flat']}/{fstats['n_total_flat']} "
-              f"(保有率={fstats['flat_keep_rate']:.4f}, precision={fstats['flat_precision']:.4f})")
-        print(f"[save] {out_path}  ({len(kept_samples)} 条)")
-        print(f"[save] {err_path}  (机标->人标 误判合计 {len(error_rows)} 条: " +
+        print(f"[result] Input samples: {fstats['n_total']}")
+        print(f"[result] Kept samples: {fstats['n_kept']}  (keep_rate={fstats['keep_rate']:.4f})")
+        print(f"[result] Dropped for low confidence: {fstats['n_drop_gray']}, "
+              f"prediction mismatch: {fstats['n_drop_mismatch']}, no tone words: {fstats['n_drop_no_tone']}")
+        print(f"[result] rising words: {fstats['n_kept_rising']}/{fstats['n_total_rising']} "
+              f"(retention={fstats['rising_keep_rate']:.4f}, precision={fstats['rising_precision']:.4f})")
+        print(f"[result] falling words: {fstats['n_kept_falling']}/{fstats['n_total_falling']} "
+              f"(retention={fstats['falling_keep_rate']:.4f}, precision={fstats['falling_precision']:.4f})")
+        print(f"[result] flat words: {fstats['n_kept_flat']}/{fstats['n_total_flat']} "
+              f"(retention={fstats['flat_keep_rate']:.4f}, precision={fstats['flat_precision']:.4f})")
+        print(f"[save] {out_path}  ({len(kept_samples)} records)")
+        print(f"[save] {err_path}  (total model-to-manual misclassifications: {len(error_rows)}: " +
               ", ".join(f"{k}={v}" for k, v in counts.items() if v > 0) + ")")
 
         sweep_rows.append((r, f, fl, fstats, out_path, len(kept_samples)))
@@ -474,7 +474,7 @@ def main():
                     f"{st['n_kept_with_rising']},{st['n_kept_with_falling']},{st['n_kept_with_flat']},{path.name}\n")
     print(f"\n[save] sweep summary -> {summary_csv}")
     print("=" * 140)
-    print(f"\n[done] 共输出 {len(sweep_rows)} 份筛选后的 dataset.json")
+    print(f"\n[done] Wrote {len(sweep_rows)} filtered dataset.json files")
 
 
 if __name__ == "__main__":

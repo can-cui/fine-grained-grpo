@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""导出或验证 V4 在线特征编码器使用的 wav2vec TorchScript 资产。"""
+"""Export or validate the wav2vec TorchScript asset used by the V4 online feature encoder."""
 
 import argparse
 import hashlib
@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument(
         "--fairseq-project-root",
         default="",
-        help="原 wav2vec 工程根目录；其中必须包含 fairseq 包",
+        help="Root of the original wav2vec project; it must contain the fairseq package",
     )
     parser.add_argument("--output-model", required=True)
     parser.add_argument("--output-meta", required=True)
@@ -47,13 +47,13 @@ def extract_conv_config(model):
     for index, block in enumerate(model.feature_extractor.conv_layers):
         conv = getattr(block, "conv", None)
         if conv is None:
-            raise RuntimeError("feature_extractor.conv_layers[{}] 没有 conv".format(index))
+            raise RuntimeError("feature_extractor.conv_layers[{}] has no conv".format(index))
         kernel = conv.kernel_size[0] if isinstance(conv.kernel_size, tuple) else conv.kernel_size
         stride = conv.stride[0] if isinstance(conv.stride, tuple) else conv.stride
         kernels.append(int(kernel))
         strides.append(int(stride))
     if not kernels or len(kernels) != len(strides):
-        raise RuntimeError("无法读取 wav2vec 卷积 kernel/stride")
+        raise RuntimeError("Could not read wav2vec convolution kernel/stride")
     return kernels, strides
 
 
@@ -61,7 +61,7 @@ def validate_asset(model_path, meta_path, expected_sample_rate, expected_feature
     model_path = Path(model_path)
     meta_path = Path(meta_path)
     if not model_path.is_file() or not meta_path.is_file():
-        raise FileNotFoundError("TorchScript 或元数据不存在：{} / {}".format(model_path, meta_path))
+        raise FileNotFoundError("TorchScript model or metadata does not exist: {} / {}".format(model_path, meta_path))
     with meta_path.open("r", encoding="utf-8") as handle:
         metadata = json.load(handle)
     required = {
@@ -70,18 +70,18 @@ def validate_asset(model_path, meta_path, expected_sample_rate, expected_feature
     }
     missing = sorted(required - set(metadata))
     if missing:
-        raise ValueError("wav2vec 元数据缺少字段：{}".format(missing))
+        raise ValueError("wav2vec metadata is missing fields: {}".format(missing))
     if int(metadata.get("format_version", 0)) != 3:
         raise ValueError("wav2vec metadata format_version must be 3")
     if int(metadata["sample_rate"]) != expected_sample_rate:
-        raise ValueError("wav2vec sample_rate 不匹配")
+        raise ValueError("wav2vec sample_rate mismatch")
     if int(metadata["feature_dim"]) != expected_feature_dim:
-        raise ValueError("wav2vec feature_dim 不匹配")
+        raise ValueError("wav2vec feature_dim mismatch")
     if len(metadata["conv_kernels"]) != len(metadata["conv_strides"]):
-        raise ValueError("wav2vec 卷积元数据长度不一致")
+        raise ValueError("wav2vec convolution metadata lengths do not match")
     actual_hash = sha256_file(model_path)
     if actual_hash != metadata["torchscript_sha256"]:
-        raise ValueError("TorchScript SHA256 与元数据不一致")
+        raise ValueError("TorchScript SHA256 does not match the metadata")
 
     trace_device = str(metadata["trace_device"])
     if trace_device != "cuda":
@@ -102,12 +102,12 @@ def validate_asset(model_path, meta_path, expected_sample_rate, expected_feature
             lengths = torch.tensor([sample_count], dtype=torch.long, device=device)
             features, output_lengths = model(waveform, lengths)
             if features.dim() != 3 or features.size(0) != 1 or features.size(2) != expected_feature_dim:
-                raise RuntimeError("TorchScript 输出 shape 非法：{}".format(tuple(features.shape)))
+                raise RuntimeError("Invalid TorchScript output shape: {}".format(tuple(features.shape)))
             current_length = int(output_lengths[0].item())
             if current_length <= previous_length or current_length > features.size(1):
-                raise RuntimeError("TorchScript 变长输出非法：{}".format(output_lengths.tolist()))
+                raise RuntimeError("Invalid variable-length TorchScript output: {}".format(output_lengths.tolist()))
             if not bool(torch.isfinite(features).all()):
-                raise RuntimeError("TorchScript 输出包含 NaN/Inf")
+                raise RuntimeError("TorchScript output contains NaN/Inf")
             previous_length = current_length
     print(json.dumps({"ok": True, "model": str(model_path), "metadata": metadata}, ensure_ascii=False))
 
@@ -124,10 +124,10 @@ class LastLayerWav2Vec(torch.nn.Module):
 
 def export_asset(args):
     if not args.checkpoint:
-        raise ValueError("导出模式必须提供 --checkpoint")
+        raise ValueError("Export mode requires --checkpoint")
     checkpoint = Path(args.checkpoint)
     if not checkpoint.is_file():
-        raise FileNotFoundError("找不到 wav2vec checkpoint：{}".format(checkpoint))
+        raise FileNotFoundError("wav2vec checkpoint not found: {}".format(checkpoint))
 
     # This script is under V1/scripts. When launched by absolute path, Python does not automatically
     # put the shell's current working directory first on sys.path, so add the original Fairseq project explicitly.
@@ -138,8 +138,8 @@ def export_asset(args):
     ).resolve()
     if not (fairseq_project_root / "fairseq").is_dir():
         raise FileNotFoundError(
-            "原 Fairseq 工程目录中找不到 fairseq 包：{}；"
-            "请传入 --fairseq-project-root".format(fairseq_project_root)
+            "Could not find the fairseq package in the original Fairseq project directory: {}; "
+            "provide --fairseq-project-root".format(fairseq_project_root)
         )
     project_root_string = str(fairseq_project_root)
     if project_root_string not in sys.path:
@@ -154,7 +154,7 @@ def export_asset(args):
         fairseq_file.relative_to(fairseq_project_root)
     except ValueError:
         raise RuntimeError(
-            "加载到了错误的 Fairseq：{}；预期位于 {}".format(
+            "Loaded the wrong Fairseq package: {}; expected it under {}".format(
                 fairseq_file, fairseq_project_root
             )
         )
@@ -162,7 +162,7 @@ def export_asset(args):
     torch.manual_seed(20260807)
     models, cfg, _task = fairseq.checkpoint_utils.load_model_ensemble_and_task([str(checkpoint)])
     if len(models) != 1:
-        raise RuntimeError("checkpoint 中的模型数量不是 1：{}".format(len(models)))
+        raise RuntimeError("Checkpoint does not contain exactly one model: {}".format(len(models)))
     trace_device = torch.device(args.trace_device)
     if trace_device.type == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA is required to export the V4 TorchScript asset")
@@ -191,15 +191,15 @@ def export_asset(args):
         if type(hook).__name__ == "WeightNorm"
     ]
     if remaining:
-        raise RuntimeError("仍存在 WeightNorm hook：{}".format(remaining))
+        raise RuntimeError("WeightNorm hooks remain: {}".format(remaining))
     with torch.no_grad():
         after_layers, after_lengths = converted.extract_features(check_waveform, check_lengths)
         after = after_layers[-1]
     error = float((before - after).abs().max().item())
     if error > args.max_error or not torch.equal(before_lengths, after_lengths):
-        raise RuntimeError("移除 weight_norm 后输出不等价：error={}".format(error))
+        raise RuntimeError("Output changed after removing weight_norm: error={}".format(error))
     if after.dim() != 3 or after.size(2) != args.feature_dim:
-        raise RuntimeError("wav2vec 特征维度非法：{}".format(tuple(after.shape)))
+        raise RuntimeError("Invalid wav2vec feature dimension: {}".format(tuple(after.shape)))
 
     wrapper = LastLayerWav2Vec(converted).to(trace_device).eval()
     with torch.no_grad():

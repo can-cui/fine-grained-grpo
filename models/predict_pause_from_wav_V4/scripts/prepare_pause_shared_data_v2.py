@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""按500/100新规则构造 V2-V5 共享双标签评测数据。"""
+"""Build shared two-label evaluation data for V2-V5 using the new 500/100 rules."""
 
 import argparse
 import hashlib
@@ -39,7 +39,7 @@ def parse_args():
 def parse_source_indices(value):
     values = [int(token.strip()) for token in str(value).split(",") if token.strip()]
     if not values or len(values) != len(set(values)):
-        raise ValueError("m2-supplement-source-indices 必须是互不重复的逗号分隔整数")
+        raise ValueError("m2-supplement-source-indices must be comma-separated, distinct integers")
     return values
 
 
@@ -48,9 +48,9 @@ def stable_half_up(value):
 
 
 def stratified_take(rows, count, positive_count, seed, label):
-    """按 source_index 分层，从正负句中分别抽取精确数量。"""
+    """Stratify by source_index and sample exact counts from positive and negative sentences separately."""
     if count < 0 or positive_count < 0 or positive_count > count:
-        raise ValueError(f"{label}: 非法抽样数量 count={count}, positive={positive_count}")
+        raise ValueError(f"{label}: invalid sample count={count}, positive={positive_count}")
     grouped = {True: defaultdict(list), False: defaultdict(list)}
     for row in rows:
         grouped[bool(row["positive_utterance"])][row["source_index"]].append(row)
@@ -60,7 +60,7 @@ def stratified_take(rows, count, positive_count, seed, label):
         available = sum(len(values) for values in grouped[status].values())
         if target > available:
             raise ValueError(
-                f"{label}: {'正' if status else '负'}停顿句需要 {target} 条，实际只有 {available} 条"
+                f"{label}: need {target} {'positive' if status else 'negative'} pause sentences, but only {available} are available"
             )
         allocation = base.allocate_strata(grouped[status], target)
         for source_index in sorted(grouped[status]):
@@ -70,13 +70,13 @@ def stratified_take(rows, count, positive_count, seed, label):
     random.Random(seed + 999983).shuffle(selected)
     selected_ids = {row["utt_id"] for row in selected}
     if len(selected_ids) != count:
-        raise AssertionError(f"{label}: 抽样后 utt_id 数量异常")
+        raise AssertionError(f"{label}: unexpected utt_id count after sampling")
     return selected, [row for row in rows if row["utt_id"] not in selected_ids]
 
 
 def shuffled_take(rows, count, seed, label):
     if count < 0 or count > len(rows):
-        raise ValueError(f"{label}: 需要 {count} 条，实际只有 {len(rows)} 条")
+        raise ValueError(f"{label}: need {count} records, but only {len(rows)} are available")
     candidates = list(rows)
     random.Random(seed).shuffle(candidates)
     return candidates[:count]
@@ -84,7 +84,7 @@ def shuffled_take(rows, count, seed, label):
 
 def select_m2_splits(rows, valid_count, test_count, positive_ratio, main_source,
                      supplement_sources, seed):
-    """test只取考试院；valid负例按27、25、26顺序补足，不足时使用最接近比例。"""
+    """Use only examination-authority data for test; fill valid negatives in order 27, 25, 26, using the closest ratio if insufficient."""
     main_rows = [row for row in rows if row["source_index"] == main_source]
     test_positive_target = stable_half_up(test_count * positive_ratio)
     test_rows, main_remaining = stratified_take(
@@ -124,7 +124,7 @@ def select_m2_splits(rows, valid_count, test_count, positive_ratio, main_source,
     valid_rows = [*positive_selected, *negative_selected]
     random.Random(seed + 700).shuffle(valid_rows)
     if len({row["utt_id"] for row in [*valid_rows, *test_rows]}) != valid_count + test_count:
-        raise AssertionError("m2_manual valid/test 出现重复 utt_id")
+        raise AssertionError("Duplicate utt_id found in m2_manual valid/test")
     return valid_rows, test_rows, {
         "reference_positive_ratio": positive_ratio,
         "test_positive_target": test_positive_target,
@@ -157,7 +157,7 @@ def select_matching_lmdb_splits(rows, valid_count, test_count, valid_positive_co
 
 def balance_train_by_removing_part00_04_negatives(rows, target_ratio, source_min,
                                                    source_max, seed):
-    """仅删除 part00-04 负例，使 train 正例比例最接近 valid_m2_manual。"""
+    """Remove only part00-04 negative examples to bring the train positive ratio as close as possible to valid_m2_manual."""
     positive_count = sum(bool(row["positive_utterance"]) for row in rows)
     current_ratio = positive_count / len(rows)
     current_target_delta = abs(positive_count - len(rows) * target_ratio)
@@ -170,8 +170,8 @@ def balance_train_by_removing_part00_04_negatives(rows, target_ratio, source_min
         }
     if current_ratio > target_ratio + 1e-12:
         raise ValueError(
-            f"train 当前正例比例 {current_ratio:.8f} 已高于目标 {target_ratio:.8f}；"
-            "只删除负例无法降低比例"
+            f"Current train positive ratio {current_ratio:.8f} exceeds target {target_ratio:.8f}; "
+            "removing only negative examples cannot lower the ratio"
         )
     removable = [
         row for row in rows
@@ -189,8 +189,8 @@ def balance_train_by_removing_part00_04_negatives(rows, target_ratio, source_min
     best_possible = positive_count / (len(rows) - remove_count)
     if remove_count == len(removable) and best_possible + 1e-12 < target_ratio:
         raise ValueError(
-            f"part00-04 可删除负例只有 {len(removable)} 条，无法把 train 从 "
-            f"{current_ratio:.8f} 提高到 {target_ratio:.8f}"
+            f"Only {len(removable)} removable negatives are available in part00-04; cannot raise train ratio "
+            f"from {current_ratio:.8f} to {target_ratio:.8f}"
         )
     removed, _ = stratified_take(
         removable, remove_count, 0, seed, "train/remove_part00_04_negative"
@@ -222,22 +222,22 @@ def main():
     args = parse_args()
     supplement_sources = parse_source_indices(args.m2_supplement_source_indices)
     if args.m2_source_index in supplement_sources:
-        raise ValueError("考试院 source_index 不能同时出现在补充来源中")
+        raise ValueError("The examination-authority source_index cannot also appear among supplement sources")
     if args.valid_count <= 0 or args.test_count <= 0:
-        raise ValueError("valid-count 和 test-count 必须大于 0")
+        raise ValueError("valid-count and test-count must be greater than 0")
     if args.lmdb_source_index_min > args.lmdb_source_index_max:
-        raise ValueError("LMDB source_index 范围非法")
+        raise ValueError("Invalid LMDB source_index range")
     manifest = Path(args.merged_manifest).resolve()
     output_root = Path(args.output_root).resolve()
     if not manifest.is_file():
-        raise FileNotFoundError(f"找不到合并 manifest：{manifest}")
+        raise FileNotFoundError(f"Merged manifest not found: {manifest}")
     output_root.mkdir(parents=True, exist_ok=True)
 
     input_records, skipped_records = base.load_manifest(manifest)
     records, pre_split_skipped = base.filter_splittable_records(input_records)
     skipped_records.extend(pre_split_skipped)
     if not records:
-        raise ValueError("过滤后没有可划分记录")
+        raise ValueError("No records remain to split after filtering")
     rows = base.build_split_rows(records)
     global_positive_count = sum(bool(row["positive_utterance"]) for row in rows)
     reference_positive_ratio = global_positive_count / len(rows)
@@ -251,7 +251,7 @@ def main():
     required = args.valid_count + args.test_count
     if m2_candidate_count < required or len(lmdb_rows) < required:
         raise ValueError(
-            f"评测候选不足：m2_allowed={m2_candidate_count}, lmdb={len(lmdb_rows)}, 每组需要={required}"
+            f"Insufficient evaluation candidates: m2_allowed={m2_candidate_count}, lmdb={len(lmdb_rows)}, required per group={required}"
         )
 
     valid_m2_manual_rows, test_m2_manual_rows, m2_targets = select_m2_splits(
@@ -268,7 +268,7 @@ def main():
     eval_rows = [*valid_m2_manual_rows, *test_m2_manual_rows, *valid_lmdb, *test_lmdb]
     eval_ids = [row["utt_id"] for row in eval_rows]
     if len(eval_ids) != len(set(eval_ids)):
-        raise AssertionError("两组评测集合出现 utt_id 重叠")
+        raise AssertionError("The two evaluation sets contain overlapping utt_id values")
     eval_id_set = set(eval_ids)
     train_candidates = [row for row in rows if row["utt_id"] not in eval_id_set]
     train_target_ratio = valid_positive_count / args.valid_count
@@ -291,10 +291,10 @@ def main():
             "target_ratio": reference_positive_ratio,
             "removed_negative_utterances": 0,
             "removed_source_counts": {},
-            "reason": "valid负例已补足；保留train自然比例，评测集使用最邻近整数正例数",
+            "reason": "Valid negatives were filled; the natural train ratio is preserved, and evaluation sets use the nearest integer positive count",
         }
     if not train_rows:
-        raise ValueError("扣除评测集和比例平衡负例后 train 为空")
+        raise ValueError("Training set is empty after removing evaluation sets and ratio-balancing negatives")
 
     removed_path = output_root / "train_ratio_removed_negative_records.jsonl"
     removed_path.write_text(
@@ -322,7 +322,7 @@ def main():
             output_root, split, split_map[split], args, skipped_records, skipped_path
         )
         if result is None:
-            raise AssertionError(f"{split}: 未生成")
+            raise AssertionError(f"{split}: was not generated")
         counters, sources = result
         reports[split] = {
             "counters": dict(counters),
@@ -340,8 +340,8 @@ def main():
     }
     if wrong_counts:
         raise RuntimeError(
-            f"评测 split 在音频编码阶段发生跳过，无法保持固定数量：{wrong_counts}；"
-            "请检查 prepare_skipped_records.jsonl"
+            f"Samples were skipped during audio encoding, so the fixed evaluation split sizes cannot be maintained: {wrong_counts}; "
+            "check prepare_skipped_records.jsonl"
         )
 
     train_positive_ratio = (

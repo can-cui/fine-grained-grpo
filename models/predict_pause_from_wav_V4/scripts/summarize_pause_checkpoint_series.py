@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""汇总多个 epoch checkpoint 的三组 valid/test 指标并生成折线图。"""
+"""Summarize three groups of valid/test metrics across epoch checkpoints and generate line plots."""
 
 import argparse
 import csv
@@ -49,20 +49,20 @@ def load_predictions(path):
         reader = csv.DictReader(handle, delimiter="\t")
         required = {"probability", "target", "valid"}
         if reader.fieldnames is None or not required.issubset(reader.fieldnames):
-            raise ValueError(f"预测 TSV 缺少字段：{path}")
+            raise ValueError(f"Prediction TSV is missing required fields: {path}")
         for line_number, row in enumerate(reader, 2):
             try:
                 probability = float(row["probability"])
                 target = int(row["target"])
                 valid = int(row["valid"])
             except (TypeError, ValueError) as exc:
-                raise ValueError(f"{path}:{line_number}: 数值字段非法") from exc
+                raise ValueError(f"{path}:{line_number}: invalid numeric field") from exc
             if not 0.0 <= probability <= 1.0 or target not in (0, 1) or valid not in (0, 1):
-                raise ValueError(f"{path}:{line_number}: probability/target/valid 越界")
+                raise ValueError(f"{path}:{line_number}: probability/target/valid is out of range")
             if valid:
                 rows.append((probability, bool(target)))
     if not rows:
-        raise ValueError(f"没有有效评测位置：{path}")
+        raise ValueError(f"No valid evaluation positions: {path}")
     return rows
 
 
@@ -202,9 +202,9 @@ def main():
     args = parse_args()
     epochs = sorted(set(args.epochs))
     if len(epochs) != len(args.epochs) or any(epoch <= 0 for epoch in epochs):
-        raise ValueError("epochs 必须是互不重复的正整数")
+        raise ValueError("epochs must be distinct positive integers")
     if not 0.0 <= args.threshold <= 1.0:
-        raise ValueError("threshold 必须在 [0, 1] 内")
+        raise ValueError("threshold must be in [0, 1]")
 
     series_root = Path(args.series_root).resolve()
     output_root = Path(args.output_root).resolve()
@@ -215,7 +215,7 @@ def main():
         for split in SPLITS:
             prediction_path = epoch_root / split / f"{split}_pause_predictions.tsv"
             if not prediction_path.is_file():
-                raise FileNotFoundError(f"找不到逐词预测：{prediction_path}")
+                raise FileNotFoundError(f"Token-level predictions not found: {prediction_path}")
             predictions = load_predictions(prediction_path)
             rows.append(
                 {

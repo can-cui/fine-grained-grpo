@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""评测已保存 checkpoint 在六个正式 split 上的句级停顿序列准确率。"""
+"""Evaluate sentence-level pause-sequence accuracy for saved checkpoints on the six official splits."""
 
 import argparse
 import csv
@@ -50,7 +50,7 @@ def list_epoch_checkpoints(checkpoint_root):
     checkpoints.sort(key=lambda item: item[0])
     if not checkpoints:
         raise FileNotFoundError(
-            "未找到已完成的 epoch checkpoint（期望 checkpointN.pt）：{}".format(checkpoint_root)
+            "No completed epoch checkpoint found (expected checkpointN.pt): {}".format(checkpoint_root)
         )
     return checkpoints
 
@@ -83,12 +83,12 @@ def evaluate_split(model, task, split, args, device):
             valid_counts = valid_mask.long().sum(dim=1)
             if torch.any(valid_counts == 0):
                 bad_indices = torch.nonzero(valid_counts == 0, as_tuple=False).flatten().tolist()
-                raise ValueError("{} 出现没有有效句中词位置的样本：{}".format(split, bad_indices))
+                raise ValueError("{} contains samples with no valid in-sentence word positions: {}".format(split, bad_indices))
             sentence_correct = ((predictions == targets) | ~valid_mask).all(dim=1)
             correct_utterances += int(sentence_correct.long().sum().item())
             utterances += int(sentence_correct.numel())
     if utterances == 0:
-        raise ValueError("{} 没有可评测句子".format(split))
+        raise ValueError("{} has no evaluable sentences".format(split))
     return {
         "correct_utterances": correct_utterances,
         "utterances": utterances,
@@ -103,11 +103,11 @@ def load_existing_rows(path, threshold, overwrite):
         payload = json.load(handle)
     if payload.get("threshold") != threshold or payload.get("splits") != list(SPLITS):
         raise ValueError(
-            "已有统计文件的阈值或 split 与当前不同；请更换输出目录或使用 --overwrite"
+            "The existing statistics use a different threshold or split; choose another output directory or use --overwrite"
         )
     rows = payload.get("rows")
     if not isinstance(rows, list):
-        raise ValueError("已有统计文件 rows 非法：{}".format(path))
+        raise ValueError("The existing statistics file has invalid rows: {}".format(path))
     return rows
 
 
@@ -134,7 +134,7 @@ def write_reports(output_root, threshold, candidate_checkpoints, rows):
     payload = {
         "format_version": 1,
         "metric": "sentence_accuracy_exact_pause_sequence",
-        "definition": "同一句所有 valid_mask=1 的词位置，预测 0/1 序列与标签完全一致才记为正确",
+        "definition": "A sentence is correct only when the predicted 0/1 sequence exactly matches the labels at all word positions with valid_mask=1",
         "threshold": threshold,
         "splits": list(SPLITS),
         "candidate_checkpoints": candidate_names,
@@ -165,19 +165,19 @@ def write_reports(output_root, threshold, candidate_checkpoints, rows):
 def main():
     args = parse_args()
     if not 0.0 <= args.threshold <= 1.0:
-        raise ValueError("threshold 必须在 [0, 1] 内")
+        raise ValueError("threshold must be in [0, 1]")
     if args.batch_size <= 0:
-        raise ValueError("batch-size 必须大于 0")
+        raise ValueError("batch-size must be greater than 0")
     if not torch.cuda.is_available():
-        raise RuntimeError("当前 wav2vec TorchScript 资产为 CUDA 版本，句级评测必须使用 GPU")
+        raise RuntimeError("The current wav2vec TorchScript asset is a CUDA build; sentence-level evaluation requires a GPU")
     checkpoint_root = args.checkpoint_root.resolve()
     data_root = args.data_root.resolve()
     output_root = args.output_root.resolve()
     if not checkpoint_root.is_dir():
-        raise FileNotFoundError("checkpoint-root 不存在：{}".format(checkpoint_root))
+        raise FileNotFoundError("checkpoint-root does not exist: {}".format(checkpoint_root))
     for split in SPLITS:
         if not (data_root / split).is_dir() or not (data_root / "{}.key".format(split)).is_file():
-            raise FileNotFoundError("缺少正式 split：{}/{}".format(data_root, split))
+            raise FileNotFoundError("Missing official split: {}/{}".format(data_root, split))
     output_root.mkdir(parents=True, exist_ok=True)
     checkpoints = list_epoch_checkpoints(checkpoint_root)
     json_path = output_root / "pause_checkpoint_sentence_accuracy.json"
@@ -191,9 +191,9 @@ def main():
             split for split in SPLITS if (checkpoint.name, split) not in expected_keys
         ]
         if not missing_splits:
-            print("跳过已统计 checkpoint：{}".format(checkpoint.name))
+            print("Skipping checkpoint with existing statistics: {}".format(checkpoint.name))
             continue
-        print("评测 {}：{}".format(checkpoint.name, ",".join(missing_splits)))
+        print("Evaluating {}: {}".format(checkpoint.name, ",".join(missing_splits)))
         models, _checkpoint_args, task = checkpoint_utils.load_model_ensemble_and_task(
             [str(checkpoint)],
             arg_overrides={
@@ -203,7 +203,7 @@ def main():
             },
         )
         if len(models) != 1:
-            raise ValueError("{} 未加载到唯一模型".format(checkpoint))
+            raise ValueError("Exactly one model was not loaded from {}".format(checkpoint))
         model = models[0].to(device).eval()
         for split in missing_splits:
             metrics = evaluate_split(model, task, split, args, device)

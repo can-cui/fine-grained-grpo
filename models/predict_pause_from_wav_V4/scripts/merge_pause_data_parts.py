@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""合并分片提取结果的 JSONL 与统计信息；不复制 WAV 文件。"""
+"""Merge JSONL manifests and statistics from extraction shards without copying WAV files."""
 
 import argparse
 import hashlib
@@ -27,11 +27,11 @@ def read_jsonl(path):
             try:
                 yield json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(f"JSONL 损坏：{path}:{line_number}: {exc}") from exc
+                raise ValueError(f"Invalid JSONL at {path}:{line_number}: {exc}") from exc
 
 
 def sample_id_from_error(row):
-    """按提取脚本相同规则，从错误记录还原 utt_id；无法还原时返回 None。"""
+    """Recover utt_id from an error record using the extraction script's rules; return None if it cannot be recovered."""
     source_index = row.get("source_index")
     key_line = row.get("key_line", "")
     if not isinstance(source_index, int) or "@" not in key_line:
@@ -45,7 +45,7 @@ def sample_id_from_error(row):
 
 
 def records_equivalent(left, right):
-    """同一条样本在不同分片目录中只有输出路径或新增审计字段可以不同。"""
+    """For the same sample across shard directories, only output paths or newly added audit fields may differ."""
     ignored = {"wav_path", "hash_marker_count_before_cleanup"}
     return (
         {key: value for key, value in left.items() if key not in ignored}
@@ -65,21 +65,21 @@ def main():
     for root in input_roots:
         manifest = root / "all_pause_data.jsonl"
         if not manifest.is_file():
-            raise FileNotFoundError(f"找不到分片 manifest：{manifest}")
+            raise FileNotFoundError(f"Shard manifest not found: {manifest}")
         for record in read_jsonl(manifest):
             utt_id = record.get("utt_id")
             if not utt_id:
-                raise ValueError(f"记录缺少 utt_id：{manifest}")
+                raise ValueError(f"Record is missing utt_id: {manifest}")
             leading = record.get("leading_silence_end_seconds")
             alignment_duration = record.get("alignment_duration_seconds")
             if leading is None:
-                leading_boundary_errors.append(f"{utt_id}: 缺少 leading_silence_end_seconds")
+                leading_boundary_errors.append(f"{utt_id}: missing leading_silence_end_seconds")
                 continue
             try:
                 leading = float(leading)
                 alignment_duration = float(alignment_duration)
             except (TypeError, ValueError):
-                leading_boundary_errors.append(f"{utt_id}: 句首或对齐时间不是数值")
+                leading_boundary_errors.append(f"{utt_id}: leading-silence or alignment time is not numeric")
                 continue
             if (
                 not math.isfinite(leading)
@@ -88,12 +88,12 @@ def main():
                 or leading > alignment_duration
             ):
                 leading_boundary_errors.append(
-                    f"{utt_id}: 非法边界 leading={leading}, alignment={alignment_duration}"
+                    f"{utt_id}: invalid boundary leading={leading}, alignment={alignment_duration}"
                 )
                 continue
             if utt_id in records:
                 if not records_equivalent(records[utt_id], record):
-                    raise ValueError(f"发现内容冲突的重复 utt_id：{utt_id}")
+                    raise ValueError(f"Conflicting duplicate utt_id found: {utt_id}")
                 duplicate_count += 1
                 # Inputs are ordered with the old single-process directory before the new shard directories; prefer a valid WAV path from the latter.
             records[utt_id] = record
@@ -101,8 +101,8 @@ def main():
     if leading_boundary_errors:
         preview = "\n".join(leading_boundary_errors[:20])
         raise ValueError(
-            "合并输入包含缺失或非法的句首静音边界；请使用更新后的提取脚本重新提取。"
-            f"错误数={len(leading_boundary_errors)}\n{preview}"
+            "Merged inputs contain missing or invalid leading-silence boundaries; re-extract using the updated extraction script. "
+            f"Error count={len(leading_boundary_errors)}\n{preview}"
         )
 
     merged_manifest = output_root / "all_pause_data.jsonl"
@@ -148,12 +148,12 @@ def main():
         if len(words) != len(labels):
             raise ValueError(
                 f"{record.get('utt_id', '<unknown>')}: "
-                f"word_list 与 pause_label 长度不一致: {len(words)} != {len(labels)}"
+                f"word_list and pause_label lengths differ: {len(words)} != {len(labels)}"
             )
         normalized_labels = [int(value) for value in labels]
         if any(value not in (0, 1) for value in normalized_labels):
             raise ValueError(
-                f"{record.get('utt_id', '<unknown>')}: pause_label 只能包含 0 或 1"
+                f"{record.get('utt_id', '<unknown>')}: pause_label may contain only 0 or 1"
             )
         positive_pause_count = sum(normalized_labels)
         counters["words"] += len(words)
@@ -177,37 +177,37 @@ def main():
     )
     total_hours = sum(float(row.get("audio_duration_seconds", 0.0)) for row in records.values()) / 3600.0
     lines = [
-        f"含至少一个停顿的样本数: {counters['utterances_with_pause']}",
-        f"不含停顿的样本数: {utterances_without_pause}",
-        f"含停顿样本比例: {utterance_pause_ratio:.8f}",
-        f"含停顿样本百分比: {utterance_pause_ratio * 100.0:.6f}%",
-        "音频停顿训练数据分片合并统计",
-        f"输入目录数: {len(input_roots)}",
-        f"唯一样本数: {len(records)}",
-        f"去重记录数: {duplicate_count}",
-        f"LMDB 来源数: {len(sources)}",
-        f"说话人数: {len(speakers)}",
-        f"总音频小时数: {total_hours:.6f}",
-        f"总词数: {counters['words']}",
-        f"正停顿标签数: {counters['positive_pauses']}",
-        f"负停顿标签数: {negative_pauses}",
-        f"正停顿比例: {positive_ratio:.8f}",
-        f"清理前含 # 标记总数: {counters['hash_markers']}",
-        f"phonemes int16_x3 样本数: {counters['phoneme_layout_int16_x3']}",
-        f"phonemes int16_x6 样本数: {counters['phoneme_layout_int16_x6']}",
-        f"phonemes 未记录布局样本数: {counters['phoneme_layout_unknown']}",
-        f"错误记录数: {len(error_rows)}",
-        f"已由成功样本消解的历史错误数: {resolved_error_count}",
-        f"被新分片覆盖的旧来源报告数: {duplicate_source_report_count}",
-        f"缺失 WAV 文件数: {counters['missing_wav_files']}",
-        "缺失 leading_silence_end_seconds 数: 0",
-        "非法 leading_silence_end_seconds 数: 0",
-        "说明: 合并过程只合并清单和统计，不复制 WAV；wav_path 仍指向原分片目录。",
+        f"Samples containing at least one pause: {counters['utterances_with_pause']}",
+        f"Samples without pauses: {utterances_without_pause}",
+        f"Fraction of samples containing pauses: {utterance_pause_ratio:.8f}",
+        f"Percentage of samples containing pauses: {utterance_pause_ratio * 100.0:.6f}%",
+        "Audio pause training-data shard merge statistics",
+        f"Input directories: {len(input_roots)}",
+        f"Unique samples: {len(records)}",
+        f"Deduplicated records: {duplicate_count}",
+        f"LMDB sources: {len(sources)}",
+        f"Speakers: {len(speakers)}",
+        f"Total audio hours: {total_hours:.6f}",
+        f"Total words: {counters['words']}",
+        f"Positive pause labels: {counters['positive_pauses']}",
+        f"Negative pause labels: {negative_pauses}",
+        f"Positive pause ratio: {positive_ratio:.8f}",
+        f"Total # markers before cleanup: {counters['hash_markers']}",
+        f"Samples with phonemes int16_x3 layout: {counters['phoneme_layout_int16_x3']}",
+        f"Samples with phonemes int16_x6 layout: {counters['phoneme_layout_int16_x6']}",
+        f"Samples with unrecorded phonemes layout: {counters['phoneme_layout_unknown']}",
+        f"Error records: {len(error_rows)}",
+        f"Historical errors resolved by successful samples: {resolved_error_count}",
+        f"Old source reports superseded by new shards: {duplicate_source_report_count}",
+        f"Missing WAV files: {counters['missing_wav_files']}",
+        "Missing leading_silence_end_seconds values: 0",
+        "Invalid leading_silence_end_seconds values: 0",
+        "Note: only manifests and statistics are merged; WAV files are not copied, and wav_path still points to the original shard directory.",
     ]
     stats = "\n".join(lines) + "\n"
     (output_root / "training_data_statistics.txt").write_text(stats, encoding="utf-8")
     print(stats, end="")
-    print(f"合并 manifest：{merged_manifest}")
+    print(f"Merged manifest: {merged_manifest}")
 
 
 if __name__ == "__main__":

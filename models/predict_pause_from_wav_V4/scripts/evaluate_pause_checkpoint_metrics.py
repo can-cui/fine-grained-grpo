@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""评测指定 checkpoint 在六个正式 split 上的词级与句级停顿指标。"""
+"""Evaluate token-level and sentence-level pause metrics for a specified checkpoint on the six official splits."""
 
 import argparse
 import csv
@@ -34,12 +34,12 @@ PHRASE_EVALUABLE_SPLITS = frozenset((
     "test_m2_mfa",
 ))
 FORMULA_REMARK = (
-    "Precision=TP/(TP+FP，分母为0取0)；Recall=TP/(TP+FN，分母为0取0)；"
-    "F1=2*Precision*Recall/(Precision+Recall，分母为0取0)；"
-    "sentence_accuracy=预测序列与标签在该句全部 valid_mask=1 词位置完全一致的句数/总句数；"
-    "phrase_pause_accuracy=【意群】内部停顿序列完全一致的句数/有可评测意群内部停顿的句数，意群左右边界及外部停顿不参与；"
-    "LMDB split（valid_lmdb_mfa/test_lmdb_mfa）没有对应的【】意群标注，"
-    "该指标输出 N/A；单词意群没有内部词间停顿，单列统计且不计入该指标分母"
+    "Precision=TP/(TP+FP, using 0 when the denominator is 0); Recall=TP/(TP+FN, using 0 when the denominator is 0); "
+    "F1=2*Precision*Recall/(Precision+Recall, using 0 when the denominator is 0); "
+    "sentence_accuracy=number of sentences whose predictions exactly match labels at all word positions with valid_mask=1 / total sentences; "
+    "phrase_pause_accuracy=number of phrases with an exact match of internal pause sequences / phrases with evaluable internal pauses; phrase boundaries and external pauses are excluded; "
+    "LMDB splits (valid_lmdb_mfa/test_lmdb_mfa) have no corresponding [] phrase annotations, so this metric is N/A; "
+    "single-word phrases have no internal inter-word pauses and are reported separately, excluded from this metric's denominator"
 )
 ID_PATTERN = re.compile(r"\d+")
 SOURCE_MARKED_ID_PATTERN = re.compile(
@@ -110,15 +110,15 @@ def load_phrase_catalog(path):
                 phrase_text, after = remaining.split("】", 1)
             except ValueError as error:
                 raise ValueError(
-                    "{}:{} 应为 id<TAB>且恰有一个【意群】的句子".format(path, line_number)
+                    "{}:{} expected id<TAB> followed by a sentence containing exactly one [phrase]".format(path, line_number)
                 ) from error
             if not marked_id.isdigit():
-                raise ValueError("{}:{} 标注 id 不是数字：{}".format(path, line_number, marked_id))
+                raise ValueError("{}:{} annotation id is not numeric: {}".format(path, line_number, marked_id))
             full_tokens = tokenize_text(before + phrase_text + after)
             phrase_tokens = tokenize_text(phrase_text)
             phrase_start = len(tokenize_text(before))
             if full_tokens[phrase_start:phrase_start + len(phrase_tokens)] != phrase_tokens:
-                raise AssertionError("{}:{} 意群词边界解析异常".format(path, line_number))
+                raise AssertionError("{}:{} failed to parse phrase word boundaries".format(path, line_number))
             record = {
                 "marked_id": str(int(marked_id)),
                 "full_tokens": full_tokens,
@@ -126,18 +126,18 @@ def load_phrase_catalog(path):
                 "phrase_start": phrase_start,
             }
             if record["marked_id"] in by_id:
-                raise ValueError("{}:{} 出现重复标注 id".format(path, line_number))
+                raise ValueError("{}:{} duplicate annotation id".format(path, line_number))
             if full_tokens in by_sentence:
-                raise ValueError("{}:{} 出现重复完整句子，无法唯一文本匹配".format(path, line_number))
+                raise ValueError("{}:{} duplicate full sentence; text matching is ambiguous".format(path, line_number))
             by_id[record["marked_id"]] = record
             by_sentence[full_tokens] = record
     if not by_id:
-        raise ValueError("意群标注文件为空：{}".format(path))
+        raise ValueError("Phrase annotation file is empty: {}".format(path))
     return {"by_id": by_id, "by_sentence": by_sentence}
 
 
 def find_phrase_spans(sequence, phrase_tokens):
-    """在 LMDB 逐词序列中定位意群，允许连字符词在 LMDB 中被拆分。"""
+    """Locate a phrase in the LMDB token sequence, allowing hyphenated words to be split in LMDB."""
     phrase_text = "".join(phrase_tokens)
     spans = []
     for start in range(len(sequence)):
@@ -183,7 +183,7 @@ def phrase_pause_indices(metadata, catalog, cache):
             selected_id = source_marked_ids[0]
         elif len(set(source_marked_ids)) > 1:
             raise ValueError(
-                "{}: 来源名后出现多个意群标注 id：{}".format(utt_id, source_marked_ids)
+                "{}: multiple phrase annotation ids follow the source name: {}".format(utt_id, source_marked_ids)
             )
         elif len(set(padded_candidate_ids)) == 1:
             selected_id = padded_candidate_ids[0]
@@ -191,7 +191,7 @@ def phrase_pause_indices(metadata, catalog, cache):
             selected_id = candidate_ids[0]
         else:
             raise ValueError(
-                "{}: 无法通过完整文本或可判定数字 id 对齐意群；数字候选={}".format(
+                "{}: could not align the phrase using full text or an unambiguous numeric id; numeric candidates={}".format(
                     utt_id, candidate_ids
                 )
             )
@@ -200,13 +200,13 @@ def phrase_pause_indices(metadata, catalog, cache):
     spans = find_phrase_spans(normalized_words, record["phrase_tokens"])
     if len(spans) != 1:
         raise ValueError(
-            "{}: 已按 {} 对齐到意群，但无法唯一定位意群词字符序列，位置={}".format(
+            "{}: aligned to the phrase by {}, but could not uniquely locate its word-character sequence; positions={}".format(
                 utt_id, matched_by, spans
             )
         )
     phrase_start, phrase_end = spans[0]
     if phrase_end > len(normalized_positions):
-        raise AssertionError("{}: 意群范围超出逐词序列".format(utt_id))
+        raise AssertionError("{}: phrase range is outside the token sequence".format(utt_id))
     indices = tuple(index for index, _token in normalized_positions[phrase_start:phrase_end - 1])
     result = {"indices": indices, "matched_by": matched_by, "marked_id": record["marked_id"]}
     cache[cache_key] = result
@@ -245,7 +245,7 @@ def evaluate_split(model, task, split, args, device, phrase_catalog, phrase_cach
             valid_counts = valid_mask.long().sum(dim=1)
             if torch.any(valid_counts == 0):
                 bad = torch.nonzero(valid_counts == 0, as_tuple=False).flatten().tolist()
-                raise ValueError("{} 存在无有效句中词位置的样本：{}".format(split, bad))
+                raise ValueError("{} contains samples with no valid in-sentence word positions: {}".format(split, bad))
             tp += int(((predictions & targets) & valid_mask).long().sum().item())
             fp += int(((predictions & ~targets) & valid_mask).long().sum().item())
             fn += int(((~predictions & targets) & valid_mask).long().sum().item())
@@ -268,7 +268,7 @@ def evaluate_split(model, task, split, args, device, phrase_catalog, phrase_cach
                 phrase_valid = valid_mask[batch_index, indices]
                 if not bool(phrase_valid.all()):
                     raise ValueError(
-                        "{}:{} 意群内部位置包含无效停顿位置：{}".format(
+                        "{}:{} phrase interior contains invalid pause positions: {}".format(
                             split, metadata["utt_id"], indices
                         )
                     )
@@ -277,7 +277,7 @@ def evaluate_split(model, task, split, args, device, phrase_catalog, phrase_cach
                 )
                 phrase_utterances += 1
     if utterances == 0:
-        raise ValueError("{} 没有可评测句子".format(split))
+        raise ValueError("{} has no evaluable sentences".format(split))
     precision = safe_div(tp, tp + fp)
     recall = safe_div(tp, tp + fn)
     return {
@@ -317,10 +317,10 @@ def load_cache(path, threshold, phrase_marked_sha256, overwrite_cache):
         or payload.get("splits") != list(SPLITS)
         or payload.get("phrase_marked_sha256") != phrase_marked_sha256
     ):
-        raise ValueError("指标缓存与当前阈值、split 或意群标注文件不一致；请更换输出目录或使用 --overwrite-cache")
+        raise ValueError("Metric cache does not match the current threshold, splits, or phrase annotation file; choose another output directory or use --overwrite-cache")
     rows = payload.get("rows")
     if not isinstance(rows, list):
-        raise ValueError("指标缓存 rows 非法：{}".format(path))
+        raise ValueError("Metric cache contains invalid rows: {}".format(path))
     return rows
 
 
@@ -385,7 +385,7 @@ def write_selected_reports(output_root, epochs, threshold, phrase_marked_path, p
     required = {(epoch, split) for epoch in epochs for split in SPLITS}
     actual = {(row["epoch"], row["split"]) for row in selected}
     if actual != required:
-        raise RuntimeError("指定 checkpoint 的指标不完整，缺少：{}".format(sorted(required - actual)))
+        raise RuntimeError("Metrics are incomplete for the specified checkpoint; missing: {}".format(sorted(required - actual)))
     selected.sort(key=lambda row: (row["epoch"], SPLITS.index(row["split"])))
     tsv_path = output_root / "pause_checkpoint_metrics.tsv"
     json_path = output_root / "pause_checkpoint_metrics.json"
@@ -416,29 +416,29 @@ def main():
     args = parse_args()
     epochs = sorted(set(args.epochs))
     if len(epochs) != len(args.epochs) or any(epoch <= 0 for epoch in epochs):
-        raise ValueError("epochs 必须是互不重复的正整数")
+        raise ValueError("epochs must be distinct positive integers")
     if not 0.0 <= args.threshold <= 1.0 or args.batch_size <= 0:
-        raise ValueError("threshold 必须在 [0,1] 内且 batch-size 必须大于 0")
+        raise ValueError("threshold must be in [0,1] and batch-size must be greater than 0")
     if not torch.cuda.is_available():
-        raise RuntimeError("当前 wav2vec TorchScript 资产为 CUDA 版本，评测必须使用 GPU")
+        raise RuntimeError("The current wav2vec TorchScript asset is a CUDA build; evaluation requires a GPU")
     checkpoint_root = args.checkpoint_root.resolve()
     data_root = args.data_root.resolve()
     phrase_marked_path = args.phrase_marked_txt.resolve()
     output_root = args.output_root.resolve()
     if not checkpoint_root.is_dir():
-        raise FileNotFoundError("checkpoint-root 不存在：{}".format(checkpoint_root))
+        raise FileNotFoundError("checkpoint-root does not exist: {}".format(checkpoint_root))
     for split in SPLITS:
         if not (data_root / split).is_dir() or not (data_root / "{}.key".format(split)).is_file():
-            raise FileNotFoundError("缺少正式 split：{}/{}".format(data_root, split))
+            raise FileNotFoundError("Missing official split: {}/{}".format(data_root, split))
     if not phrase_marked_path.is_file():
-        raise FileNotFoundError("意群标注文件不存在：{}".format(phrase_marked_path))
+        raise FileNotFoundError("Phrase annotation file does not exist: {}".format(phrase_marked_path))
     phrase_marked_sha256 = sha256_file(phrase_marked_path)
     phrase_catalog = load_phrase_catalog(phrase_marked_path)
     phrase_cache = {}
     checkpoints = [(epoch, checkpoint_root / "checkpoint{}.pt".format(epoch)) for epoch in epochs]
     missing_files = [str(path) for _epoch, path in checkpoints if not path.is_file()]
     if missing_files:
-        raise FileNotFoundError("指定 checkpoint 不存在：{}".format(missing_files))
+        raise FileNotFoundError("Specified checkpoint does not exist: {}".format(missing_files))
     output_root.mkdir(parents=True, exist_ok=True)
     cache_path = output_root / "pause_checkpoint_metrics_cache.json"
     rows = load_cache(cache_path, args.threshold, phrase_marked_sha256, args.overwrite_cache)
@@ -449,9 +449,9 @@ def main():
     for epoch, checkpoint in checkpoints:
         missing_splits = [split for split in SPLITS if (checkpoint.name, split) not in cached_keys]
         if not missing_splits:
-            print("跳过已缓存 checkpoint：{}".format(checkpoint.name))
+            print("Skipping checkpoint with cached metrics: {}".format(checkpoint.name))
             continue
-        print("评测 {}：{}".format(checkpoint.name, ",".join(missing_splits)))
+        print("Evaluating {}: {}".format(checkpoint.name, ",".join(missing_splits)))
         models, _checkpoint_args, task = checkpoint_utils.load_model_ensemble_and_task(
             [str(checkpoint)],
             arg_overrides={
@@ -461,7 +461,7 @@ def main():
             },
         )
         if len(models) != 1:
-            raise ValueError("{} 未加载到唯一模型".format(checkpoint))
+            raise ValueError("Exactly one model was not loaded from {}".format(checkpoint))
         model = models[0].to(device).eval()
         for split in missing_splits:
             rows.append({

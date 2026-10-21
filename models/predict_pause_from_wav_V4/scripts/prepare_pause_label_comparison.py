@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""为同一批 valid/test 样本生成“人工标签 / MFA 30 ms 标签”对照 LMDB。"""
+"""Create comparison LMDBs with manual labels and MFA 30 ms labels for the same valid/test samples."""
 
 import argparse
 import hashlib
@@ -37,7 +37,7 @@ def parse_args():
 def load_extraction_runtime(extract_script, protobuf_python_dir, phone_vocab):
     script_path = Path(extract_script).resolve()
     if not script_path.is_file():
-        raise FileNotFoundError(f"找不到原始提取脚本：{script_path}")
+        raise FileNotFoundError(f"Original extraction script not found: {script_path}")
     spec = importlib.util.spec_from_file_location("pause_batch_extract", str(script_path))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -52,13 +52,13 @@ def read_key_file(path):
         for line_number, line in enumerate(handle, 1):
             parts = line.rstrip("\n").split("\t")
             if len(parts) != 4:
-                raise ValueError(f"{path}:{line_number}: key 行不是 4 列")
+                raise ValueError(f"{path}:{line_number}: key row does not have 4 columns")
             rows.append(parts)
     if not rows:
-        raise ValueError(f"key 文件为空：{path}")
+        raise ValueError(f"Key file is empty: {path}")
     keys = [row[0] for row in rows]
     if len(keys) != len(set(keys)):
-        raise ValueError(f"key 文件存在重复 utt_id：{path}")
+        raise ValueError(f"Key file contains duplicate utt_id values: {path}")
     return rows
 
 
@@ -73,13 +73,13 @@ def load_selected_manifest(manifest_path, wanted_ids):
             if utt_id not in wanted_ids:
                 continue
             if utt_id in selected:
-                raise ValueError(f"merged manifest 中 utt_id 重复：{utt_id}")
+                raise ValueError(f"Duplicate utt_id in merged manifest: {utt_id}")
             selected[utt_id] = record
             if len(selected) == len(wanted_ids):
                 break
     missing = sorted(wanted_ids - set(selected))
     if missing:
-        raise KeyError(f"merged manifest 缺少 {len(missing)} 条评测样本，例如：{missing[:5]}")
+        raise KeyError(f"Merged manifest is missing {len(missing)} evaluation samples, e.g. {missing[:5]}")
     return selected
 
 
@@ -96,7 +96,7 @@ def collapse_mfa_labels(words, raw_labels, pause_symbols):
 
 
 def load_mfa_labels(selected_manifest, extract_module, datum_class, vocab, threshold):
-    """只回读入选的600条源 Datum，复用正式提取函数从 phonemes/fa 生成 MFA 标签。"""
+    """Read back only the 600 selected source Datum records and reuse the official extraction function to generate MFA labels from phonemes/fa."""
     environments = {}
     results = {}
     try:
@@ -105,14 +105,14 @@ def load_mfa_labels(selected_manifest, extract_module, datum_class, vocab, thres
             source_key = str(record.get("source_lmdb_key", ""))
             lmdb_path, _ = extract_module.split_lmdb_spec(lmdb_spec)
             if not lmdb_path or not source_key:
-                raise ValueError(f"{utt_id}: 缺少 source_lmdb_spec/source_lmdb_key")
+                raise ValueError(f"{utt_id}: missing source_lmdb_spec/source_lmdb_key")
             if lmdb_path not in environments:
                 environments[lmdb_path] = lmdb.open(
                     lmdb_path, readonly=True, lock=False, readahead=False, subdir=True
                 )
             raw = environments[lmdb_path].begin().get(source_key.encode("utf-8"))
             if raw is None:
-                raise KeyError(f"{utt_id}: 源 LMDB 找不到 key={source_key}")
+                raise KeyError(f"{utt_id}: key={source_key} not found in source LMDB")
             datum = datum_class()
             datum.ParseFromString(raw)
             (
@@ -153,7 +153,7 @@ def remove_split(output_root, split):
     lmdb_path = output_root / split
     if lmdb_path.exists():
         if not lmdb_path.is_dir():
-            raise ValueError(f"预期 LMDB 为目录，实际不是：{lmdb_path}")
+            raise ValueError(f"Expected LMDB to be a directory, got: {lmdb_path}")
         shutil.rmtree(str(lmdb_path))
     for suffix in (".key", ".jsonl"):
         path = output_root / f"{split}{suffix}"
@@ -171,14 +171,14 @@ def build_split(
     overwrite,
 ):
     if not source_split.endswith("_manual"):
-        raise ValueError(f"人工标签源 split 必须以 _manual 结尾：{source_split}")
+        raise ValueError(f"Manual-label source split must end in _manual: {source_split}")
     output_split = source_split[:-len("_manual")] + "_mfa"
     output_lmdb = output_root / output_split
     output_key = output_root / f"{output_split}.key"
     output_manifest = output_root / f"{output_split}.jsonl"
     if any(path.exists() for path in (output_lmdb, output_key, output_manifest)):
         if not overwrite:
-            raise FileExistsError(f"输出已存在：{output_split}；确认后使用 --overwrite")
+            raise FileExistsError(f"Output already exists: {output_split}; use --overwrite after confirmation")
         remove_split(output_root, output_split)
 
     source_env = lmdb.open(
@@ -196,21 +196,21 @@ def build_split(
             utt_id = key_row[0]
             raw = source_txn.get(utt_id.encode("utf-8"))
             if raw is None:
-                raise KeyError(f"{source_split} LMDB 缺少 key：{utt_id}")
+                raise KeyError(f"{source_split} LMDB is missing key: {utt_id}")
             arrays = decode_npz(raw)
             manual_labels = arrays["pause_label"].astype(np.uint8, copy=True)
             valid_mask = arrays["valid_mask"].astype(bool)
             lexical_words, mfa_labels = mfa_labels_by_id[utt_id]
             lmdb_words = arrays["word_list"].astype(str).tolist()
             if lexical_words != lmdb_words:
-                raise ValueError(f"{utt_id}: manifest 与现有 LMDB 的 lexical word_list 不一致")
+                raise ValueError(f"{utt_id}: lexical word_list in the manifest does not match the existing LMDB")
             if len(mfa_labels) != len(manual_labels):
-                raise ValueError(f"{utt_id}: MFA/人工标签长度不一致")
+                raise ValueError(f"{utt_id}: MFA and manual label lengths differ")
 
             output_labels = mfa_labels
             arrays["pause_label"] = mfa_labels
             if not transaction.put(utt_id.encode("utf-8"), encode_npz(arrays), overwrite=False):
-                raise ValueError(f"{output_split}: 重复 key：{utt_id}")
+                raise ValueError(f"{output_split}: duplicate key: {utt_id}")
 
             manual_valid = manual_labels.astype(bool) & valid_mask
             mfa_valid = mfa_labels.astype(bool) & valid_mask
@@ -261,23 +261,23 @@ def build_split(
 def main():
     args = parse_args()
     if args.pause_threshold_seconds < 0:
-        raise ValueError("pause-threshold-seconds 不能小于 0")
+        raise ValueError("pause-threshold-seconds cannot be negative")
     if args.map_size_gb <= 0:
-        raise ValueError("map-size-gb 必须大于 0")
+        raise ValueError("map-size-gb must be greater than 0")
     manifest_path = Path(args.merged_manifest).resolve()
     source_root = Path(args.source_data_root).resolve()
     output_root = Path(args.output_root).resolve()
     if not manifest_path.is_file():
-        raise FileNotFoundError(f"找不到 merged manifest：{manifest_path}")
+        raise FileNotFoundError(f"Merged manifest not found: {manifest_path}")
 
     source_splits = (args.source_valid_split, args.source_test_split)
     if len(set(source_splits)) != 2:
-        raise ValueError("source-valid-split 与 source-test-split 不能相同")
+        raise ValueError("source-valid-split and source-test-split must differ")
     split_rows = {}
     wanted_ids = set()
     for split in source_splits:
         if not (source_root / split).is_dir():
-            raise FileNotFoundError(f"找不到原始 split LMDB：{source_root / split}")
+            raise FileNotFoundError(f"Original split LMDB not found: {source_root / split}")
         split_rows[split] = read_key_file(source_root / f"{split}.key")
         wanted_ids.update(row[0] for row in split_rows[split])
     expected_counts = {
@@ -287,8 +287,8 @@ def main():
     for split, rows in split_rows.items():
         if expected_counts[split] >= 0 and len(rows) != expected_counts[split]:
             raise ValueError(
-                f"原 {split} 数量应为 {expected_counts[split]}，实际为 {len(rows)}；"
-                "为避免对比错数据，已停止"
+                f"Expected {expected_counts[split]} records in original {split}, got {len(rows)}; "
+                "stopped to avoid comparing mismatched data"
             )
     selected_manifest = load_selected_manifest(manifest_path, wanted_ids)
     allowed_sources = {
@@ -297,7 +297,7 @@ def main():
         if token.strip()
     }
     if not allowed_sources:
-        raise ValueError("expected-source-indices 不能为空")
+        raise ValueError("expected-source-indices cannot be empty")
     wrong_sources = [
         utt_id
         for utt_id, record in selected_manifest.items()
@@ -310,8 +310,8 @@ def main():
     ]
     if wrong_sources:
         raise ValueError(
-            f"评测样本中有 {len(wrong_sources)} 条不属于允许来源="
-            f"{sorted(allowed_sources)}，例如：{wrong_sources[:5]}"
+            f"{len(wrong_sources)} evaluation samples are not from the allowed sources="
+            f"{sorted(allowed_sources)}, e.g. {wrong_sources[:5]}"
         )
     test_ids = {row[0] for row in split_rows[args.source_test_split]}
     wrong_test_sources = [
@@ -321,12 +321,12 @@ def main():
     ]
     if wrong_test_sources:
         raise ValueError(
-            f"test 必须全部来自 source_index={args.expected_test_source_index}，"
-            f"例如：{wrong_test_sources[:5]}"
+            f"All test samples must come from source_index={args.expected_test_source_index}; "
+            f"examples of violations: {wrong_test_sources[:5]}"
         )
     if non_manual:
         raise ValueError(
-            f"评测样本中有 {len(non_manual)} 条不是 Excel 人工标签，例如：{non_manual[:5]}"
+            f"{len(non_manual)} evaluation samples do not use manual Excel labels, e.g. {non_manual[:5]}"
         )
     extract_module, datum_class, vocab = load_extraction_runtime(
         args.extract_script, args.protobuf_python_dir, args.phone_vocab

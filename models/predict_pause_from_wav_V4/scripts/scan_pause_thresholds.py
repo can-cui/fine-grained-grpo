@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在 valid 上扫描停顿阈值，并把所选阈值应用到对应的 test 标签口径。"""
+"""Scan pause thresholds on valid and apply the selected threshold to the corresponding test label convention."""
 
 import argparse
 import csv
@@ -27,7 +27,7 @@ def parse_args():
             "valid_m2_mfa:test_m2_mfa",
             "valid_lmdb_mfa:test_lmdb_mfa",
         ),
-        help="每项格式为 valid_split:test_split；阈值只在左侧 valid 上选择",
+        help="Each item has the format valid_split:test_split; thresholds are selected only on the valid split on the left",
     )
     return parser.parse_args()
 
@@ -38,14 +38,14 @@ def safe_div(numerator, denominator):
 
 def make_thresholds(start, end, step):
     if start < 0 or end > 1 or start > end or step <= 0:
-        raise ValueError("阈值范围必须满足 0 <= start <= end <= 1 且 step > 0")
+        raise ValueError("Threshold range must satisfy 0 <= start <= end <= 1 and step > 0")
     thresholds = []
     value = start
     while value <= end:
         thresholds.append(value)
         value += step
     if not thresholds:
-        raise ValueError("阈值列表为空")
+        raise ValueError("Threshold list is empty")
     return thresholds
 
 
@@ -55,20 +55,20 @@ def load_predictions(path):
         reader = csv.DictReader(handle, delimiter="\t")
         required = {"utt_id", "word_index", "probability", "target", "valid"}
         if reader.fieldnames is None or not required.issubset(reader.fieldnames):
-            raise ValueError(f"预测 TSV 缺少字段：{path}")
+            raise ValueError(f"Prediction TSV is missing required fields: {path}")
         for line_number, row in enumerate(reader, 2):
             try:
                 probability = float(row["probability"])
                 target = int(row["target"])
                 valid = int(row["valid"])
             except (TypeError, ValueError) as exc:
-                raise ValueError(f"{path}:{line_number}: 数值字段非法") from exc
+                raise ValueError(f"{path}:{line_number}: invalid numeric field") from exc
             if not 0.0 <= probability <= 1.0 or target not in (0, 1) or valid not in (0, 1):
-                raise ValueError(f"{path}:{line_number}: probability/target/valid 越界")
+                raise ValueError(f"{path}:{line_number}: probability/target/valid is out of range")
             if valid:
                 rows.append((probability, bool(target)))
     if not rows:
-        raise ValueError(f"没有有效评测位置：{path}")
+        raise ValueError(f"No valid evaluation positions: {path}")
     return rows
 
 
@@ -122,7 +122,7 @@ def main():
         args.threshold_start, args.threshold_end, args.threshold_step
     )
     if not 0 <= args.baseline_threshold <= 1:
-        raise ValueError("baseline-threshold 必须在 [0, 1] 内")
+        raise ValueError("baseline-threshold must be in [0, 1]")
 
     inference_root = Path(args.inference_root).resolve()
     output_root = Path(args.output_root).resolve()
@@ -142,16 +142,16 @@ def main():
     for pair in args.split_pairs:
         parts = pair.split(":")
         if len(parts) != 2 or not all(parts):
-            raise ValueError(f"split-pairs 格式非法：{pair}")
+            raise ValueError(f"Invalid split-pairs format: {pair}")
         valid_split, test_split = parts
         if valid_split in seen_valid:
-            raise ValueError(f"valid split 重复：{valid_split}")
+            raise ValueError(f"Duplicate valid split: {valid_split}")
         seen_valid.add(valid_split)
         valid_path = inference_root / valid_split / f"{valid_split}_pause_predictions.tsv"
         test_path = inference_root / test_split / f"{test_split}_pause_predictions.tsv"
         if not valid_path.is_file() or not test_path.is_file():
             raise FileNotFoundError(
-                f"缺少 {valid_split}/{test_split} 的逐词预测；请先运行 sh03："
+                f"Missing token-level predictions for {valid_split}/{test_split}; run sh03 first:"
                 f"{valid_path}, {test_path}"
             )
         valid_predictions = load_predictions(valid_path)

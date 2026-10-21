@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""校验 part_05 的三个正式来源均已成功打开并导出样本。"""
+"""Validate that all three official part_05 sources opened and exported samples."""
 
 import argparse
 import json
@@ -17,7 +17,7 @@ def main():
     args = parse_args()
     report_path = Path(args.source_report)
     if not report_path.is_file():
-        raise FileNotFoundError(f"找不到来源报告：{report_path}")
+        raise FileNotFoundError(f"Source report not found: {report_path}")
 
     reports = []
     with report_path.open("r", encoding="utf-8") as handle:
@@ -27,13 +27,13 @@ def main():
             try:
                 reports.append(json.loads(line))
             except json.JSONDecodeError as exc:
-                raise ValueError(f"来源报告第 {line_number} 行不是合法 JSON") from exc
+                raise ValueError(f"Line {line_number} in the source report is not valid JSON") from exc
 
     by_index = {int(report["source_index"]): report for report in reports}
     expected = list(args.expected_source_indices)
     missing = [index for index in expected if index not in by_index]
     if missing:
-        raise ValueError(f"来源报告缺少 source_index：{missing}")
+        raise ValueError(f"Source report is missing source_index: {missing}")
 
     failed = []
     for index in expected:
@@ -50,9 +50,9 @@ def main():
             failed.append(index)
 
     if failed:
-        raise ValueError(f"以下正式来源没有成功完成：{failed}")
+        raise ValueError(f"The following official sources did not complete successfully: {failed}")
 
-    print("part_05 三来源状态校验通过")
+    print("part_05 three-source status validation passed")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""校验 V2-V5 共享 split 的数量、来源、配对、泄漏与 SHA256 指纹。"""
+"""Validate counts, sources, pairing, leakage, and SHA256 fingerprints for V2-V5 shared splits."""
 
 import argparse
 import hashlib
@@ -36,7 +36,7 @@ def parse_args():
     parser.add_argument(
         "--verify-existing-fingerprint",
         action="store_true",
-        help="只读比对已有指纹；不创建或改写 shared_dataset_fingerprint.json",
+        help="Read-only comparison with the existing fingerprint; do not create or modify shared_dataset_fingerprint.json",
     )
     return parser.parse_args()
 
@@ -55,10 +55,10 @@ def read_keys(path):
         for line_number, line in enumerate(handle, 1):
             parts = line.rstrip("\n").split("\t")
             if len(parts) != 4:
-                raise ValueError(f"{path}:{line_number}: key 行必须为 4 列")
+                raise ValueError(f"{path}:{line_number}: key row must have 4 columns")
             rows.append(parts[0])
     if not rows or len(rows) != len(set(rows)):
-        raise ValueError(f"key 文件为空或含重复 utt_id：{path}")
+        raise ValueError(f"Key file is empty or contains duplicate utt_id values: {path}")
     return rows
 
 
@@ -71,7 +71,7 @@ def read_manifest(path):
             try:
                 rows.append(json.loads(line))
             except json.JSONDecodeError as exc:
-                raise ValueError(f"{path}:{line_number}: JSON 损坏") from exc
+                raise ValueError(f"{path}:{line_number}: invalid JSON") from exc
     return rows
 
 
@@ -80,7 +80,7 @@ def main():
     root = Path(args.data_root).resolve()
     split_config_path = root / "shared_split_config.json"
     if not split_config_path.is_file():
-        raise FileNotFoundError(f"缺少共享划分配置：{split_config_path}")
+        raise FileNotFoundError(f"Missing shared split configuration: {split_config_path}")
     split_config = json.loads(split_config_path.read_text(encoding="utf-8"))
     split_keys = {}
     split_manifests = {}
@@ -95,24 +95,24 @@ def main():
     for filename in metadata_files:
         metadata_path = root / filename
         if not metadata_path.is_file():
-            raise FileNotFoundError(f"缺少共享数据审计文件：{metadata_path}")
+            raise FileNotFoundError(f"Missing shared-data audit file: {metadata_path}")
         hashes[filename] = sha256_file(metadata_path)
     for split in SPLITS:
         lmdb_path = root / split
         key_path = root / f"{split}.key"
         manifest_path = root / f"{split}.jsonl"
         if not lmdb_path.is_dir() or not key_path.is_file() or not manifest_path.is_file():
-            raise FileNotFoundError(f"{split}: LMDB/key/jsonl 不完整")
+            raise FileNotFoundError(f"{split}: LMDB/key/jsonl is incomplete")
         split_keys[split] = read_keys(key_path)
         split_manifests[split] = read_manifest(manifest_path)
         if len(split_keys[split]) != len(split_manifests[split]):
-            raise ValueError(f"{split}: key 与 manifest 数量不同")
+            raise ValueError(f"{split}: key and manifest counts differ")
         hashes[f"{split}.key"] = sha256_file(key_path)
         hashes[f"{split}.jsonl"] = sha256_file(manifest_path)
 
     for left, right in M2_PAIRS:
         if split_keys[left] != split_keys[right]:
-            raise ValueError(f"{left} 与 {right} 的 utt_id 或顺序不同")
+            raise ValueError(f"utt_id values or order differ between {left} and {right}")
     expected = {
         "valid_m2_manual": args.expected_valid_count,
         "valid_m2_mfa": args.expected_valid_count,
@@ -123,7 +123,7 @@ def main():
     }
     for split, count in expected.items():
         if len(split_keys[split]) != count:
-            raise ValueError(f"{split}: 预期 {count} 条，实际 {len(split_keys[split])} 条")
+            raise ValueError(f"{split}: expected {count} records, got {len(split_keys[split])}")
 
     unique_eval_splits = (
         "valid_m2_manual", "test_m2_manual", "valid_lmdb_mfa", "test_lmdb_mfa"
@@ -133,14 +133,14 @@ def main():
     for split in unique_eval_splits:
         current = set(split_keys[split])
         if train_ids & current:
-            raise ValueError(f"train 与 {split} 存在数据泄漏")
+            raise ValueError(f"Data leakage between train and {split}")
         if seen_eval & current:
-            raise ValueError(f"唯一评测集合之间存在数据泄漏：{split}")
+            raise ValueError(f"Data leakage between unique evaluation sets: {split}")
         seen_eval.update(current)
     expected_unique_eval = 2 * (args.expected_valid_count + args.expected_test_count)
     if len(seen_eval) != expected_unique_eval:
         raise ValueError(
-            f"唯一评测 utt_id 应为 {expected_unique_eval}，实际 {len(seen_eval)}"
+            f"Expected {expected_unique_eval} unique evaluation utt_id values, got {len(seen_eval)}"
         )
 
     supplement_sources = {
@@ -154,13 +154,13 @@ def main():
         if int(row.get("source_index", -1)) != args.m2_source_index
     ]
     if bad_test:
-        raise ValueError(f"test_m2_manual: 存在非考试院来源，例如 {bad_test[:5]}")
+        raise ValueError(f"test_m2_manual: contains non-examination-authority sources, e.g. {bad_test[:5]}")
     bad_valid = [
         row.get("utt_id") for row in split_manifests["valid_m2_manual"]
         if int(row.get("source_index", -1)) not in allowed_m2_sources
     ]
     if bad_valid:
-        raise ValueError(f"valid_m2_manual: 存在非法来源，例如 {bad_valid[:5]}")
+        raise ValueError(f"valid_m2_manual: contains invalid sources, e.g. {bad_valid[:5]}")
     bad_supplements = [
         row.get("utt_id") for row in split_manifests["valid_m2_manual"]
         if int(row.get("source_index", -1)) in supplement_sources
@@ -168,13 +168,13 @@ def main():
     ]
     if bad_supplements:
         raise ValueError(
-            f"valid_m2_manual: Gemini补充来源只能提供负例，例如 {bad_supplements[:5]}"
+            f"valid_m2_manual: Gemini supplement sources may only provide negative examples, e.g. {bad_supplements[:5]}"
         )
     for split in ("valid_lmdb_mfa", "test_lmdb_mfa"):
         bad = [row.get("utt_id") for row in split_manifests[split]
                if not args.lmdb_source_index_min <= int(row.get("source_index", -1)) <= args.lmdb_source_index_max]
         if bad:
-            raise ValueError(f"{split}: 存在 part00-04 之外来源，例如 {bad[:5]}")
+            raise ValueError(f"{split}: contains sources outside part00-04, e.g. {bad[:5]}")
 
     removed_rows = read_manifest(root / "train_ratio_removed_negative_records.jsonl")
     bad_removed = [
@@ -183,10 +183,10 @@ def main():
         or not args.lmdb_source_index_min <= int(row.get("source_index", -1)) <= args.lmdb_source_index_max
     ]
     if bad_removed:
-        raise ValueError(f"训练比例剔除清单包含正例或part00-04外样本，例如 {bad_removed[:5]}")
+        raise ValueError(f"Training-ratio removal list contains positive examples or samples outside part00-04, e.g. {bad_removed[:5]}")
     removed_ids = {str(row.get("utt_id", "")) for row in removed_rows}
     if removed_ids & (train_ids | seen_eval):
-        raise ValueError("训练比例剔除清单与最终 train/eval 存在重叠")
+        raise ValueError("Training-ratio removal list overlaps with the final train/eval sets")
 
     train_rows = split_manifests["train"]
     train_positive = sum(int(row.get("positive_target_count", 0)) > 0 for row in train_rows)
@@ -203,20 +203,20 @@ def main():
         "test": abs(positive_counts["test_m2_manual"] - positive_counts["test_lmdb_mfa"]),
     }
     if any(delta > args.ratio_tolerance_utterances for delta in pair_ratio_checks.values()):
-        raise ValueError(f"两批评测的对应 valid/test 正例句数不一致：{pair_ratio_checks}")
+        raise ValueError(f"Positive sentence counts differ between corresponding valid/test evaluation pairs: {pair_ratio_checks}")
     valid_target_ratio = positive_counts["valid_m2_manual"] / args.expected_valid_count
     train_balance_mode = split_config.get("train_balance_mode", "")
     if train_balance_mode == "match_fallback_valid_ratio_by_removing_part00_04_negatives":
         train_delta = abs(train_positive - len(train_rows) * valid_target_ratio)
         if train_delta > args.ratio_tolerance_utterances:
             raise ValueError(
-                f"回退模式下 train 与 valid_m2_manual 比例目标相差 {train_delta:.6f}，"
-                f"超过容差 {args.ratio_tolerance_utterances}"
+                f"In fallback mode, the train ratio differs from the valid_m2_manual target by {train_delta:.6f}, "
+                f"exceeding the tolerance of {args.ratio_tolerance_utterances}"
             )
         nearest_integer_checks = {}
     elif train_balance_mode == "preserve_natural_ratio_and_use_nearest_integer_eval_counts":
         if removed_rows:
-            raise ValueError("正常补足模式不应删除任何训练负例")
+            raise ValueError("Normal fill mode should not remove any training negatives")
         expected_valid_positive = int(math.floor(args.expected_valid_count * train_ratio + 0.5))
         expected_test_positive = int(math.floor(args.expected_test_count * train_ratio + 0.5))
         nearest_integer_checks = {
@@ -232,11 +232,11 @@ def main():
             for delta in nearest_integer_checks.values()
         ):
             raise ValueError(
-                f"正常补足模式下评测正例数不是train比例的最邻近整数：{nearest_integer_checks}"
+                f"In normal fill mode, evaluation positive counts are not the nearest integers to the train ratio: {nearest_integer_checks}"
             )
         train_delta = 0.0
     else:
-        raise ValueError(f"未知 train_balance_mode：{train_balance_mode!r}")
+        raise ValueError(f"Unknown train_balance_mode: {train_balance_mode!r}")
     ratio_checks = {
         "positive_counts": positive_counts,
         "paired_eval_positive_count_delta": pair_ratio_checks,
@@ -264,12 +264,12 @@ def main():
     output_path = root / "shared_dataset_fingerprint.json"
     if args.verify_existing_fingerprint:
         if not output_path.is_file():
-            raise FileNotFoundError(f"只读校验要求已有指纹：{output_path}")
+            raise FileNotFoundError(f"Read-only validation requires an existing fingerprint: {output_path}")
         existing = json.loads(output_path.read_text(encoding="utf-8"))
         if existing != fingerprint_payload:
             raise ValueError(
-                "共享数据当前统计/SHA256 与已有指纹不一致；V3-V5 禁止刷新指纹，"
-                "请回到 V2 查明数据漂移"
+                "Current shared-data statistics/SHA256 do not match the existing fingerprint; V3-V5 must not refresh it. "
+                "Return to V2 to investigate the data drift."
             )
     else:
         output_path.write_text(

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""确认从 V1 补齐的 13 个公共 Fairseq 运行时文件均为非零文件。"""
+"""Confirm that all 13 shared Fairseq runtime files copied from V1 are non-empty."""
 
 import argparse
 import json
@@ -35,8 +35,8 @@ def main():
             missing.append(str(path))
     if missing:
         raise RuntimeError(
-            "公共 Fairseq 运行时尚未补齐；请在 variation 目录运行 "
-            "bash copy_v1_runtime_files_to_v2_v5.sh。缺失/零字节：\n" + "\n".join(missing)
+            "Shared Fairseq runtime files are incomplete; run "
+            "bash copy_v1_runtime_files_to_v2_v5.sh in the variation directory. Missing/empty files:\n" + "\n".join(missing)
         )
     print(json.dumps({"ok": True, "package_root": str(root), "files": len(RUNTIME_FILES)}, ensure_ascii=False))
 

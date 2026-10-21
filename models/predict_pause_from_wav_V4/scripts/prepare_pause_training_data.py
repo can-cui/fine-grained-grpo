@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""把合并后的停顿 JSONL/WAV 转换为在线 wav2vec 训练使用的 PCM16 LMDB。"""
+"""Convert merged pause JSONL/WAV data to PCM16 LMDBs for online wav2vec training."""
 
 import argparse
 import io
@@ -25,7 +25,7 @@ PAUSE_SYMBOLS = {
 
 
 class NoValidPauseTargetError(ValueError):
-    """记录清除停顿符号后不足两个词，因而没有有效训练目标。"""
+    """Record samples with fewer than two words after removing pause markers, which have no valid training targets."""
 
 
 def parse_args():
@@ -44,8 +44,8 @@ def parse_args():
         type=float,
         default=0.50,
         help=(
-            "count 模式且 train-count=0 时，test 中含至少一个有效正停顿的句子比例；"
-            "按四舍五入换算为精确句数。"
+            "In count mode with train-count=0, the ratio of test sentences containing at least one valid positive pause; "
+            "rounded to obtain an exact sentence count."
         ),
     )
     parser.add_argument(
@@ -53,8 +53,8 @@ def parse_args():
         type=int,
         default=None,
         help=(
-            "仅在 count 模式且 train-count=0 时使用；valid/test 只从该 "
-            "source_index 抽取，其余来源及该来源剩余样本全部进入 train。"
+            "Used only in count mode with train-count=0; valid/test are sampled only from this "
+            "source_index, and all other sources plus its remaining samples go to train."
         ),
     )
     parser.add_argument("--split-seed", type=int, default=20260807)
@@ -80,7 +80,7 @@ def load_manifest(path):
                     make_skipped_record(
                         None,
                         "load_manifest",
-                        f"JSON 损坏：{exc}",
+                        f"Invalid JSON: {exc}",
                         line_number=line_number,
                     )
                 )
@@ -90,7 +90,7 @@ def load_manifest(path):
                     make_skipped_record(
                         None,
                         "load_manifest",
-                        f"JSON 顶层类型必须为对象，实际为 {type(record).__name__}",
+                        f"JSON top-level value must be an object, got {type(record).__name__}",
                         line_number=line_number,
                     )
                 )
@@ -101,7 +101,7 @@ def load_manifest(path):
                     make_skipped_record(
                         record,
                         "load_manifest",
-                        "缺少 utt_id",
+                        "Missing utt_id",
                         line_number=line_number,
                     )
                 )
@@ -111,7 +111,7 @@ def load_manifest(path):
                     make_skipped_record(
                         record,
                         "load_manifest",
-                        f"重复 utt_id：{utt_id}",
+                        f"Duplicate utt_id: {utt_id}",
                         line_number=line_number,
                     )
                 )
@@ -119,7 +119,7 @@ def load_manifest(path):
             seen.add(utt_id)
             records.append(record)
     if not records:
-        raise ValueError(f"合并 manifest 为空：{path}")
+        raise ValueError(f"Merged manifest is empty: {path}")
     return sorted(records, key=lambda item: item["utt_id"]), skipped
 
 
@@ -147,9 +147,9 @@ def write_skipped_records(path, rows):
 
 def ratio_counts(total, ratios):
     if any(value < 0 for value in ratios):
-        raise ValueError("train/valid/test ratio 不能为负数")
+        raise ValueError("train/valid/test ratios cannot be negative")
     if not math.isclose(sum(ratios), 1.0, rel_tol=0.0, abs_tol=1e-8):
-        raise ValueError(f"ratio 之和必须为 1，实际为 {sum(ratios)}")
+        raise ValueError(f"Ratios must sum to 1, got {sum(ratios)}")
     raw = [total * value for value in ratios]
     counts = [int(math.floor(value)) for value in raw]
     remainder = total - sum(counts)
@@ -164,12 +164,12 @@ def record_source_index(record):
         return int(record.get("source_index", -1))
     except (TypeError, ValueError) as exc:
         raise ValueError(
-            f"{record['utt_id']}: source_index 不是整数：{record.get('source_index')!r}"
+            f"{record['utt_id']}: source_index is not an integer: {record.get('source_index')!r}"
         ) from exc
 
 
 def record_has_positive_pause(record):
-    """判断句子是否包含至少一个参与训练的正停顿目标。"""
+    """Determine whether a sentence contains at least one positive pause target used for training."""
     _, _, _, labels, valid_mask = collapse_to_lexical(record)
     return any(label and valid for label, valid in zip(labels, valid_mask))
 
@@ -177,7 +177,7 @@ def record_has_positive_pause(record):
 def allocate_strata(strata, count):
     total = sum(len(items) for items in strata.values())
     if count < 0 or count > total:
-        raise ValueError(f"分层抽样数量非法：count={count}, total={total}")
+        raise ValueError(f"Invalid stratified sample count: count={count}, total={total}")
     if count == 0:
         return {key: 0 for key in strata}
     raw = {key: count * len(items) / total for key, items in strata.items()}
@@ -197,7 +197,7 @@ def allocate_strata(strata, count):
             if remaining == 0:
                 break
         if not moved:
-            raise ValueError("无法完成分层数量分配")
+            raise ValueError("Could not allocate stratified sample counts")
     return quota
 
 
@@ -216,7 +216,7 @@ def build_split_rows(records):
 
 
 def filter_splittable_records(records):
-    """逐条检查划分所需字段，任何样本错误都排除并保留审计原因。"""
+    """Check required fields for each split; exclude invalid samples and retain the audit reason."""
     eligible = []
     skipped = []
     for record in records:
@@ -230,7 +230,7 @@ def filter_splittable_records(records):
         else:
             eligible.append(record)
     if not eligible:
-        raise ValueError("所有记录都无法产生有效词末停顿目标")
+        raise ValueError("No records can produce valid word-final pause targets")
     return eligible, skipped
 
 
@@ -262,10 +262,10 @@ def take_test_with_positive_ratio(rows, count, positive_ratio, seed):
     requested = {True: positive_count, False: negative_count}
     for status in (True, False):
         if requested[status] > len(groups[status]):
-            name = "含正停顿" if status else "无正停顿"
+            name = "with positive pauses" if status else "without positive pauses"
             raise ValueError(
-                f"test 需要 {name} 样本 {requested[status]} 条，"
-                f"但可用样本只有 {len(groups[status])} 条"
+                f"test requires {requested[status]} samples {name}, "
+                f"but only {len(groups[status])} are available"
             )
 
     selected = []
@@ -286,7 +286,7 @@ def take_test_with_positive_ratio(rows, count, positive_ratio, seed):
 
 
 def ensure_binary_validation(valid_rows, train_rows):
-    """valid 至少两句时，尽量保证正负停顿句均存在。"""
+    """When valid has at least two sentences, try to include both positive- and negative-pause sentences."""
     if len(valid_rows) < 2:
         return
     statuses = {row["positive_utterance"] for row in valid_rows}
@@ -313,20 +313,20 @@ def split_records(records, args):
     random.Random(args.split_seed).shuffle(shuffled)
     if args.split_mode == "ratio":
         if args.eval_source_index is not None:
-            raise ValueError("eval-source-index 仅支持 count 模式且 train-count=0")
+            raise ValueError("eval-source-index is supported only in count mode with train-count=0")
         counts = ratio_counts(
             len(shuffled),
             [args.train_ratio, args.valid_ratio, args.test_ratio],
         )
         if counts[0] == 0 or counts[1] == 0:
-            raise ValueError(f"train 和 valid 都必须非空，实际数量为 {counts}")
+            raise ValueError(f"train and valid must both be non-empty, got counts {counts}")
         result = {}
         cursor = 0
         for split, count in zip(SPLITS, counts):
             result[split] = shuffled[cursor:cursor + count]
             cursor += count
         return result, {
-            "strategy": "按固定随机种子随机划分（ratio 模式）",
+            "strategy": "Random split with a fixed seed (ratio mode)",
             "eval_source_index": None,
             "eval_source_utterance_count": None,
             "test_positive_utterance_ratio_requested": None,
@@ -335,16 +335,16 @@ def split_records(records, args):
 
     counts = [args.train_count, args.valid_count, args.test_count]
     if any(value < 0 for value in counts):
-        raise ValueError("train/valid/test count 不能为负数")
+        raise ValueError("train/valid/test counts cannot be negative")
     if not 0.0 <= args.test_positive_utterance_ratio <= 1.0:
-        raise ValueError("test-positive-utterance-ratio 必须在 0 到 1 之间")
+        raise ValueError("test-positive-utterance-ratio must be between 0 and 1")
 
     if args.train_count == 0:
         if args.valid_count <= 0:
-            raise ValueError("count 模式且 train-count=0 时，valid-count 必须大于 0")
+            raise ValueError("In count mode with train-count=0, valid-count must be greater than 0")
         if args.valid_count + args.test_count >= len(records):
             raise ValueError(
-                "valid-count + test-count 必须小于总样本数，保证 train 自动保留非空"
+                "valid-count + test-count must be less than the total sample count so train remains non-empty"
             )
         rows = build_split_rows(records)
         if args.eval_source_index is None:
@@ -362,8 +362,8 @@ def split_records(records, args):
             required_eval_count = args.valid_count + args.test_count
             if required_eval_count > len(eval_rows):
                 raise ValueError(
-                    f"source_index={args.eval_source_index} 共有 {len(eval_rows)} 条，"
-                    f"少于 valid+test={required_eval_count}，无法完成指定划分"
+                    f"source_index={args.eval_source_index} has {len(eval_rows)} records, "
+                    f"fewer than valid+test={required_eval_count}; cannot create the requested split"
                 )
         test_rows, remaining_rows, test_positive_count = take_test_with_positive_ratio(
             eval_rows,
@@ -385,14 +385,14 @@ def split_records(records, args):
         }
         if args.eval_source_index is None:
             strategy = (
-                "test 先按指定含正停顿句比例、在正负类别内按 source_index 分层抽样；"
-                "valid 再按 source_index 和是否含正停顿分层抽样；train 为剩余样本"
+                "Sample test first using the requested ratio of sentences with positive pauses, stratified by source_index within positive/negative classes; "
+                "then stratify valid by source_index and positive-pause status; train uses the remaining samples"
             )
         else:
             strategy = (
-                f"valid/test 仅从 source_index={args.eval_source_index} 抽取；"
-                "test 先按指定含正停顿句比例抽样，valid 再按是否含正停顿分层抽样；"
-                "其余来源及该来源剩余样本全部进入 train"
+                f"Sample valid/test only from source_index={args.eval_source_index}; "
+                "sample test first using the requested ratio of sentences with positive pauses, then stratify valid by positive-pause status; "
+                "all other sources and remaining samples from this source go to train"
             )
         return result, {
             "strategy": strategy,
@@ -403,21 +403,21 @@ def split_records(records, args):
         }
 
     if args.eval_source_index is not None:
-        raise ValueError("eval-source-index 仅支持 count 模式且 train-count=0")
+        raise ValueError("eval-source-index is supported only in count mode with train-count=0")
     if sum(counts) != len(shuffled):
         raise ValueError(
-            f"count 之和必须等于样本总数：counts={counts}, total={len(shuffled)}；"
-            "若希望 train 自动取余，请将 train-count 设为 0"
+            f"Counts must sum to the total number of samples: counts={counts}, total={len(shuffled)}; "
+            "set train-count to 0 to assign the remainder to train automatically"
         )
     if counts[0] == 0 or counts[1] == 0:
-        raise ValueError(f"train 和 valid 都必须非空，实际数量为 {counts}")
+        raise ValueError(f"train and valid must both be non-empty, got counts {counts}")
     result = {}
     cursor = 0
     for split, count in zip(SPLITS, counts):
         result[split] = shuffled[cursor:cursor + count]
         cursor += count
     return result, {
-        "strategy": "按固定随机种子随机划分（count 模式，指定了 train-count）",
+        "strategy": "Random split with a fixed seed (count mode with train-count specified)",
         "eval_source_index": None,
         "eval_source_utterance_count": None,
         "test_positive_utterance_ratio_requested": None,
@@ -434,15 +434,15 @@ def read_pcm16_wav(path, expected_sample_rate):
         raw = handle.readframes(frame_count)
     if channels != 1 or sample_width != 2:
         raise ValueError(
-            f"{path}: 仅支持单声道 PCM16 WAV，实际 channels={channels}, sample_width={sample_width}"
+            f"{path}: only mono PCM16 WAV is supported, got channels={channels}, sample_width={sample_width}"
         )
     if sample_rate != expected_sample_rate:
         raise ValueError(
-            f"{path}: 采样率应为 {expected_sample_rate}，实际为 {sample_rate}"
+            f"{path}: expected sample rate {expected_sample_rate}, got {sample_rate}"
         )
     waveform = np.frombuffer(raw, dtype="<i2").copy()
     if len(waveform) == 0:
-        raise ValueError(f"{path}: WAV 为空")
+        raise ValueError(f"{path}: WAV is empty")
     return waveform
 
 
@@ -462,7 +462,7 @@ def collapse_to_lexical(record):
     labels = list(record.get("pause_label", []))
     if not (len(words) == len(ends) == len(labels)):
         raise ValueError(
-            f"{record['utt_id']}: word_list/word_end_time/pause_label 长度不一致"
+            f"{record['utt_id']}: word_list/word_end_time/pause_label lengths do not match"
         )
 
     lexical_words = []
@@ -470,11 +470,11 @@ def collapse_to_lexical(record):
     lexical_labels = []
     for word, end_time, label in zip(words, ends, labels):
         if end_time is None or not math.isfinite(float(end_time)):
-            raise ValueError(f"{record['utt_id']}: {word!r} 的结束时间非法：{end_time}")
+            raise ValueError(f"{record['utt_id']}: invalid end time for {word!r}: {end_time}")
         end_time = float(end_time)
         label = int(label)
         if label not in (0, 1):
-            raise ValueError(f"{record['utt_id']}: 停顿标签不是 0/1：{label}")
+            raise ValueError(f"{record['utt_id']}: pause label is not 0/1: {label}")
         if word in PAUSE_SYMBOLS:
             if lexical_words:
                 lexical_ends[-1] = end_time
@@ -486,20 +486,20 @@ def collapse_to_lexical(record):
 
     if len(lexical_words) < 2:
         raise NoValidPauseTargetError(
-            f"{record['utt_id']}: 实际词数少于 2，无法产生有效停顿目标"
+            f"{record['utt_id']}: fewer than two words; cannot produce valid pause targets"
         )
     leading = record.get("leading_silence_end_seconds")
     if leading is None:
         raise ValueError(
-            f"{record['utt_id']}: 缺少 leading_silence_end_seconds，请重新执行 LMDB 提取"
+            f"{record['utt_id']}: missing leading_silence_end_seconds; rerun LMDB extraction"
         )
     leading = float(leading)
     if not math.isfinite(leading) or leading < 0 or leading > lexical_ends[0]:
         raise ValueError(
-            f"{record['utt_id']}: 句首静音边界非法：leading={leading}, first_end={lexical_ends[0]}"
+            f"{record['utt_id']}: invalid leading-silence boundary: leading={leading}, first_end={lexical_ends[0]}"
         )
     if any(right <= left for left, right in zip([leading] + lexical_ends[:-1], lexical_ends)):
-        raise ValueError(f"{record['utt_id']}: 词窗口时间不是严格递增")
+        raise ValueError(f"{record['utt_id']}: word-window times are not strictly increasing")
 
     starts = [leading] + lexical_ends[:-1]
     valid_mask = [1] * (len(lexical_words) - 1) + [0]
@@ -511,7 +511,7 @@ def seconds_to_samples(values, sample_rate, waveform_samples, utt_id):
     tolerance = int(round(0.05 * sample_rate))
     if np.any(result < 0) or np.any(result > waveform_samples + tolerance):
         raise ValueError(
-            f"{utt_id}: 时间边界超出 WAV，范围={result.min()}..{result.max()}, wav={waveform_samples}"
+            f"{utt_id}: time boundaries exceed WAV length, range={result.min()}..{result.max()}, wav={waveform_samples}"
         )
     return np.clip(result, 0, waveform_samples)
 
@@ -519,14 +519,14 @@ def seconds_to_samples(values, sample_rate, waveform_samples, utt_id):
 def encode_record(record, source_rate, target_rate):
     wav_path = Path(record["wav_path"])
     if not wav_path.is_file():
-        raise FileNotFoundError(f"{record['utt_id']}: 找不到 WAV：{wav_path}")
+        raise FileNotFoundError(f"{record['utt_id']}: WAV not found: {wav_path}")
     source_waveform = read_pcm16_wav(wav_path, source_rate)
     waveform = resample_pcm16(source_waveform, source_rate, target_rate)
     words, starts_seconds, ends_seconds, labels, valid_mask = collapse_to_lexical(record)
     starts = seconds_to_samples(starts_seconds, target_rate, len(waveform), record["utt_id"])
     ends = seconds_to_samples(ends_seconds, target_rate, len(waveform), record["utt_id"])
     if np.any(ends <= starts):
-        raise ValueError(f"{record['utt_id']}: 转换到采样点后存在空词窗口")
+        raise ValueError(f"{record['utt_id']}: empty word window after conversion to sample indices")
 
     arrays = {
         "waveform_pcm16": waveform.astype(np.int16, copy=False),
@@ -568,7 +568,7 @@ def write_split(output_root, split, records, args, skipped_records, skipped_path
         existing = [path for path in (lmdb_path, key_path, manifest_path) if path.exists()]
         if existing and not args.overwrite:
             raise FileExistsError(
-                f"{split} 数量为 0，但旧输出仍存在；确认后使用 --overwrite 删除：{existing}"
+                f"{split} count is 0, but old output still exists; use --overwrite to delete after confirmation: {existing}"
             )
         if args.overwrite:
             remove_existing_split(output_root, split)
@@ -578,7 +578,7 @@ def write_split(output_root, split, records, args, skipped_records, skipped_path
     manifest_path = output_root / f"{split}.jsonl"
     existing = [path for path in (lmdb_path, key_path, manifest_path) if path.exists()]
     if existing and not args.overwrite:
-        raise FileExistsError(f"{split} 输出已存在；确认后使用 --overwrite：{existing}")
+        raise FileExistsError(f"{split} output already exists; use --overwrite after confirmation: {existing}")
     if args.overwrite:
         remove_existing_split(output_root, split)
 
@@ -610,7 +610,7 @@ def write_split(output_root, split, records, args, skipped_records, skipped_path
                 continue
             key = str(record["utt_id"])
             if not txn.put(key.encode("utf-8"), raw, overwrite=False):
-                raise ValueError(f"{split}: LMDB 重复 key：{key}")
+                raise ValueError(f"{split}: duplicate LMDB key: {key}")
             word_count = len(arrays["pause_label"])
             valid = arrays["valid_mask"].astype(bool)
             labels = arrays["pause_label"].astype(bool)
@@ -664,11 +664,11 @@ def main():
     manifest = Path(args.merged_manifest).resolve()
     output_root = Path(args.output_root).resolve()
     if not manifest.is_file():
-        raise FileNotFoundError(f"找不到合并 manifest：{manifest}")
+        raise FileNotFoundError(f"Merged manifest not found: {manifest}")
     if args.source_sample_rate <= 0 or args.target_sample_rate <= 0:
-        raise ValueError("采样率必须为正整数")
+        raise ValueError("Sample rate must be a positive integer")
     if args.map_size_gb <= 0:
-        raise ValueError("map-size-gb 必须大于 0")
+        raise ValueError("map-size-gb must be greater than 0")
     output_root.mkdir(parents=True, exist_ok=True)
 
     input_records, skipped_records = load_manifest(manifest)
@@ -692,26 +692,26 @@ def main():
             split_reports[split] = result
 
     lines = [
-        "音频停顿预测 V4：在线 wav2vec 训练喂入数据统计",
+        "Audio Pause Prediction V4: Online wav2vec Training Data Statistics",
         "=" * 72,
-        f"输入 manifest: {manifest}",
-        f"输出目录: {output_root}",
-        f"划分模式: {args.split_mode}",
-        f"随机种子: {args.split_seed}",
-        f"划分策略: {split_strategy['strategy']}",
-        f"采样率转换: {args.source_sample_rate} -> {args.target_sample_rate}",
-        f"输入样本数: {input_record_count}",
-        f"划分前可划分样本数: {len(records)}",
-        f"累计跳过样本数: {len(skipped_records)}",
-        f"跳过样本清单: {skipped_path}",
+        f"Input manifest: {manifest}",
+        f"Output directory: {output_root}",
+        f"Split mode: {args.split_mode}",
+        f"Random seed: {args.split_seed}",
+        f"Split strategy: {split_strategy['strategy']}",
+        f"Sample-rate conversion: {args.source_sample_rate} -> {args.target_sample_rate}",
+        f"Input samples: {input_record_count}",
+        f"Splittable samples before partitioning: {len(records)}",
+        f"Cumulative skipped samples: {len(skipped_records)}",
+        f"Skipped-sample manifest: {skipped_path}",
     ]
     if split_strategy["eval_source_index"] is not None:
         lines.extend(
             [
-                "valid/test 限定来源 source_index: {}".format(
+                "Restricted source_index for valid/test: {}".format(
                     split_strategy["eval_source_index"]
                 ),
-                "限定来源可用句子数: {}".format(
+                "Available sentences from restricted sources: {}".format(
                     split_strategy["eval_source_utterance_count"]
                 ),
             ]
@@ -719,17 +719,17 @@ def main():
     if split_strategy["test_positive_utterance_ratio_requested"] is not None:
         lines.extend(
             [
-                "test 含正停顿句目标比例: {:.8f}".format(
+                "Target ratio of test sentences with positive pauses: {:.8f}".format(
                     split_strategy["test_positive_utterance_ratio_requested"]
                 ),
-                "test 含正停顿句目标数量: {}".format(
+                "Target count of test sentences with positive pauses: {}".format(
                     split_strategy["test_positive_utterance_count_target"]
                 ),
             ]
         )
     for split in SPLITS:
         if split not in split_reports:
-            lines.extend(["", f"[{split}] 未生成（数量为 0）"])
+            lines.extend(["", f"[{split}] Not generated (count is 0)"])
             continue
         counters, sources = split_reports[split]
         negative = counters["valid"] - counters["positive"]
@@ -737,20 +737,20 @@ def main():
             [
                 "",
                 f"[{split}]",
-                f"句子数: {counters['utterances']}",
-                f"说话人数: {counters['speakers']}",
-                f"音频小时数: {counters['audio_samples'] / args.target_sample_rate / 3600.0:.6f}",
-                f"总词数: {counters['words']}",
-                f"有效目标数: {counters['valid']}",
-                f"mask 目标数: {counters['masked']}",
-                f"含正停顿句数: {counters['positive_utterances']}",
-                "含正停顿句比例: {:.8f}".format(
+                f"Sentences: {counters['utterances']}",
+                f"Speakers: {counters['speakers']}",
+                f"Audio hours: {counters['audio_samples'] / args.target_sample_rate / 3600.0:.6f}",
+                f"Total words: {counters['words']}",
+                f"Valid targets: {counters['valid']}",
+                f"Masked targets: {counters['masked']}",
+                f"Sentences with positive pauses: {counters['positive_utterances']}",
+                "Ratio of sentences with positive pauses: {:.8f}".format(
                     counters["positive_utterances"] / counters["utterances"]
                 ),
-                f"正停顿数: {counters['positive']}",
-                f"负停顿数: {negative}",
-                f"正停顿比例: {(counters['positive'] / counters['valid'] if counters['valid'] else 0):.8f}",
-                "来源句数: " + ", ".join(
+                f"Positive pauses: {counters['positive']}",
+                f"Negative pauses: {negative}",
+                f"Positive-pause ratio: {(counters['positive'] / counters['valid'] if counters['valid'] else 0):.8f}",
+                "Sentences by source: " + ", ".join(
                     f"{source_index}={sources[source_index]['utterances']}"
                     for source_index in sorted(sources)
                 ),
