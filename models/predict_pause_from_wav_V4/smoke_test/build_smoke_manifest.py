@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从正式提取 manifest 中确定性抽取平衡的极小端到端测试集。"""
+"""Deterministically sample a tiny, balanced end-to-end test set from the production extraction manifest."""
 
 import argparse
 import json
@@ -38,16 +38,16 @@ def collapse_labels(record):
     ends = list(record.get("word_end_time", []))
     labels = list(record.get("pause_label", []))
     if not (len(words) == len(ends) == len(labels)):
-        raise ValueError("word_list/word_end_time/pause_label 长度不一致")
+        raise ValueError("word_list, word_end_time, and pause_label lengths do not match")
     lexical_words = []
     lexical_ends = []
     lexical_labels = []
     for word, end_time, label in zip(words, ends, labels):
         if end_time is None or not math.isfinite(float(end_time)):
-            raise ValueError("词结束时间非法")
+            raise ValueError("Invalid word end time")
         label = int(label)
         if label not in (0, 1):
-            raise ValueError("停顿标签不是 0/1")
+            raise ValueError("Pause label must be 0 or 1")
         if word in PAUSE_SYMBOLS:
             if lexical_words:
                 lexical_ends[-1] = float(end_time)
@@ -57,16 +57,16 @@ def collapse_labels(record):
         lexical_ends.append(float(end_time))
         lexical_labels.append(label)
     if len(lexical_words) < 2:
-        raise ValueError("清理停顿符号后实际词数少于 2")
+        raise ValueError("Fewer than two words remain after removing pause markers")
     leading = record.get("leading_silence_end_seconds")
     if leading is None:
-        raise ValueError("缺少 leading_silence_end_seconds")
+        raise ValueError("Missing leading_silence_end_seconds")
     leading = float(leading)
     if not math.isfinite(leading) or leading < 0 or leading > lexical_ends[0]:
-        raise ValueError("leading_silence_end_seconds 非法")
+        raise ValueError("Invalid leading_silence_end_seconds")
     boundaries = [leading] + lexical_ends
     if any(right <= left for left, right in zip(boundaries[:-1], boundaries[1:])):
-        raise ValueError("词窗口时间不是严格递增")
+        raise ValueError("Word-window timestamps are not strictly increasing")
     valid_labels = lexical_labels[:-1]
     return {
         "word_count": len(lexical_words),
@@ -77,7 +77,7 @@ def collapse_labels(record):
 
 def inspect_wav(path, sample_rate, max_seconds):
     if not path.is_file():
-        raise ValueError("WAV 不存在")
+        raise ValueError("WAV file does not exist")
     with wave.open(str(path), "rb") as handle:
         channels = handle.getnchannels()
         width = handle.getsampwidth()
@@ -85,14 +85,14 @@ def inspect_wav(path, sample_rate, max_seconds):
         frames = handle.getnframes()
         compression = handle.getcomptype()
     if channels != 1 or width != 2 or compression != "NONE":
-        raise ValueError("WAV 不是单声道 PCM16")
+        raise ValueError("WAV must be mono PCM16")
     if rate != sample_rate:
-        raise ValueError("WAV 采样率不是 {}".format(sample_rate))
+        raise ValueError("WAV sample rate is not {}".format(sample_rate))
     duration = frames / float(rate)
     if frames <= 0:
-        raise ValueError("WAV 为空")
+        raise ValueError("WAV file is empty")
     if duration > max_seconds:
-        raise ValueError("WAV 超过最大时长")
+        raise ValueError("WAV exceeds the maximum duration")
     return frames, duration
 
 
@@ -125,7 +125,7 @@ def select_records(positive, negative, counts, seed):
     total = sum(counts)
     if len(positive) < len(SPLITS) or len(negative) < len(SPLITS):
         raise ValueError(
-            "至少需要 3 条正停顿样本和 3 条负停顿样本；当前 positive={} negative={}".format(
+            "At least 3 positive-pause and 3 negative-pause samples are required; current counts: positive={} negative={}".format(
                 len(positive), len(negative)
             )
         )
@@ -135,7 +135,7 @@ def select_records(positive, negative, counts, seed):
     ]
     feasible.sort(key=lambda value: (abs(value - total / 2.0), value))
     if not feasible:
-        raise ValueError("正负候选总数不足以组成 {} 条平衡样本".format(total))
+        raise ValueError("Too few positive and negative candidates to create {} balanced samples".format(total))
     rng = random.Random(seed)
     positive = sorted(positive, key=lambda item: (item["duration_seconds"], item["utt_id"]))
     negative = sorted(negative, key=lambda item: (item["duration_seconds"], item["utt_id"]))
@@ -151,16 +151,16 @@ def select_records(positive, negative, counts, seed):
         split_map = expected_split(selected, counts, seed)
         if split_is_balanced(split_map):
             return selected, split_map, trial + 1
-    raise ValueError("尝试 10000 次后仍无法让每个 split 同时包含正、负样本")
+    raise ValueError("Could not ensure both positive and negative samples in every split after 10000 attempts")
 
 
 def main():
     args = parse_args()
     counts = [args.train_count, args.valid_count, args.test_count]
     if any(value < 2 for value in counts):
-        raise ValueError("为保证正负平衡，train/valid/test 数量都必须至少为 2")
+        raise ValueError("Train/valid/test must each contain at least 2 samples to ensure positive/negative balance")
     if args.max_audio_seconds <= 0 or args.sample_rate <= 0:
-        raise ValueError("最大时长和采样率必须大于 0")
+        raise ValueError("Maximum duration and sample rate must be greater than 0")
 
     input_path = Path(args.input_manifest).resolve()
     output_path = Path(args.output_manifest).resolve()
@@ -180,9 +180,9 @@ def main():
                 record = json.loads(line)
                 utt_id = str(record.get("utt_id", "")).strip()
                 if not utt_id:
-                    raise ValueError("缺少 utt_id")
+                    raise ValueError("Missing utt_id")
                 if utt_id in seen:
-                    raise ValueError("重复 utt_id")
+                    raise ValueError("Duplicate utt_id")
                 seen.add(utt_id)
                 stats = collapse_labels(record)
                 frames, duration = inspect_wav(

@@ -1,11 +1,11 @@
 """
-data_utils.py — exp8: 加载 word_boundaries 用于 span pooling
+data_utils.py — exp8: Load word_boundaries for span pooling
 
-相比 exp5:
-  - Dataset 加载 word_boundaries 字段
-  - 转换为下采样后的帧索引 (÷ CONV_STRIDE)
-  - collate_fn 新增 word_spans padding (B, N, 2)
-  - 删除 F0 相关逻辑
+Compared with exp5:
+  - Load the word_boundaries field in the Dataset
+  - Convert timestamps to frame indices after downsampling (÷ CONV_STRIDE)
+  - Add word_spans padding (B, N, 2) in collate_fn
+  - Remove F0-related logic
 """
 import json
 import numpy as np
@@ -40,7 +40,7 @@ class WordTokenizer:
                     idx = len(self.word2idx)
                     self.word2idx[w] = idx
                     self.idx2word[idx] = w
-        print(f"[vocab] 词表大小: {len(self.word2idx)}")
+        print(f"[vocab] Vocabulary size: {len(self.word2idx)}")
 
     def encode(self, words):
         return [self.word2idx.get(self._clean(w), 1) for w in words]
@@ -94,7 +94,7 @@ def compute_and_save_stats(samples, stats_path=C.STATS_NPZ):
     actual_tmp_path = Path(str(tmp_path) + ".npz")
     np.savez(str(tmp_path), fbank_mean=mean, fbank_std=std)
     actual_tmp_path.replace(stats_path)
-    print(f"[stats] 保存 -> {stats_path} ({n_frames} 帧)")
+    print(f"[stats] Saved -> {stats_path} ({n_frames} frames)")
     return {"fbank_mean": mean, "fbank_std": std}
 
 
@@ -104,23 +104,23 @@ def load_stats(stats_path=C.STATS_NPZ):
 
 
 def _parse_word_boundaries(word_boundaries, n_words, total_frames):
-    """将 dataset.json 中的 word_boundaries 转为每个词的 [start, end) 帧索引。
+    """Convert word_boundaries in dataset.json to [start, end) frame indices for each word.
 
-    word_boundaries 格式:
-      - 第 0 项: [0, total_ms] 整段时长
-      - 第 1~N 项: 每个词的 [start_ms, end_ms]（对应 words[0] ~ words[N-1]）
+    word_boundaries format:
+      - Item 0: [0, total_ms], the duration of the full utterance
+      - Items 1..N: [start_ms, end_ms] for each word (corresponding to words[0]..words[N-1])
 
-    但 words[0] 可能是 silence marker（如 "3"），此时 word_boundaries[1] 对应 words[0]。
-    所以 word_boundaries[i+1] 对应 words[i]（如果 len(wb) == n_words + 1）。
+    However, words[0] may be a silence marker (e.g. "3"), in which case word_boundaries[1]
+    corresponds to words[0]. Thus, word_boundaries[i+1] maps to words[i] when len(wb) == n_words + 1.
 
-    返回: list of (start_frame, end_frame)，长度 = n_words
+    Returns a list of (start_frame, end_frame) tuples with length n_words.
     """
     if not word_boundaries or len(word_boundaries) < 2:
-        # fallback: 均匀分配
+        # Fallback: distribute frames uniformly
         chunk = max(1, total_frames // max(n_words, 1))
         return [(i * chunk, min((i + 1) * chunk, total_frames)) for i in range(n_words)]
 
-    # 判断 offset
+    # Determine the offset
     if len(word_boundaries) == n_words + 1:
         offset = 1
     elif len(word_boundaries) == n_words:
@@ -164,7 +164,7 @@ class IntonationDataset(Dataset):
         fbank = np.load(s["fbk"]).astype(np.float32)
         T = fbank.shape[0]
 
-        # 如果超长，从前面截掉
+        # If it is too long, truncate from the beginning
         drop = 0
         if T > self.max_frames:
             drop = T - self.max_frames
@@ -179,10 +179,10 @@ class IntonationDataset(Dataset):
         break_labels = s["break_labels"][:self.max_words]
         tone_labels = s["tone_labels"][:self.max_words]
 
-        # word_boundaries → 帧级 span（考虑 drop 和下采样）
+        # Convert word_boundaries to frame-level spans (accounting for dropping and downsampling)
         raw_wb = s.get("word_boundaries", [])
         raw_spans = _parse_word_boundaries(raw_wb, len(words), T + drop)
-        # 调整 drop offset 并转为下采样后的索引
+        # Adjust the drop offset and convert to downsampled indices
         word_spans = []
         for (sf, ef) in raw_spans:
             sf = max(0, sf - drop)
@@ -299,5 +299,5 @@ def get_sample_lengths(samples):
 def load_json(json_path):
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
-    print(f"[data] 加载 {len(data)} 条样本 from {json_path}")
+    print(f"[data] Loaded {len(data)} samples from {json_path}")
     return data

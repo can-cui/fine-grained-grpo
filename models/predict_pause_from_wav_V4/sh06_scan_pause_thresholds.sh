@@ -1,18 +1,18 @@
 #!/bin/bash
 # ============================================================================
-# 音频停顿预测 V4：在三组 valid 上选阈值，并应用到各自对应 test。
+# Audio pause prediction V4: select thresholds on three valid sets and apply them to their corresponding test sets.
 #
-# 主要阶段：
-#   1. 分别扫描 m2_manual、m2_mfa、lmdb_mfa 三组 valid；
-#   2. 每组按最高 F1 选择阈值并原样应用到对应 test；
+# Main steps:
+#   1. Scan the m2_manual, m2_mfa, and lmdb_mfa valid sets separately.
+#   2. Select a threshold with the highest F1 for each group and apply it unchanged to the corresponding test set.
 #
-# 直接运行：
+# Run directly:
 #   bash sh06_scan_pause_thresholds.sh
 #
-# 重要约束：只读取 sh03 已保存的逐词概率，不重新推理、不使用 test 选择阈值。
+# Important: read only the word-level probabilities saved by sh03; do not rerun inference or use test data to select thresholds.
 # ============================================================================
 
-# ==================== 需要修改的地方 ====================
+# ==================== Edit these settings ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 EXPERIMENT_ROOT="/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2"
 CHECKPOINT_NAME="checkpoint_best.pt"
@@ -25,7 +25,7 @@ CONDA_ACTIVATE="/home/tts/cancui11/miniconda3/bin/activate"
 CONDA_ENV="torch20_fair_fromyjdong4"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== The settings below usually do not need changes ==================
 set -euo pipefail
 
 source "$CONDA_ACTIVATE" "$CONDA_ENV"
@@ -35,20 +35,20 @@ INFERENCE_ROOT="$EXPERIMENT_ROOT/inference/${CHECKPOINT_NAME%.pt}_threshold_${SO
 OUTPUT_ROOT="$INFERENCE_ROOT/threshold_scan"
 
 if [[ ! -f "$SCAN_SCRIPT" ]]; then
-    echo "错误：找不到阈值扫描脚本：$SCAN_SCRIPT" >&2
+    echo "Error: threshold-scan script not found: $SCAN_SCRIPT" >&2
     exit 1
 fi
 for split in valid_m2_manual valid_m2_mfa valid_lmdb_mfa test_m2_manual test_m2_mfa test_lmdb_mfa; do
     PREDICTION_TSV="$INFERENCE_ROOT/$split/${split}_pause_predictions.tsv"
     if [[ ! -f "$PREDICTION_TSV" ]]; then
-        echo "错误：找不到逐词预测：$PREDICTION_TSV" >&2
-        echo "请先运行 bash sh03_infer_pause_from_wav.sh" >&2
+        echo "Error: word-level predictions not found: $PREDICTION_TSV" >&2
+        echo "Run bash sh03_infer_pause_from_wav.sh first." >&2
         exit 1
     fi
 done
 
-# 第 1 阶段：读取已有概率，在三组 valid 上独立扫描阈值。
-echo "[1/2] 扫描 valid 阈值：$THRESHOLD_START 到 $THRESHOLD_END，步长 $THRESHOLD_STEP"
+# Step 1: Read the existing probabilities and scan thresholds independently on the three valid sets.
+echo "[1/2] Scan validation thresholds: $THRESHOLD_START to $THRESHOLD_END, step $THRESHOLD_STEP"
 python "$SCAN_SCRIPT" \
     --inference-root "$INFERENCE_ROOT" \
     --output-root "$OUTPUT_ROOT" \
@@ -57,10 +57,10 @@ python "$SCAN_SCRIPT" \
     --threshold-step "$THRESHOLD_STEP" \
     --baseline-threshold "$BASELINE_THRESHOLD"
 
-# 第 2 阶段：报告汇总路径；test 只使用 valid 选出的阈值。
-echo "[2/2] 完成阈值选择与 test 复算"
-echo "汇总表：$OUTPUT_ROOT/pause_threshold_scan_summary.tsv"
-echo "完整结果：$OUTPUT_ROOT/pause_threshold_scan_summary.json"
-echo "考试院人工扫描表：$OUTPUT_ROOT/valid_m2_manual_threshold_scan.tsv"
-echo "考试院 MFA 扫描表：$OUTPUT_ROOT/valid_m2_mfa_threshold_scan.tsv"
-echo "part00-04 MFA 扫描表：$OUTPUT_ROOT/valid_lmdb_mfa_threshold_scan.tsv"
+# Step 2: Report the summary path; use only the thresholds selected on valid for test.
+echo "[2/2] Threshold selection and test-set recomputation complete"
+echo "Summary table: $OUTPUT_ROOT/pause_threshold_scan_summary.tsv"
+echo "Full results: $OUTPUT_ROOT/pause_threshold_scan_summary.json"
+echo "Exam-authority manual scan: $OUTPUT_ROOT/valid_m2_manual_threshold_scan.tsv"
+echo "Exam-authority MFA scan: $OUTPUT_ROOT/valid_m2_mfa_threshold_scan.tsv"
+echo "part00-04 MFA scan: $OUTPUT_ROOT/valid_lmdb_mfa_threshold_scan.tsv"

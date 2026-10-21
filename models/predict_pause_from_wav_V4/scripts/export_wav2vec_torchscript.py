@@ -129,8 +129,8 @@ def export_asset(args):
     if not checkpoint.is_file():
         raise FileNotFoundError("找不到 wav2vec checkpoint：{}".format(checkpoint))
 
-    # 本脚本位于 V1/scripts，从绝对路径启动时，Python 不会自动把 shell 的
-    # 当前工作目录放到 sys.path 首位，所以必须显式加入原 Fairseq 工程。
+    # This script is under V1/scripts. When launched by absolute path, Python does not automatically
+    # put the shell's current working directory first on sys.path, so add the original Fairseq project explicitly.
     fairseq_project_root = (
         Path(args.fairseq_project_root)
         if args.fairseq_project_root

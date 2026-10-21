@@ -1,18 +1,18 @@
 #!/bin/bash
 # ============================================================================
-# 音频停顿预测 V4：提交正式训练到 KY 集群。
+# Audio pause prediction V4: submit the formal training job to the KY cluster.
 #
-# 主要阶段：
-#   1. 检查 KY CLI、worker 脚本及 GPU 资源配置；
-#   2. 在正式实验根目录下创建 KY stdout/stderr 日志目录；
-#   3. 提交单张 Tesla V100 PCIe 32GB 正式训练任务。
+# Main steps:
+#   1. Check the KY CLI, worker script, and GPU resource configuration.
+#   2. Create KY stdout/stderr log directories under the formal experiment root.
+#   3. Submit the formal training job on one Tesla V100 PCIe 32 GB GPU.
 #
-# 直接运行：
+# Run directly:
 #   bash run_pause_from_wav_train_ky.sh
 #
-# 重要约束：KY 日志和模型登记路径均位于 /ng-mix02 的正式实验目录。
+# Important: KY logs and model registration paths are both under the formal experiment directory on /ng-mix02.
 # ============================================================================
-# ==================== 需要修改的地方 ====================
+# ==================== Edit these settings ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 KY_USERNAME="yhchen70"
 KY_PROJECT_ID="2227"
@@ -27,34 +27,34 @@ KY_MODEL_PATH="/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause
 KY_WORKER_SCRIPT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4/ky_pause_from_wav_train.sh"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== The settings below usually do not need changes ==================
 set -euo pipefail
 
 if ! command -v ky >/dev/null 2>&1; then
-    echo "错误：当前终端找不到 ky 命令；请在具备 KY CLI 的内网登录节点执行。" >&2
+    echo "Error: ky command is unavailable in this terminal; run this on an internal login node with the KY CLI." >&2
     exit 1
 fi
 if [[ ! -f "$KY_WORKER_SCRIPT" ]]; then
-    echo "错误：找不到 KY worker 脚本：$KY_WORKER_SCRIPT" >&2
+    echo "Error: KY worker script not found: $KY_WORKER_SCRIPT" >&2
     exit 1
 fi
 if [[ "$KY_GPU_COUNT" -le 0 ]]; then
-    echo "错误：KY_GPU_COUNT 必须大于 0" >&2
+    echo "Error: KY_GPU_COUNT must be greater than 0" >&2
     exit 1
 fi
 
-# 第 1 阶段：创建 KY 调度日志和模型登记目录。
+# Step 1: Create the KY scheduler log and model registration directories.
 mkdir -p "$KY_LOG_DIR" "$KY_MODEL_PATH"
 TIMESTAMP="$(date '+%Y%m%d%H%M%S')"
 STDOUT_LOG="$KY_LOG_DIR/${KY_JOB_NAME}_${TIMESTAMP}.log"
 STDERR_LOG="$KY_LOG_DIR/${KY_JOB_NAME}_${TIMESTAMP}.error.log"
 
-echo "提交 KY 正式训练任务：$KY_JOB_NAME"
-echo "标准输出日志：$STDOUT_LOG"
-echo "错误输出日志：$STDERR_LOG"
-echo "KY 模型登记目录：$KY_MODEL_PATH"
+echo "Submitting KY training job: $KY_JOB_NAME"
+echo "Standard output log: $STDOUT_LOG"
+echo "Standard error log: $STDERR_LOG"
+echo "KY model registry directory: $KY_MODEL_PATH"
 
-# 第 2 阶段：提交正式训练任务。
+# Step 2: Submit the formal training job.
 ky exp submit \
     -a "$KY_USERNAME" \
     -n "$KY_JOB_NAME" \

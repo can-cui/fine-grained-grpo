@@ -1,27 +1,27 @@
 """
-infer_threshold_3class.py — exp8_3class: txt + wav -> pred (三阈值带拒识, 纯推理)
+infer_threshold_3class.py — exp8_3class: txt + wav -> predictions (three thresholds with rejection; inference only)
 
-和二分类 infer_threshold.py 的差异:
-  - tone 是 3 类 softmax (rising/falling/flat), P(rising)+P(falling)+P(flat)=1
-  - tone 判决: 每类独立阈值三态判决 (和二分类 infer_threshold.py 完全一致):
+Differences from the binary-classification infer_threshold.py:
+  - Tone uses a 3-class softmax (rising/falling/flat), with P(rising)+P(falling)+P(flat)=1
+  - Tone decision: apply an independent three-way threshold decision to each class (same as in binary infer_threshold.py):
         P(rising)  >= rising_threshold   -> rising
         P(falling) >= falling_threshold  -> falling
         P(flat)    >= flat_threshold     -> flat
-        都不满足 (灰区)                  -> 拒识, 该词直接丢掉, 不出现在结果里
-        多个同时满足时优先级 rising > falling > flat
-  - 对齐: whisperX forced alignment 拿逐词时间
-  - 纯推理, 没有 GT, 不做任何指标测试
+        None satisfied (gray zone)       -> reject; discard the word from the results
+        If multiple thresholds are met, priority is rising > falling > flat
+  - Alignment: use whisperX forced alignment to obtain word-level timestamps
+  - Inference only: no ground truth and no metric evaluation
 
-阈值含义:
-  阈值越高灰区越大, 拒识越多。三类阈值都设 0 时几乎不拒识。
+Thresholds:
+  Higher thresholds create a wider gray zone and more rejections. Setting all three thresholds to 0 results in almost no rejections.
 
-用法 (一般用 run.sh 包一层):
+Usage (usually invoked through a wrapper such as run.sh):
   python infer_threshold_3class.py \\
-      --text-path  <id\\tsentence 文本>     \\
-      --wav-dir    <wav 目录>               \\
-      --fbk-dir    <fbank .npy 缓存目录>    \\
-      --ckpt  <模型> --vocab <vocab.json> --stats <stats.npz> \\
-      --output-txt <输出 txt>               \\
+      --text-path  <id\\tsentence text file> \\
+      --wav-dir    <wav directory>            \\
+      --fbk-dir    <fbank .npy cache directory> \\
+      --ckpt  <model> --vocab <vocab.json> --stats <stats.npz> \\
+      --output-txt <output txt file>          \\
       --rising-threshold 0.9 --falling-threshold 0.8 --flat-threshold 0.7
 """
 import argparse
@@ -44,11 +44,11 @@ RISING, FALLING, FLAT, REJECT = 0, 1, 2, 3
 
 
 # =========================================================================
-# 读取 id\tsentence 文本
+# Read id\tsentence text
 # =========================================================================
 
 def load_text(text_path):
-    """返回 [(id, sentence), ...]。每行 id<空格>sentence, 跳过空行。"""
+    """Return [(id, sentence), ...]. Each line is id<whitespace>sentence; blank lines are skipped."""
     pairs = []
     with open(text_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -57,20 +57,20 @@ def load_text(text_path):
                 continue
             parts = line.split(None, 1)
             if len(parts) < 2:
-                print(f"  [skip] 无法解析(缺 sentence): {line[:60]}")
+                print(f"  [skip] Could not parse line (missing sentence): {line[:60]}")
                 continue
             uid, sentence = parts[0].strip(), parts[1].strip()
             pairs.append((uid, sentence))
-    print(f"[text] 读到 {len(pairs)} 条 (id sentence) from {text_path}")
+    print(f"[text] Read {len(pairs)} (id, sentence) pairs from {text_path}")
     return pairs
 
 
 # =========================================================================
-# whisperX forced alignment: (wav, transcript) -> 逐词 (start_s, end_s, word)
+# whisperX forced alignment: (wav, transcript) -> word-level (start_s, end_s, word)
 # =========================================================================
 
 def build_aligner(device):
-    """加载 whisperX 对齐模型一次, 返回 (whisperx, align_model, metadata)。"""
+    """Load the whisperX alignment model once and return (whisperx, align_model, metadata)."""
     import whisperx
     align_model, metadata = whisperx.load_align_model(
         language_code="en", device=str(device)
@@ -79,9 +79,9 @@ def build_aligner(device):
 
 
 def align_one(whisperx, align_model, metadata, wav_path, sentence, device):
-    """对单条 wav 做 forced alignment, 返回 [(start_s, end_s, word), ...]。"""
+    """Run forced alignment on one WAV file and return [(start_s, end_s, word), ...]."""
     audio = whisperx.load_audio(str(wav_path))
-    dur = len(audio) / 16000.0  # whisperx.load_audio 重采样到 16k
+    dur = len(audio) / 16000.0  # whisperx.load_audio resamples to 16 kHz
     segments = [{"start": 0.0, "end": dur, "text": sentence}]
     result = whisperx.align(
         segments, align_model, metadata, audio, str(device),
@@ -91,7 +91,7 @@ def align_one(whisperx, align_model, metadata, wav_path, sentence, device):
     for seg in result.get("segments", []):
         for w in seg.get("words", []):
             if "start" not in w or "end" not in w:
-                continue  # whisperX 对某些词 (标点/未对上) 不给时间, 跳过
+                continue  # whisperX provides no timestamps for some words (punctuation or failed alignment); skip them
             txt = str(w.get("word", "")).strip()
             if not txt:
                 continue
@@ -100,13 +100,13 @@ def align_one(whisperx, align_model, metadata, wav_path, sentence, device):
 
 
 # =========================================================================
-# fbank 自动提取 (和 infer.py 一致)
+# Automatic fbank extraction (same as infer.py)
 # =========================================================================
 
 def ensure_fbank_batch(wav_dir, fbk_dir, extract_script, n_thread=40):
-    """批量提取整个 wav 目录的 fbank 到 fbk_dir。
-    提取脚本是目录级: --input_wav_dir / --output_fbk_dir / --n_thread,
-    命名规则 <id>.wav -> <id>.npy, 已存在的 .npy 会被脚本自动跳过。"""
+    """Batch-extract fbank features for the entire WAV directory into fbk_dir.
+    The extractor operates on directories via --input_wav_dir / --output_fbk_dir / --n_thread.
+    Files follow the naming rule <id>.wav -> <id>.npy; existing .npy files are skipped automatically."""
     Path(fbk_dir).mkdir(parents=True, exist_ok=True)
     cmd = [
         sys.executable, extract_script,
@@ -114,7 +114,7 @@ def ensure_fbank_batch(wav_dir, fbk_dir, extract_script, n_thread=40):
         "--output_fbk_dir", str(fbk_dir),
         "--n_thread", str(n_thread),
     ]
-    print(f"[fbk] 批量提取: {' '.join(cmd)}")
+    print(f"[fbk] Batch extraction: {' '.join(cmd)}")
     try:
         subprocess.run(cmd, check=True)
         return True
@@ -124,7 +124,7 @@ def ensure_fbank_batch(wav_dir, fbk_dir, extract_script, n_thread=40):
 
 
 # =========================================================================
-# 构造样本 (whisperX intervals -> sample dict)
+# Build samples (whisperX intervals -> sample dict)
 # =========================================================================
 
 def build_sample(uid, fbk_path, intervals):
@@ -145,7 +145,7 @@ def build_sample(uid, fbk_path, intervals):
 
 
 # =========================================================================
-# Dataset (推理用)
+# Dataset (for inference)
 # =========================================================================
 
 class InferDataset(Dataset):
@@ -203,25 +203,25 @@ class InferDataset(Dataset):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--text-path", required=True, help="id\\tsentence 文本文件")
-    parser.add_argument("--wav-dir", required=True, help="wav 目录, id -> <wav-dir>/<id>.wav")
-    parser.add_argument("--fbk-dir", required=True, help="fbank .npy 缓存目录 (没有就生成)")
+    parser.add_argument("--text-path", required=True, help="Text file with id\\tsentence rows")
+    parser.add_argument("--wav-dir", required=True, help="WAV directory; id maps to <wav-dir>/<id>.wav")
+    parser.add_argument("--fbk-dir", required=True, help="fbank .npy cache directory (created if missing)")
     parser.add_argument("--ckpt", required=True)
     parser.add_argument("--vocab", required=True)
     parser.add_argument("--stats", required=True)
     parser.add_argument("--extract-script", default=C.EXTRACT_SCRIPT)
-    parser.add_argument("--output-txt", required=True, help="输出: id\\tword\\ttone_pred\\tP(pred)")
-    parser.add_argument("--output-json", default="", help="可选: 详细 json, 留空则不写")
+    parser.add_argument("--output-txt", required=True, help="Output columns: id\\tword\\ttone_pred\\tP(pred)")
+    parser.add_argument("--output-json", default="", help="Optional detailed JSON output; leave empty to disable")
     parser.add_argument("--wav-suffix", default=".wav")
     parser.add_argument("--batch-size", type=int, default=C.BATCH_SIZE)
     parser.add_argument("--encoder-type", type=str, default=C.ENCODER_TYPE,
                         choices=["bilstm", "bilstm_residual", "transformer"])
     parser.add_argument("--rising-threshold", type=float, default=0.0,
-                        help="P(rising)>=此值判 rising")
+                        help="Predict rising when P(rising) is at least this value")
     parser.add_argument("--falling-threshold", type=float, default=0.0,
-                        help="P(falling)>=此值判 falling")
+                        help="Predict falling when P(falling) is at least this value")
     parser.add_argument("--flat-threshold", type=float, default=0.0,
-                        help="P(flat)>=此值判 flat; 三者都不满足则拒识丢弃")
+                        help="Predict flat when P(flat) is at least this value; reject and discard if none pass")
     args = parser.parse_args()
 
     print(f"[infer] rising_threshold={args.rising_threshold}, "
@@ -236,11 +236,11 @@ def main():
     fbk_dir = Path(args.fbk_dir)
     fbk_dir.mkdir(parents=True, exist_ok=True)
 
-    # 1. 先批量提取整个 wav 目录的 fbank (目录级脚本, 已存在的 .npy 自动跳过)
+    # 1. Extract fbank features for the entire wav directory (directory-level script; existing .npy files are skipped)
     ensure_fbank_batch(wav_dir, fbk_dir, args.extract_script)
 
-    # 2. whisperX 对齐, 构造样本
-    print("[align] 加载 whisperX 对齐模型...")
+    # 2. Align with whisperX and build samples
+    print("[align] Loading the whisperX alignment model...")
     whisperx, align_model, metadata = build_aligner(device)
 
     samples = []
@@ -272,7 +272,7 @@ def main():
         print("[infer] no samples to run")
         return
 
-    # 3. 加载模型
+    # 3. Load the model
     print(f"[load] vocab from {args.vocab}")
     tokenizer = WordTokenizer()
     tokenizer.load(args.vocab)
@@ -288,7 +288,7 @@ def main():
     if "epoch" in ckpt:
         print(f"  ckpt epoch={ckpt['epoch']}, best_score={ckpt.get('best_score', 'N/A')}")
 
-    # 4. 推理 (argmax 候选 + 每类阈值带拒识)
+    # 4. Run inference (argmax candidate + per-class thresholds with rejection)
     dataset = InferDataset(samples, stats, tokenizer)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False,
                         collate_fn=collate_fn, num_workers=2)
@@ -315,7 +315,7 @@ def main():
             p_rising = tone_prob[..., RISING]
             p_falling = tone_prob[..., FALLING]
             p_flat = tone_prob[..., FLAT]
-            # 每类独立阈值三态判决 (和二分类一致, 重叠区优先 rising > falling > flat)
+            # Apply a three-way decision with an independent threshold per class (same as binary classification; in overlaps, prioritize rising > falling > flat)
             pred_rising = p_rising >= Tr
             pred_falling = p_falling >= Tf
             pred_flat = p_flat >= Tfl
@@ -330,7 +330,7 @@ def main():
                 for j, w in enumerate(words):
                     n_words_total += 1
                     tp = int(tone_pred[i, j].item())
-                    if tp == REJECT:        # 置信度不足 -> 直接丢掉
+                    if tp == REJECT:        # Insufficient confidence -> discard
                         continue
                     n_words_kept += 1
                     kept.append({
@@ -343,7 +343,7 @@ def main():
                     })
                 results.append({"id": uid, "words": words, "kept_words": kept})
 
-    # 5. 输出
+    # 5. Write outputs
     Path(args.output_txt).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output_txt, "w", encoding="utf-8") as f:
         for r in results:
@@ -368,8 +368,8 @@ def main():
             }, f, ensure_ascii=False, indent=2)
         print(f"[save] {args.output_json}")
 
-    print(f"[done] {len(results)} 句, 保留词 {n_words_kept}/{n_words_total} "
-          f"(拒识 {n_words_total - n_words_kept})")
+    print(f"[done] {len(results)} utterances, retained words: {n_words_kept}/{n_words_total} "
+          f"(rejected: {n_words_total - n_words_kept})")
 
 
 if __name__ == "__main__":

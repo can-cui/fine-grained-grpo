@@ -13,11 +13,11 @@ import pronouncing
 import re
 from difflib import SequenceMatcher
 
-# 音素ASR模型路径
+# Path to the phoneme ASR model
 PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
 TARGET_SAMPLE_RATE = 16000
 
-# Huper phoneme model 音素集合
+# Phoneme inventory used by the Huper phoneme model
 MODEL_PHONES = {
     "AA", "AE", "AH", "AW", "AY", "B", "CH", "D", "DH", "EH", "ER", "EY",
     "F", "G", "HH", "IH", "IY", "JH", "K", "L", "M", "N", "NG", "OW", "OY",
@@ -134,10 +134,10 @@ def text_to_huper_phones(text: str):
 
 
 def normalize_spaces(phoneme_str: str):
-    """将连续的多个空格转换为单个空格"""
+    """Replace consecutive spaces with a single space."""
     return re.sub(r' +', ' ', phoneme_str).strip()
 
-# 配置离线环境
+# Configure the offline environment
 def configure_offline_env(root):
     os.environ.setdefault("HF_HOME", os.path.join(root, "hf_cache"))
     os.environ.setdefault("HF_HUB_CACHE", os.path.join(root, "hf_cache", "hub"))
@@ -149,7 +149,7 @@ def configure_offline_env(root):
 
 
 def load_audio_16k_mono(path):
-    """加载音频并重采样到16k单声道"""
+    """Load audio and resample it to 16 kHz mono."""
     audio, sample_rate = sf.read(str(path), always_2d=False)
     audio = np.asarray(audio, dtype=np.float32)
     if audio.ndim == 2:
@@ -164,7 +164,7 @@ def load_audio_16k_mono(path):
 
 
 def decode_phoneme_labels(model, predicted_ids):
-    """解码音素标签，去除CTC重复和blank"""
+    """Decode phoneme labels and remove CTC repeats and blanks."""
     ids = predicted_ids[0].detach().cpu().tolist()
     blank_id = getattr(model.config, "pad_token_id", None)
     id2label = getattr(model.config, "id2label", {})
@@ -184,7 +184,7 @@ def decode_phoneme_labels(model, predicted_ids):
 
 
 def infer_phoneme_one(processor, model, device, audio):
-    """对单个音频文件进行音素识别"""
+    """Recognize phonemes in a single audio file."""
     # audio, sample_rate = load_audio_16k_mono(wav_path)
     inputs = processor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
     inputs = {key: value.to(device) for key, value in inputs.items()}
@@ -217,7 +217,7 @@ def count_deletions(ref_phoneme: str, hyp_phoneme: str):
                     dp[i - 1][j - 1] + 1,  # substitution
                 )
 
-    # backtrace统计deletion
+    # Count deletions during backtracing
     i, j = n, m
     deletions = 0
 
@@ -272,12 +272,12 @@ class PhoneASR(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        # 配置离线环境
+        # Configure the offline environment
         root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         phoneme_root = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr"
         configure_offline_env(phoneme_root)
 
-        # 加载音素ASR模型
+        # Load the phoneme ASR model
         self.processor = AutoProcessor.from_pretrained(PHONEME_MODEL_DIR, local_files_only=True)
         self.model = AutoModelForCTC.from_pretrained(PHONEME_MODEL_DIR, local_files_only=True)
         self.model.to("cuda")
@@ -291,10 +291,10 @@ class PhoneASR(torch.nn.Module):
                         text_to_huper_phones):
         """
         Args:
-            text: 原始文本
-            intos: 词级mask，1表示关注，-1表示忽略
-            pred_phone: ASR预测音素字符串
-            text_to_huper_phones: 文本->HuPER音素函数
+            text: Original text
+            intos: Word-level mask; 1 means include and -1 means ignore
+            pred_phone: Phoneme string predicted by ASR
+            text_to_huper_phones: Function that converts text to HuPER phonemes
 
         Returns:
             focus_gt_phones: list[str]
@@ -304,7 +304,7 @@ class PhoneASR(torch.nn.Module):
         words = text.split()
 
         #
-        # 1. 构建整个GT phone序列
+        # 1. Build the complete ground-truth phone sequence
         #
         gold_phones = []
         word_phone_spans = []
@@ -323,7 +323,7 @@ class PhoneASR(torch.nn.Module):
             offset = e
 
         #
-        # 2. 找到关注词对应的GT phone index
+        # 2. Find the ground-truth phone indices for the target words
         #
         focus_gt_idx = []
 
@@ -340,7 +340,7 @@ class PhoneASR(torch.nn.Module):
         pred_phones = pred_phone.split()
 
         #
-        # 4. 对齐gold和pred
+        # 4. Align the gold and predicted sequences
         #
         sm = SequenceMatcher(
             None,
@@ -365,15 +365,15 @@ class PhoneASR(torch.nn.Module):
                     gold2pred[i1 + k] = j1 + k
 
             # delete:
-            # gold存在，pred不存在
-            # 不建立映射
+            # The gold phone exists, but the predicted phone does not
+            # Do not create a mapping
 
             # insert:
-            # pred多出来phone
-            # 不建立映射
+            # The prediction contains an extra phone
+            # Do not create a mapping
 
         #
-        # 5. 提取关注词GT phones
+        # 5. Extract ground-truth phones for the target words
         #
         focus_gt_phones = [
             gold_phones[i]
@@ -381,7 +381,7 @@ class PhoneASR(torch.nn.Module):
         ]
 
         #
-        # 6. 提取关注词pred phones
+        # 6. Extract predicted phones for the target words
         #
         focus_pred_idx = [
             gold2pred[i]
@@ -397,19 +397,19 @@ class PhoneASR(torch.nn.Module):
         return focus_gt_phones, focus_pred_phones
     def cal_reward(self, asr_phoneme, tgt_text):
         """
-        计算音素ASR的reward
-        TODO: 根据实际需求实现音素级别的reward计算
+        Compute the phoneme ASR reward
+        TODO: Implement phoneme-level reward computation as needed
 
         Args:
-            asr_phoneme: ASR识别出的音素序列
-            tgt_text: 原始文本，需要转换为音素
+            asr_phoneme: Phoneme sequence recognized by ASR
+            tgt_text: Original text to be converted into phonemes
 
         Returns:
-            reward: 奖励值
+            reward: Reward value
         """
-        # # 规范化ASR输出中的连续空格
+        # # Normalize consecutive spaces in ASR output
         # asr_phoneme = normalize_spaces(asr_phoneme)
-        # # 将原始文本转换为hubert音素
+        # # Convert the original text to HuPER phonemes
         # golden_phoneme = text_to_huper_phones(tgt_text)
         # deletions = count_deletions(tgt_text, asr_phoneme)
         deletions, replacements = count_phone_errors(
@@ -423,7 +423,7 @@ class PhoneASR(torch.nn.Module):
 
     @torch.no_grad()
     def forward(self, wav_batch, labels, wav_masks=None, num_thread=1, infer_bsz=1):
-        """批量推理"""
+        """Run batch inference."""
         if num_thread <= 1:
             return self._forward(wav_batch, labels, wav_masks, infer_bsz)
 
@@ -445,7 +445,7 @@ class PhoneASR(torch.nn.Module):
         return rewards
 
     def _forward(self, wav_batch, labels, wav_masks=None, infer_bsz=1):
-        """单线程批量推理"""
+        """Run batch inference in a single thread."""
         preds = []
         bsz = wav_batch.size(0)
         total_batch = bsz // infer_bsz
@@ -457,11 +457,11 @@ class PhoneASR(torch.nn.Module):
             wav_mask = wav_masks[i*infer_bsz:(i+1)*infer_bsz] if wav_masks is not None else None
             valid_wav = wav[wav_mask.bool()] if wav_mask is not None else wav
 
-            # 重采样到16k (原始可能是24k)
+            # Resample to 16 kHz (the original audio may be 24 kHz)
             audio = torchaudio.functional.resample(valid_wav.unsqueeze(0), orig_freq=24000, new_freq=16000).squeeze(0)
             audio = audio.detach().float().cpu().numpy()
 
-            # 写入临时文件供推理
+            # Write a temporary file for inference
             # import tempfile
             # with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as f:
             #     sf.write(f.name, audio, TARGET_SAMPLE_RATE)
@@ -489,7 +489,7 @@ class PhoneASR(torch.nn.Module):
         return rewards
 
     def reward_func(self, wav, label, wav_masks=None):
-        """单样本reward计算"""
+        """Compute the reward for a single sample."""
         valid_wav = wav[wav_masks.bool()] if wav_masks is not None else wav
         audio = torchaudio.functional.resample(valid_wav.unsqueeze(0), orig_freq=24000, new_freq=16000).squeeze(0)
         audio = audio.detach().float().cpu().numpy()

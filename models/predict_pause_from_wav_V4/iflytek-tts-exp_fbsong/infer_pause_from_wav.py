@@ -46,8 +46,9 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     device = torch.device("cpu" if args.cpu or not torch.cuda.is_available() else "cuda")
 
-    # 推理入口不经过 train.py 的参数初始化，必须在加载 checkpoint 前显式
-    # 导入 V4 user-dir，注册 pause task/model/criterion。
+    # The inference entry point does not use train.py's argument initialization, so
+    # explicitly import the V4 user-dir before loading the checkpoint to register
+    # the pause task, model, and criterion.
     utils.import_user_module(args)
 
     models, _checkpoint_args, task = checkpoint_utils.load_model_ensemble_and_task(

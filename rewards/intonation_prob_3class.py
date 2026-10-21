@@ -9,16 +9,16 @@ import torchaudio
 import soundfile as sf
 import re
 
-# 语调预测模型路径 (exp8)
+# Path to the intonation prediction model (exp8)
 CKPT_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/checkpoints/best_exp8_span_tone_3class0625.pt"
 VOCAB_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/vocab.json"
 STATS_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/stats.npz"
 
-# WhisperX模型路径
+# Path to the WhisperX model
 WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
-# # calc_fbk 路径 (用于从24kHz音频提取fbank)
+# # Path to calc_fbk (used to extract filter-bank features from 24 kHz audio)
 # CALC_FBK_DIR = "/train34/tts/permanent/cancui11/RL/original/src_format_code_silu_rms_split_rope_expand_lang_v3_code_en_edu_add_emo_tag_sep_ratio"
 # sys.path.insert(0, CALC_FBK_DIR)
 # from inference import calc_fbk
@@ -51,27 +51,27 @@ mel_spec_func = torchaudio.transforms.MelSpectrogram(
                 )
 
 def calc_fbk(audio_norm,preemphasis=0.97):
-    # 预加重
+    # Pre-emphasis
     audio = torch.cat((audio_norm[...,0:1],audio_norm[...,1:] - preemphasis* audio_norm[...,:-1]),dim=-1) 
-    # mel 
+    # Mel spectrogram
     mel = mel_spec_func(audio)
     fbk = safe_log10(mel)
     return fbk
 
-# 模型配置
+# Model configuration
 FBANK_DIM = 80
 MAX_FRAMES = 600
 MAX_WORDS = 80
 TONE_NAMES = ["rising", "falling"]
 SAMPLE_RATE = 16000
 
-# 添加路径
+# Add the paths
 sys.path.insert(0, WHISPERX_DIR)
 sys.path.insert(0, WHISPERX_MAIN_DIR)
 import whisperx
 
 
-# 导入exp8的config和model
+# Import the exp8 configuration and model
 sys.path.insert(0, "/train34/tts/permanent/cancui11/RL/models/exp8_span_tone_3class")
 import config3c as C
 from data_utils import WordTokenizer, load_stats
@@ -79,7 +79,7 @@ from reward_model3c import IntonationV4Model, span_pool
 
 
 class WordTokenizerForReward(WordTokenizer):
-    """独立的tokenizer，不依赖config"""
+    """A standalone tokenizer that does not depend on the config."""
     PAD_TOKEN = "<pad>"
     UNK_TOKEN = "<unk>"
 
@@ -109,21 +109,21 @@ class WordTokenizerForReward(WordTokenizer):
 
 
 def _normalize_word(word):
-    """标准化词（去标点、小写），用于模糊匹配。"""
+    """Normalize a word (remove punctuation and lowercase it) for fuzzy matching."""
     if word == "…":
         return "…"
     return re.sub(r'[^/w]', '', word.lower())
 
 
 def _merge_whisperx_to_user_words(user_words, whisperx_segments):
-    """将 WhisperX 的细粒度分词映射到用户的粗粒度分词。
+    """Map WhisperX fine-grained tokens to the user-provided coarse-grained tokens.
 
     Args:
-        user_words: 用户的词序列
-        whisperx_segments: WhisperX 输出
+        user_words: Sequence of user-provided words
+        whisperx_segments: Output from WhisperX
 
     Returns:
-        word_boundaries: list of [start_cs, end_cs]，长度 = len(user_words)
+        word_boundaries: List of [start_cs, end_cs] pairs, with length len(user_words)
     """
     user_norm = [_normalize_word(w) for w in user_words]
     whisperx_norm = [_normalize_word(seg["word"]) for seg in whisperx_segments]
@@ -176,12 +176,12 @@ class IntonationASR(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        # 加载tokenizer和stats
+        # Load the tokenizer and statistics
         self.tokenizer = WordTokenizerForReward()
         self.tokenizer.load(VOCAB_PATH)
         self.stats = load_stats(STATS_PATH)
 
-        # 加载exp8语调模型
+        # Load the exp8 intonation model
         self.model = IntonationV4Model(
             self.tokenizer.vocab_size,
             encoder_type=C.ENCODER_TYPE
@@ -190,9 +190,9 @@ class IntonationASR(torch.nn.Module):
         self.model.load_state_dict(ckpt["state_dict"])
         self.model.eval()
 
-        # 加载WhisperX转录模型
+        # Load the WhisperX transcription model
         # self.whisperx_model = whisperx.load_model("large-v3", "cuda", compute_type="int8_float16")
-        # 加载WhisperX对齐模型
+        # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
             "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
         )
@@ -201,13 +201,13 @@ class IntonationASR(torch.nn.Module):
         self.max_words = MAX_WORDS
 
     def whisperx_align_words(self, audio_16k, words):
-        """用WhisperX对齐，获取词边界（厘秒）"""
+        """Align with WhisperX and obtain word boundaries in centiseconds."""
         # try:
         duration_s = len(audio_16k) / SAMPLE_RATE
         text_str = " ".join(words)
         transcript = [{"start": 0.0, "end": duration_s, "text": text_str}]
 
-        # 对齐
+        # Align the transcript
         result = whisperx.align(transcript, self.align_model, self.align_metadata,
                                 audio_16k, "cuda", return_char_alignments=False)
 
@@ -229,12 +229,12 @@ class IntonationASR(torch.nn.Module):
 
     def cal_reward(self, pred_tone, words, intos):
         """
-        计算reward的接口
+        Reward computation interface
 
         Args:
-            pred_tone: 预测的语调 tensor
-            words: 文本词列表
-            intos: 真实的语调标签
+            pred_tone: Predicted intonation tensor
+            words: List of text words
+            intos: Ground-truth intonation labels
 
         Returns:
             reward: float
@@ -296,33 +296,33 @@ class IntonationASR(torch.nn.Module):
 
     def process_batch(self, wav_batch, wav_masks, labels):
         """
-        处理一个batch的样本，返回reward
-        wav_batch: (batch, samples) 24kHz波形
-        labels: tuple (text, intos) 或单个text
+        Process a batch of samples and return rewards
+        wav_batch: (batch, samples) waveform at 24 kHz
+        labels: Tuple (text, intos) or a single text string
         """
         B = wav_batch.size(0)
 
-        # 处理labels
+        # Process labels
         text, intos = labels
         intos_list = intos
 
 
-        # 获取有效音频 (24kHz)
+        # Get the valid audio (24 kHz)
         valid_wav = wav_batch[wav_masks.bool()] if wav_masks is not None else wav_batch
         audio_24k = valid_wav.detach().float().cpu()
 
-        # 转换为16kHz用于WhisperX
+        # Resample to 16 kHz for WhisperX
         audio_16k = torchaudio.functional.resample(
             audio_24k.unsqueeze(0),
             orig_freq=24000, new_freq=16000
         ).squeeze(0).numpy()
 
-        # 提取fbank (24kHz音频，10ms/帧) 使用calc_fbk
+        # Extract filter-bank features from 24 kHz audio (10 ms per frame) using calc_fbk
         audio_24k_for_fbk = audio_24k.unsqueeze(0) if audio_24k.dim() == 1 else audio_24k
         fbank = calc_fbk(audio_24k_for_fbk).squeeze(0)  # (80, frames) from calc_fbk
         fbank = fbank.float().transpose(0, 1).unsqueeze(0).cuda()  # (1, frames, 80)
         # import pdb;pdb.set_trace()
-        # 归一化fbank
+        # Normalize filter-bank features
         fbank = (fbank - torch.from_numpy(self.stats["fbank_mean"]).to(fbank.device).float()) / /
                 (torch.from_numpy(self.stats["fbank_std"]).to(fbank.device).float() + 1e-8)
 
@@ -332,14 +332,14 @@ class IntonationASR(torch.nn.Module):
             T = self.max_frames
 
         fbank_mask = torch.ones(1, T, device=fbank.device)
-        # WhisperX对齐获取词边界（厘秒）
+        # Use WhisperX alignment to obtain word boundaries in centiseconds
         words = text.split()[:self.max_words]
         word_boundaries = self.whisperx_align_words(audio_16k, words)
         
-        # 计算word_spans: 厘秒 -> 下采样后的帧索引
-        # 24kHz, 10ms/帧 -> 100帧/秒
-        # Conv前端下采样4x -> 25帧/秒, 每帧 = 4cs (厘秒)
-        # 帧索引 = 厘秒 // 4
+        # Compute word_spans: convert centiseconds to downsampled frame indices
+        # At 24 kHz, 10 ms per frame corresponds to 100 frames per second
+        # The convolutional front end downsamples by 4x, yielding 25 frames per second; each frame represents 4 centiseconds
+        # Frame index = centiseconds // 4
         if word_boundaries is not None:
             word_spans = []
             for start_cs, end_cs in word_boundaries:
@@ -348,32 +348,32 @@ class IntonationASR(torch.nn.Module):
                 word_spans.append([start_frame, end_frame])
             word_spans = torch.tensor([word_spans], dtype=torch.long, device=fbank.device)
         else:
-            # 如果对齐失败，使用均匀分布的word_spans
+            # If alignment fails, use uniformly distributed word spans
             n_words = len(words)
             word_spans = torch.zeros(1, n_words, 2, dtype=torch.long, device=fbank.device)
             frame_per_word = T // max(n_words, 1)
             for i in range(n_words):
                 word_spans[0, i, 0] = i * frame_per_word
                 word_spans[0, i, 1] = (i + 1) * frame_per_word
-        # 处理文本token 
+        # Process text tokens
         text_tokens = self.tokenizer.encode(words)
         text_tokens = torch.tensor([text_tokens], dtype=torch.long, device=fbank.device)
         text_mask = torch.ones(1, text_tokens.size(1), device=fbank.device)
 
-        # 模型推理 (exp8需要word_spans)
+        # Run model inference (exp8 requires word_spans)
         out = self.model(fbank, fbank_mask, text_tokens, text_mask, word_spans)
         tone_prob = F.softmax(out["tone_logits"], dim=-1)
         tone_pred = tone_prob.argmax(-1).squeeze(0)
-        # 设置阈值：如果预测概率小于0.8，则该位置设为-1
+        # Apply a threshold: set positions with predicted probabilities below 0.8 to -1
         max_prob = tone_prob.max(dim=-1)[0].squeeze(0)
         tone_pred = tone_pred.where(max_prob >= 0.9, torch.tensor(-1, device=tone_pred.device))
-        # 计算reward
+        # Compute the reward
         reward = self.cal_reward(tone_pred, words, intos_list)
         # import pdb;pdb.set_trace()
         return reward
 
     def reward_func(self, wav_batch, labels, wav_masks=None):
-        """单batch处理，用于多线程调用"""
+        """Process a single batch for multithreaded execution."""
         return self.process_batch(wav_batch, wav_masks, labels)
 
 

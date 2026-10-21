@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""检查 predict_pause_from_wav_V4 内网运行包是否完整且 Python 文件可解析。"""
+"""Check that the predict_pause_from_wav_V4 internal package is complete and its Python files parse."""
 
 import argparse
 import ast
@@ -96,7 +96,7 @@ def main():
 
     manifest = Path(args.manifest)
     if not manifest.is_file() or manifest.stat().st_size == 0:
-        missing.append("外部正式数据 manifest: {}".format(manifest))
+        missing.append("External production-data manifest: {}".format(manifest))
 
     jit_path = Path(args.wav2vec_jit_path)
     meta_path = Path(args.wav2vec_meta_path)
@@ -105,7 +105,7 @@ def main():
     asset_status = "ready" if asset_exists and meta_exists else "will_export"
     if asset_exists != meta_exists:
         asset_status = "incomplete"
-        missing.append("wav2vec 永久资产必须模型和元数据同时存在或同时缺失")
+        missing.append("wav2vec permanent model assets and metadata must either both exist or both be missing")
     elif asset_exists:
         try:
             with meta_path.open("r", encoding="utf-8") as handle:
@@ -118,8 +118,8 @@ def main():
         except (OSError, UnicodeError, json.JSONDecodeError):
             asset_status = "will_reexport_cuda_v3"
 
-    # 在内网训练环境中真实导入 user-dir，防止只通过 AST、却没有进入
-    # Fairseq 注册表的问题拖到正式训练阶段才暴露。
+    # Import the user-dir in the actual internal training environment so that
+    # missing Fairseq registry entries are caught here rather than during formal training.
     if args.check_fairseq_registration and not missing and not empty and not syntax_errors:
         try:
             root_string = str(root)
@@ -158,7 +158,7 @@ def main():
             if args.expected_arch == "pause_from_wav_w2v_unfreeze_last2":
                 registration["optimizer_pause_adam"] = "pause_adam" in optim.OPTIMIZER_REGISTRY
             if not all(registration.values()):
-                registration_error = "Fairseq 自定义注册表缺项：{}".format(registration)
+                registration_error = "Missing entry in the Fairseq custom registry: {}".format(registration)
         except Exception as exc:
             registration_error = "{}: {}".format(type(exc).__name__, exc)
 
@@ -182,7 +182,7 @@ def main():
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     if not report["ok"]:
-        raise SystemExit("实验包不完整；请按上方清单补齐后重跑")
+        raise SystemExit("Package is incomplete; address the items listed above and run again")
 
 
 if __name__ == "__main__":

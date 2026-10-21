@@ -1,13 +1,13 @@
 """
 model.py — exp8: Span Pooling Tone Head
 
-相比 exp5:
-  - tone_head 不再吃 cross-attn 输出
-  - 改为直接从 acoustic_feat 上做 span pooling（用 word_boundaries 定位）
-  - break_head 保持不变（继续吃 cross-attn 输出）
-  - 删除 F0 相关模块
+Compared with exp5:
+  - The tone_head no longer consumes cross-attention output.
+  - Instead, it applies span pooling directly to acoustic_feat (located using word_boundaries).
+  - The break_head remains unchanged and continues to consume cross-attention output.
+  - Remove F0-related modules.
 
-架构:
+Architecture:
     fbank → Conv×2 (↓4x) → BiLSTM → acoustic_feat (B, T/4, 512)
     text  → Embed + Transformer → text_feat (B, N, 128)
 
@@ -144,13 +144,13 @@ class CrossAttentionAlignment(nn.Module):
 
 def span_pool(acoustic_feat, word_spans, tail_ratio=C.TAIL_RATIO,
               post_frames=C.POST_FRAMES):
-    """从 acoustic_feat 上按 word_spans 做 span pooling（向量化版）。
+    """Apply vectorized span pooling to acoustic_feat using word_spans.
 
     Args:
         acoustic_feat: (B, T, D)
-        word_spans: (B, N, 2) — 每个词的 [start, end) 帧索引（已经是下采样后的）
-        tail_ratio: 取词尾多少比例作为 tail_audio
-        post_frames: 词后取多少帧作为 post_audio
+        word_spans: (B, N, 2) — downsampled [start, end) frame indices for each word
+        tail_ratio: Proportion of each word's tail to use as tail_audio
+        post_frames: Number of frames after each word to use as post_audio
 
     Returns:
         tone_input: (B, N, D*3)
@@ -160,13 +160,13 @@ def span_pool(acoustic_feat, word_spans, tail_ratio=C.TAIL_RATIO,
     device = acoustic_feat.device
 
     # cumsum trick: sum over [s, e) = cumsum[e] - cumsum[s]
-    # 在 T 维前面 pad 一个零，方便切片
+    # Pad a zero at the beginning of the T dimension to simplify slicing
     zero = torch.zeros(B, 1, D, device=device, dtype=acoustic_feat.dtype)
     cumsum = torch.cat([zero, acoustic_feat.cumsum(dim=1)], dim=1)  # (B, T+1, D)
 
     s = word_spans[..., 0].clamp(min=0, max=T)   # (B, N)
     e = word_spans[..., 1].clamp(min=0, max=T)   # (B, N)
-    e = torch.maximum(e, s + 1).clamp(max=T)     # 保证 e > s
+    e = torch.maximum(e, s + 1).clamp(max=T)     # Ensure e > s
 
     span_len = (e - s).clamp(min=1).unsqueeze(-1).to(acoustic_feat.dtype)  # (B, N, 1)
 
@@ -190,7 +190,7 @@ def span_pool(acoustic_feat, word_spans, tail_ratio=C.TAIL_RATIO,
 
     # post_audio: [e, min(e + post_frames, T))
     post_end = (e + post_frames).clamp(max=T)
-    # 处理 post 段为空的情况：fallback 到最后一帧
+    # Handle an empty post segment by falling back to the last frame
     empty = post_end <= e
     post_start = torch.where(empty, (e - 1).clamp(min=0), e)
     post_end_safe = torch.where(empty, e.clamp(max=T), post_end)
@@ -231,10 +231,10 @@ class IntonationV4Model(nn.Module):
             acoustic_dim=acoustic_dim,
         )
 
-        # Break head: 吃 cross-attn 输出（和 exp5 一样）
+        # Break head: uses the cross-attention output (same as exp5)
         self.break_head = nn.Linear(acoustic_dim, 1)
 
-        # Tone head: 吃 span pooling 输出（新）
+        # Tone head: uses the span pooling output (new)
         tone_h1 = 256
         tone_h2 = 128
         tone_h3 = 64
@@ -258,7 +258,7 @@ class IntonationV4Model(nn.Module):
             fbank_mask:  (B, T)
             text_tokens: (B, N)
             text_mask:   (B, N)
-            word_spans:  (B, N, 2) — 下采样后的帧索引 [start, end)
+            word_spans:  (B, N, 2) — downsampled frame indices [start, end)
 
         Returns:
             break_logits: (B, N)
@@ -289,7 +289,7 @@ class IntonationV4Model(nn.Module):
         )
         break_logits = self.break_head(word_acoustic).squeeze(-1)
 
-        # Tone path: span pooling（不经过 cross-attn）
+        # Tone path: span pooling (does not use cross-attention)
         tone_input = span_pool(acoustic_feat, word_spans)
         tone_logits = self.tone_head(tone_input)
 
@@ -304,7 +304,7 @@ if __name__ == "__main__":
     vocab_size = 1000
     model = IntonationV4Model(vocab_size)
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"参数量: {n_params / 1e6:.2f}M")
+    print(f"Parameter count: {n_params / 1e6:.2f}M")
 
     B, T, N = 2, 400, 12
     fbank = torch.randn(B, T, 80)
@@ -322,4 +322,4 @@ if __name__ == "__main__":
     print(f"break_logits: {out['break_logits'].shape}")
     print(f"tone_logits:  {out['tone_logits'].shape}")
     print(f"attn_weights: {out['attn_weights'].shape}")
-    print("验证通过")
+    print("Validation passed")

@@ -101,7 +101,7 @@ def calculate_metrics(rows, threshold):
 
 
 def choose_best(rows):
-    # F1 优先；完全并列时依次偏向更高 recall、precision 和更高阈值。
+    # Prefer F1; for exact ties, prefer higher recall, then precision, then threshold.
     return max(
         rows,
         key=lambda row: (row["f1"], row["recall"], row["precision"], row["threshold"]),

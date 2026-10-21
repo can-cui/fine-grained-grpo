@@ -10,45 +10,45 @@ import soundfile as sf
 import re
 import json
 
-# WhisperX模型路径
+# Path to the WhisperX model
 WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
-# 停顿预测模型路径
+# Path to the pause prediction model
 PAUSE_PACKAGE_ROOT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4"
 PAUSE_CHECKPOINT = "/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2/checkpoints/checkpoint_last.pt"
 WAV2VEC_JIT_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.pt"
 WAV2VEC_META_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.meta.json"
 PAUSE_USER_DIR = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/pause_user_dir"
 
-# 模型配置
+# Model configuration
 MAX_FRAMES = 600
 MAX_WORDS = 80
 SAMPLE_RATE = 16000
 PAUSE_THRESHOLD = 0.5
 
-# 添加路径
+# Add the paths
 sys.path.insert(0, WHISPERX_DIR)
 sys.path.insert(0, WHISPERX_MAIN_DIR)
 import whisperx
 
 
 def _normalize_word(word):
-    """标准化词（去标点、小写），用于模糊匹配。"""
+    """Normalize a word (remove punctuation and lowercase it) for fuzzy matching."""
     if word == "…":
         return "…"
     return re.sub(r'[^\w]', '', word.lower())
 
 
 def _merge_whisperx_to_user_words(user_words, whisperx_segments):
-    """将 WhisperX 的细粒度分词映射到用户的粗粒度分词。
+    """Map WhisperX fine-grained tokens to the user-provided coarse-grained tokens.
 
     Args:
-        user_words: 用户的词序列
-        whisperx_segments: WhisperX 输出
+        user_words: Sequence of user-provided words
+        whisperx_segments: Output from WhisperX
 
     Returns:
-        word_boundaries: list of [start_cs, end_cs]，长度 = len(user_words)
+        word_boundaries: List of [start_cs, end_cs] pairs, with length len(user_words)
     """
     user_norm = [_normalize_word(w) for w in user_words]
     whisperx_norm = [_normalize_word(seg["word"]) for seg in whisperx_segments]
@@ -123,13 +123,13 @@ def load_audio(path, target_sample_rate):
 
 
 def build_sample(row, whisper_record, waveform, sample_rate):
-    """构建停顿模型的输入样本
+    """Build an input sample for the pause prediction model.
 
     Args:
-        row: 包含id和text的字典
-        whisper_record: 包含words列表的字典，每个word有word/start/end
+        row: Dictionary containing id and text
+        whisper_record: Dictionary containing a words list; each word has word/start/end fields
         waveform: audio waveform tensor (1D)
-        sample_rate: 采样率
+        sample_rate: Sample rate
     """
     words = whisper_record["words"]
     duration = waveform.numel() / float(sample_rate)
@@ -139,11 +139,11 @@ def build_sample(row, whisper_record, waveform, sample_rate):
                 row["id"], words[-1]["end"], duration
             )
         )
-    # pool_starts: 第一个词的start + 前面每个词的end
+    # pool_starts: Start time of the first word plus the end time of each preceding word
     pool_starts_seconds = [words[0]["start"]] + [item["end"] for item in words[:-1]]
     pool_ends_seconds = [item["end"] for item in words]
 
-    # 转换为采样点
+    # Convert times to sample indices
     starts = torch.tensor(
         [round(min(value, duration) * sample_rate) for value in pool_starts_seconds],
         dtype=torch.long,
@@ -169,7 +169,7 @@ def build_sample(row, whisper_record, waveform, sample_rate):
 
 
 def collate(samples):
-    """将样本collate成batch"""
+    """Collate samples into a batch."""
     batch_size = len(samples)
     max_audio = max(sample["waveform"].numel() for sample in samples)
     max_words = max(len(sample["words"]) for sample in samples)
@@ -200,12 +200,12 @@ class PausePredWhisper(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        # 加载WhisperX对齐模型
+        # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
             "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
         )
 
-        # 加载停顿预测模型
+        # Load the pause prediction model
         from fairseq import checkpoint_utils, utils
         utils.import_user_module(type('obj', (object,), {'user_dir': PAUSE_USER_DIR})())
 
@@ -227,7 +227,7 @@ class PausePredWhisper(torch.nn.Module):
         self.threshold = PAUSE_THRESHOLD
 
     def whisperx_align_words(self, audio_16k, words):
-        """用WhisperX对齐，获取词边界（厘秒）"""
+        """Align with WhisperX and obtain word boundaries in centiseconds."""
         try:
             duration_s = len(audio_16k) / SAMPLE_RATE
             text_str = " ".join(words)
@@ -251,17 +251,17 @@ class PausePredWhisper(torch.nn.Module):
             return None
 
     def cal_word_pause_predictions(self, waveform, words, word_boundaries):
-        """用停顿模型预测每个词后面的停顿
+        """Use the pause model to predict whether a pause follows each word.
 
         Args:
             waveform: audio waveform tensor (1D) at 16kHz
-            words: 词列表
-            word_boundaries: 词边界 [[start_cs, end_cs], ...]
+            words: List of words
+            word_boundaries: Word boundaries [[start_cs, end_cs], ...]
 
         Returns:
-            pause_predictions: list of int (0或1)，每个词后面是否有停顿
+            pause_predictions: List of integers (0 or 1), indicating whether each word is followed by a pause
         """
-        # 构建sample
+        # Build the sample
         row = {"id": "0", "text": " ".join(words)}
         whisper_record = {"words": [{"word": w, "start": b[0]/100.0, "end": b[1]/100.0} for w, b in zip(words, word_boundaries)]}
 
@@ -273,25 +273,25 @@ class PausePredWhisper(torch.nn.Module):
             logits = self.model(**net_input)["pause_logits"]
             probs = torch.sigmoid(logits).cpu().squeeze(0)
 
-        # 获取预测结果 (转为int 0/1)
+        # Get predictions and convert them to integers (0/1)
         n_words = len(words)
         predictions = (probs[:n_words] >= self.threshold).long().tolist()
 
-        # 最后一个词后面强制无停顿
+        # Force no pause after the final word
         if n_words > 0:
             predictions[-1] = 0
 
         return predictions
 
     def cal_reward(self, pred_pause, intos):
-        """计算reward的接口（待实现）
+        """Reward interface (to be implemented).
 
         Args:
-            pred_pause: 预测的停顿序列
-            intos: 真实的语调标签
+            pred_pause: Predicted pause sequence
+            intos: Ground-truth intonation labels
 
         Returns:
-            reward: float (待实现)
+            reward: Float reward (to be implemented)
         """
         if not torch.is_tensor(pred_pause):
             pred_pause = torch.tensor(pred_pause)
@@ -311,7 +311,7 @@ class PausePredWhisper(torch.nn.Module):
 
     @torch.no_grad()
     def forward(self, wav_batch, labels, wav_masks=None, num_thread=1, infer_bsz=1):
-        """批量推理
+        """Run batch inference.
 
         Returns:
             rewards: tensor of shape [batch_size, 1], sentence-level reward
@@ -340,7 +340,7 @@ class PausePredWhisper(torch.nn.Module):
         return rewards
 
     def _forward(self, wav_batch, labels, wav_masks=None, infer_bsz=1):
-        """单线程批量推理"""
+        """Run batch inference in a single thread."""
         rewards = []
         bsz = wav_batch.size(0)
         total_batch = bsz // infer_bsz
@@ -358,44 +358,44 @@ class PausePredWhisper(torch.nn.Module):
         return rewards_tensor
 
     def process_batch(self, wav_batch, wav_masks, labels):
-        """处理一个batch的样本，返回reward和word-level信息
+        """Process a batch of samples and return rewards and word-level information.
 
         Returns:
             dict with keys: reward, word_rewards, word_boundaries
         """
         text, intos = labels
 
-        # 获取有效音频 (24kHz)
+        # Get the valid audio (24 kHz)
         valid_wav = wav_batch[wav_masks.bool()] if wav_masks is not None else wav_batch
         audio_24k = valid_wav.detach().float().cpu()
 
-        # 转换为16kHz用于WhisperX和停顿模型
+        # Resample to 16 kHz for WhisperX and the pause model
         audio_16k_tensor = torchaudio.functional.resample(
             audio_24k.unsqueeze(0),
             orig_freq=24000, new_freq=16000
         ).squeeze(0)
 
-        # WhisperX对齐获取词边界
+        # Use WhisperX alignment to obtain word boundaries
         audio_16k_np = audio_16k_tensor.numpy()
         text=text.replace('-','')
         words = text.split()[:self.max_words]
         word_boundaries = self.whisperx_align_words(audio_16k_np, words)
 
         if word_boundaries is None:
-            # 如果对齐失败，使用均匀分布的word_boundaries
+            # If alignment fails, use uniformly distributed word boundaries
             word_boundaries = [[i * 100, (i + 1) * 100] for i in range(len(words))]
 
-        # 直接用tensor调用停顿模型预测每个词后面的停顿
+        # Call the pause model directly with tensors to predict pauses after each word
         pause_predictions = self.cal_word_pause_predictions(audio_16k_tensor, words, word_boundaries)
         # import pdb;pdb.set_trace()
-        # 计算word-level rewards (待实现)
+        # Compute word-level rewards (to be implemented)
         reward= self.cal_reward(pause_predictions, intos)
         # if 1 in pause_predictions:
         #     import pdb;pdb.set_trace()
         return reward
 
     def reward_func(self, wav_batch, labels, wav_masks=None):
-        """单batch处理，用于多线程调用"""
+        """Process a single batch for multithreaded execution."""
         return self.process_batch(wav_batch, wav_masks, labels)
 
 

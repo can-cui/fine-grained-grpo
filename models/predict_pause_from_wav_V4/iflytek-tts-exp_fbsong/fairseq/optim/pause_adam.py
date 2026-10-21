@@ -1,4 +1,4 @@
-"""为停顿分类头和部分解冻 wav2vec 保持独立学习率的 Fairseq Adam。"""
+"""Fairseq Adam optimizer with separate learning rates for the pause head and partially unfrozen wav2vec."""
 
 import ast
 import json
@@ -15,17 +15,17 @@ class PauseAdam(FairseqOptimizer):
         parameters = [parameter for parameter in params if parameter.requires_grad]
         untagged = [parameter for parameter in parameters if not hasattr(parameter, "_pause_lr_group")]
         if untagged:
-            raise ValueError(f"pause_adam 发现 {len(untagged)} 个未标注的可训练参数")
+            raise ValueError(f"pause_adam found {len(untagged)} trainable parameters without tags")
         head = [p for p in parameters if p._pause_lr_group == "head"]
         wav2vec = [p for p in parameters if p._pause_lr_group == "wav2vec"]
         if not head or not wav2vec:
             raise ValueError(
-                f"pause_adam 参数组不完整：head={len(head)}, wav2vec={len(wav2vec)}"
+                f"pause_adam parameter groups are incomplete: head={len(head)}, wav2vec={len(wav2vec)}"
             )
         self.head_base_lr = float(args.lr[0])
         self.wav2vec_base_lr = float(args.wav2vec_lr)
         if self.head_base_lr <= 0 or self.wav2vec_base_lr <= 0:
-            raise ValueError("分类头与 wav2vec 学习率必须为正数")
+            raise ValueError("Classifier and wav2vec learning rates must be positive")
         self.wav2vec_lr_ratio = self.wav2vec_base_lr / self.head_base_lr
         self.audit_path = Path(args.save_dir) / "optimizer_update_audit.json"
         self._first_step_audited = False
@@ -77,7 +77,7 @@ class PauseAdam(FairseqOptimizer):
         for group in self._optimizer.param_groups:
             if group.get("pause_group") == "head":
                 return group["lr"]
-        raise RuntimeError("pause_adam 找不到 head 参数组")
+        raise RuntimeError("pause_adam could not find the head parameter group")
 
     def step(self, closure=None):
         if self._first_step_audited:
@@ -106,7 +106,7 @@ class PauseAdam(FairseqOptimizer):
             json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
         if not audit["ok"]:
-            raise RuntimeError(f"首次 optimizer step 参数更新范围校验失败：{audit}")
+            raise RuntimeError(f"Parameter-update range validation failed on the first optimizer step: {audit}")
         print(json.dumps({"optimizer_update_audit": str(self.audit_path), **audit}, ensure_ascii=False))
         self._first_step_audited = True
         return result

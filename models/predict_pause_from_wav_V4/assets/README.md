@@ -1,13 +1,11 @@
-# wav2vec 运行资产
+# wav2vec Runtime Assets
 
-本目录不预放模型二进制。首次运行 `sh02_train_pause_from_wav.sh` 或
-`sh03_infer_pause_from_wav.sh` 时，会从原 `wav2vec_small.pt` 自动生成：
+This directory does not include model binaries. The first run of `sh02_train_pause_from_wav.sh` or
+`sh03_infer_pause_from_wav.sh` automatically generates the following files from the original `wav2vec_small.pt`:
 
 ```text
 wav2vec_small_last_layer_jit.pt
 wav2vec_small_last_layer_jit.meta.json
 ```
 
-TorchScript 只返回 wav2vec 最后一层 `[B,T,768]` 特征和有效帧数。元数据保存
-原 checkpoint 与 TorchScript 的 SHA256、采样率、卷积 kernel/stride 和导出环境，
-训练、恢复及推理前必须校验通过。不要把该资产理解为离线逐 WAV 特征文件。
+The TorchScript model returns only the final wav2vec layer features `[B,T,768]` and the number of valid frames. Its metadata records the SHA256 hashes of the original checkpoint and TorchScript model, the sample rate, convolution kernel/stride, and export environment. Validation must pass before training, resuming, or inference. These assets are not offline per-WAV feature files.

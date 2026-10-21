@@ -13,21 +13,21 @@ import pronouncing
 import re
 from difflib import SequenceMatcher
 
-# 音素ASR模型路径
+# Path to the phoneme ASR model
 PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
 TARGET_SAMPLE_RATE = 16000
 SAMPLE_RATE = 16000  # WhisperX uses 16kHz
 
-# WhisperX模型路径
+# Path to the WhisperX model
 WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
-# 添加路径
+# Add the paths
 sys.path.insert(0, WHISPERX_DIR)
 sys.path.insert(0, WHISPERX_MAIN_DIR)
 import whisperx
 
-# Huper phoneme model 音素集合
+# Phoneme inventory used by the Huper phoneme model
 MODEL_PHONES = {
     "AA", "AE", "AH", "AW", "AY", "B", "CH", "D", "DH", "EH", "ER", "EY",
     "F", "G", "HH", "IH", "IY", "JH", "K", "L", "M", "N", "NG", "OW", "OY",
@@ -65,26 +65,26 @@ LEXICAL_OVERRIDES = {
 
 VOWEL_LETTERS = set("aeiou")
 
-# Token到Word映射的Special Tokens
-# 假设GPT生成的token序列中，包含一些特殊的分隔符来标识词的边界
-# 需要根据实际tokenizer来确定，这里假设有以下token标记词边界
-WORD_SEPARATOR_TOKENS = {"", ""}  # 需要根据实际tokenizer设置
+# Special tokens for mapping tokens to words
+# Assume the GPT-generated token sequence contains special separators marking word boundaries
+# Determine these using the actual tokenizer; the following tokens are placeholders for word boundaries
+WORD_SEPARATOR_TOKENS = {"", ""}  # Configure this according to the actual tokenizer
 
 
 def _normalize_word(word):
-    """标准化词（去标点、小写），用于模糊匹配。"""
+    """Normalize a word (remove punctuation and lowercase it) for fuzzy matching."""
     return re.sub(r'[^/w]', '', word.lower())
 
 
 def _merge_whisperx_to_user_words(user_words, whisperx_segments):
-    """将 WhisperX 的细粒度分词映射到用户的粗粒度分词。
+    """Map WhisperX fine-grained tokens to the user-provided coarse-grained tokens.
 
     Args:
-        user_words: 用户的词序列
-        whisperx_segments: WhisperX 输出
+        user_words: Sequence of user-provided words
+        whisperx_segments: Output from WhisperX
 
     Returns:
-        word_boundaries: list of [start_cs, end_cs]，长度 = len(user_words)
+        word_boundaries: List of [start_cs, end_cs] pairs, with length len(user_words)
     """
     user_norm = [_normalize_word(w) for w in user_words]
     whisperx_norm = [_normalize_word(seg["word"]) for seg in whisperx_segments]
@@ -210,10 +210,10 @@ def text_to_huper_phones(text: str):
 
 
 def normalize_spaces(phoneme_str: str):
-    """将连续的多个空格转换为单个空格"""
+    """Replace consecutive spaces with a single space."""
     return re.sub(r' +', ' ', phoneme_str).strip()
 
-# 配置离线环境
+# Configure the offline environment
 def configure_offline_env(root):
     os.environ.setdefault("HF_HOME", os.path.join(root, "hf_cache"))
     os.environ.setdefault("HF_HUB_CACHE", os.path.join(root, "hf_cache", "hub"))
@@ -225,7 +225,7 @@ def configure_offline_env(root):
 
 
 def load_audio_16k_mono(path):
-    """加载音频并重采样到16k单声道"""
+    """Load audio and resample it to 16 kHz mono."""
     audio, sample_rate = sf.read(str(path), always_2d=False)
     audio = np.asarray(audio, dtype=np.float32)
     if audio.ndim == 2:
@@ -240,7 +240,7 @@ def load_audio_16k_mono(path):
 
 
 def decode_phoneme_labels(model, predicted_ids):
-    """解码音素标签，去除CTC重复和blank"""
+    """Decode phoneme labels and remove CTC repeats and blanks."""
     ids = predicted_ids[0].detach().cpu().tolist()
     blank_id = getattr(model.config, "pad_token_id", None)
     id2label = getattr(model.config, "id2label", {})
@@ -260,7 +260,7 @@ def decode_phoneme_labels(model, predicted_ids):
 
 
 def infer_phoneme_one(processor, model, device, audio):
-    """对单个音频文件进行音素识别"""
+    """Recognize phonemes in a single audio file."""
     # audio, sample_rate = load_audio_16k_mono(wav_path)
     inputs = processor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
     inputs = {key: value.to(device) for key, value in inputs.items()}
@@ -293,7 +293,7 @@ def count_deletions(ref_phoneme: str, hyp_phoneme: str):
                     dp[i - 1][j - 1] + 1,  # substitution
                 )
 
-    # backtrace统计deletion
+    # Count deletions during backtracing
     i, j = n, m
     deletions = 0
 
@@ -357,24 +357,24 @@ class PhoneASRWordLevel(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        # 配置离线环境
+        # Configure the offline environment
         root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
         phoneme_root = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr"
         configure_offline_env(phoneme_root)
 
-        # 加载音素ASR模型
+        # Load the phoneme ASR model
         self.processor = AutoProcessor.from_pretrained(PHONEME_MODEL_DIR, local_files_only=True)
         self.model = AutoModelForCTC.from_pretrained(PHONEME_MODEL_DIR, local_files_only=True)
         self.model.to("cuda")
         self.model.eval()
 
-        # 加载WhisperX对齐模型
+        # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
             "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
         )
 
     def whisperx_align_words(self, audio_16k, words):
-        """用WhisperX对齐，获取词边界（厘秒）"""
+        """Align with WhisperX and obtain word boundaries in centiseconds."""
         try:
             duration_s = len(audio_16k) / SAMPLE_RATE
             text_str = " ".join(words)
@@ -398,17 +398,17 @@ class PhoneASRWordLevel(torch.nn.Module):
             return None
 
     def get_word_phoneme_level_rewards(self, text, intos, pred_phoneme_str, word_boundaries):
-        """计算每个词级别的phoneme reward
+        """Compute a phoneme reward for each word.
 
         Args:
-            text: 原始文本字符串
-            intos: 词级mask，1表示关注，-1表示忽略
-            pred_phoneme_str: ASR预测的音素字符串
-            word_boundaries: list of [start_cs, end_cs]，词的边界
+            text: Original text string
+            intos: Word-level mask; 1 means include and -1 means ignore
+            pred_phoneme_str: Phoneme string predicted by ASR
+            word_boundaries: List of [start_cs, end_cs] pairs for word boundaries
 
         Returns:
-            word_rewards: list of float，每个词一个reward
-            word_phoneme_errors: list of dict，每个词的deletion和replacement数量
+            word_rewards: List of floats, one reward per word
+            word_phoneme_errors: List of dictionaries containing deletion and replacement counts for each word
         """
         if word_boundaries is None:
             return None, None
@@ -472,14 +472,14 @@ class PhoneASRWordLevel(torch.nn.Module):
         return word_rewards, word_phoneme_errors
 
     def cal_reward(self, focus_pred, focus_gt):
-        """计算音素ASR的reward（句子级别）"""
+        """Compute the sentence-level phoneme ASR reward."""
         deletions, replacements = count_phone_errors(focus_gt, focus_pred)
         reward = -(deletions + 0.5 * replacements) / max(len(focus_gt), 1)
         return reward
 
     @torch.no_grad()
     def forward(self, wav_batch, labels, wav_masks=None, num_thread=1, infer_bsz=1):
-        """批量推理
+        """Run batch inference.
 
         Returns:
             rewards: tensor of shape [batch_size, 1], sentence-level reward
@@ -516,7 +516,7 @@ class PhoneASRWordLevel(torch.nn.Module):
         return rewards_tensor, word_rewards_list, word_boundaries_list
 
     def _forward(self, wav_batch, labels, wav_masks=None, infer_bsz=1):
-        """单线程批量推理"""
+        """Run batch inference in a single thread."""
         preds = []
         audios_16k = []
         bsz = wav_batch.size(0)
@@ -579,7 +579,7 @@ class PhoneASRWordLevel(torch.nn.Module):
         return rewards_tensor, word_rewards_list, word_boundaries_list
 
     def _get_focus_phones(self, text, intos, pred_phone):
-        """获取focus words的GT和pred phones"""
+        """Get the ground-truth and predicted phones for the focus words."""
         words = text.split()
         gold_phones = []
         word_phone_spans = []
@@ -620,7 +620,7 @@ class PhoneASRWordLevel(torch.nn.Module):
         return focus_gt_phones, focus_pred_phones
 
     def reward_func(self, wav, label, wav_masks=None):
-        """单样本reward计算
+        """Compute the reward for a single sample.
 
         Returns:
             dict with keys: reward, word_rewards, word_boundaries

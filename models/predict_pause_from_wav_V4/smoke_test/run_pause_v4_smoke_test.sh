@@ -1,10 +1,10 @@
 #!/bin/bash
-# 音频停顿预测 V4 极小数据端到端烟雾测试。
-# 处理阶段：检查内网 V4 包 -> 抽样 -> LMDB -> 在线 wav2vec 训练 -> 推理 -> 验收。
-# 直接运行：bash run_pause_v4_smoke_test.sh
-# 重要约束：只清理 pause_v4_smoke_test 根目录下的固定子目录，不修改正式数据和正式实验。
+# End-to-end smoke test for audio pause prediction V4 using a tiny dataset.
+# Stages: check the internal V4 package -> sample -> LMDB -> online wav2vec training -> inference -> validation.
+# Run directly: bash run_pause_v4_smoke_test.sh
+# Important: only clean fixed subdirectories under the pause_v4_smoke_test root; production data and experiments are untouched.
 
-# ==================== 需要修改的地方 ====================
+# ==================== Configuration ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 MERGED_MANIFEST="/ng-mix02/tts/permanent/yhchen70/data/extracted_pause_training_data/all_pause_data.jsonl"
 SMOKE_OUTPUT_ROOT="/ng-mix02/tts/permanent/yhchen70/data/pause_v4_smoke_test"
@@ -27,9 +27,9 @@ CUDA_VISIBLE_DEVICES_VALUE="0"
 RESET_SMOKE_OUTPUT="1"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== Usually no changes needed below ==================
 if [[ ! -f "$NEW_CONDA_ACTIVATE" ]]; then
-    echo "错误：找不到训练环境 activate：$NEW_CONDA_ACTIVATE" >&2
+    echo "Error: training environment activation script not found: $NEW_CONDA_ACTIVATE" >&2
     exit 1
 fi
 source "$NEW_CONDA_ACTIVATE" "$NEW_CONDA_ENV"
@@ -60,21 +60,21 @@ USER_DIR="$PACKAGE_ROOT/pause_user_dir"
 TRAIN_SCRIPT="$CODE_ROOT/train.py"
 INFER_SCRIPT="$CODE_ROOT/infer_pause_from_wav.py"
 
-# 第 0 阶段：严格限制可清理的烟雾测试目录。
+# Stage 0: strictly constrain which smoke-test directory may be cleaned.
 if [[ "$(basename "$SMOKE_OUTPUT_ROOT")" != "pause_v4_smoke_test" ]]; then
-    echo "错误：SMOKE_OUTPUT_ROOT 的目录名必须为 pause_v4_smoke_test：$SMOKE_OUTPUT_ROOT" >&2
+    echo "Error: SMOKE_OUTPUT_ROOT directory name must be pause_v4_smoke_test: $SMOKE_OUTPUT_ROOT" >&2
     exit 1
 fi
 if [[ "$SMOKE_OUTPUT_ROOT" == "/" || "$SMOKE_OUTPUT_ROOT" == "$PACKAGE_ROOT" ]]; then
-    echo "错误：拒绝使用危险的烟雾测试输出路径：$SMOKE_OUTPUT_ROOT" >&2
+    echo "Error: refusing unsafe smoke-test output path: $SMOKE_OUTPUT_ROOT" >&2
     exit 1
 fi
 if [[ "$RESET_SMOKE_OUTPUT" != "0" && "$RESET_SMOKE_OUTPUT" != "1" ]]; then
-    echo "错误：RESET_SMOKE_OUTPUT 只能为 0 或 1" >&2
+    echo "Error: RESET_SMOKE_OUTPUT must be 0 or 1" >&2
     exit 1
 fi
 if [[ "$RESET_SMOKE_OUTPUT" == "1" ]]; then
-    echo "[0/8] 清理独立烟雾测试输出"
+    echo "[0/8] Clean isolated smoke-test output"
     for child in selected data experiments logs inference; do
         rm -rf -- "$SMOKE_OUTPUT_ROOT/$child"
     done
@@ -82,8 +82,8 @@ if [[ "$RESET_SMOKE_OUTPUT" == "1" ]]; then
 fi
 mkdir -p "$SELECTED_DIR" "$CHECKPOINT_DIR" "$LOG_DIR" "$INFERENCE_DIR"
 
-# 第 1 阶段：先确认内网 V4 运行树、正式 manifest 和脚本均完整。
-echo "[1/8] 检查内网 predict_pause_from_wav_V4 实验包完整性"
+# Stage 1: verify the internal V4 runtime tree, production manifest, and scripts.
+echo "[1/8] Check completeness of the internal predict_pause_from_wav_V4 package"
 python "$CHECK_PACKAGE_SCRIPT" \
     --package-root "$PACKAGE_ROOT" \
     --expected-arch "pause_from_wav_w2v_unfreeze_last2" \
@@ -93,8 +93,8 @@ python "$CHECK_PACKAGE_SCRIPT" \
     --check-fairseq-registration \
     --report "$PACKAGE_REPORT"
 
-# 第 2 阶段：确定性选择短音频，并预演与正式转换器完全相同的 count 划分。
-echo "[2/8] 从正式提取结果中抽取极小平衡数据"
+# Stage 2: deterministically select short audio and preview the count split used by the production converter.
+echo "[2/8] Sample a tiny balanced dataset from production extraction results"
 python "$BUILD_MANIFEST_SCRIPT" \
     --input-manifest "$MERGED_MANIFEST" \
     --output-manifest "$SMOKE_MANIFEST" \
@@ -107,8 +107,8 @@ python "$BUILD_MANIFEST_SCRIPT" \
     --max-audio-seconds "$MAX_AUDIO_SECONDS" \
     --sample-rate 24000
 
-# 第 3 阶段：复用正式转换器生成 8/4/4 的 16 kHz PCM16 LMDB。
-echo "[3/8] 生成烟雾测试 train/valid/test LMDB"
+# Stage 3: reuse the production converter to create 8/4/4 16 kHz PCM16 LMDBs.
+echo "[3/8] Create smoke-test train/valid/test LMDBs"
 python "$PREPARE_SCRIPT" \
     --merged-manifest "$SMOKE_MANIFEST" \
     --output-root "$DATA_ROOT" \
@@ -121,14 +121,14 @@ python "$PREPARE_SCRIPT" \
     --target-sample-rate 16000 \
     --map-size-gb 8
 
-# 第 4 阶段：逐条回读三个 LMDB，检查 PCM、词窗口、标签和 mask。
-echo "[4/8] 校验烟雾测试 LMDB"
+# Stage 4: read each LMDB record and check PCM, word windows, labels, and masks.
+echo "[4/8] Validate smoke-test LMDBs"
 python "$VALIDATE_LMDB_SCRIPT" \
     --data-root "$DATA_ROOT" \
     --sample-rate 16000 \
     --splits train,valid,test
 
-# 第 5 阶段：缺少永久资产时在旧环境导出，再切回训练环境做跨版本校验。
+# Stage 5: if permanent assets are missing, export them in the legacy environment, then switch back for cross-version validation.
 WAV2VEC_NEEDS_EXPORT="0"
 if [[ ! -s "$WAV2VEC_JIT_PATH" || ! -s "$WAV2VEC_META_PATH" ]]; then
     WAV2VEC_NEEDS_EXPORT="1"
@@ -151,10 +151,10 @@ fi
 
 if [[ "$WAV2VEC_NEEDS_EXPORT" == "1" ]]; then
     if [[ ! -f "$OLD_CONDA_ACTIVATE" || ! -d "$ORIGINAL_WAV2VEC_PROJECT" || ! -s "$WAV2VEC_CHECKPOINT" ]]; then
-        echo "错误：wav2vec 永久资产缺失，且旧环境/原工程/checkpoint 不完整" >&2
+        echo "Error: wav2vec permanent assets are missing, and the legacy environment/original project/checkpoint is incomplete" >&2
         exit 1
     fi
-    echo "[5/8] 在原 Python 3.6 环境导出 wav2vec TorchScript"
+    echo "[5/8] Export wav2vec TorchScript in the original Python 3.6 environment"
     set +u
     source "$OLD_CONDA_ACTIVATE" "$OLD_CONDA_ENV"
     set -u
@@ -168,7 +168,7 @@ if [[ "$WAV2VEC_NEEDS_EXPORT" == "1" ]]; then
         --feature-dim 768 \
         --trace-device cuda
 else
-    echo "[5/8] 复用已有 wav2vec TorchScript 永久资产"
+    echo "[5/8] Reuse existing permanent wav2vec TorchScript assets"
 fi
 
 set +u
@@ -181,8 +181,8 @@ CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" python "$EXPORT_SCRIPT" \
     --feature-dim 768 \
     --validate-only
 
-# 第 6 阶段：只训练 1 个 epoch，checkpoint 和日志均写入独立目录。
-echo "[6/8] 运行在线 wav2vec + Linear 极小训练"
+# Stage 6: train for one epoch; write checkpoints and logs to an isolated directory.
+echo "[6/8] Run a tiny online wav2vec + Linear training job"
 cd "$CODE_ROOT"
 CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     python -u "$TRAIN_SCRIPT" "$DATA_ROOT" \
@@ -214,8 +214,8 @@ CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     --skip-invalid-size-inputs-valid-test \
     2>&1 | tee "$TRAIN_LOG"
 
-# 第 7 阶段：使用最佳 checkpoint 对 4 条 test 样本推理。
-echo "[7/8] 运行极小 test 推理"
+# Stage 7: run inference on four test samples using the best checkpoint.
+echo "[7/8] Run tiny test inference"
 CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     python "$INFER_SCRIPT" \
     --user-dir "$USER_DIR" \
@@ -229,8 +229,8 @@ CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     --batch-size "$MAX_SENTENCES" \
     --num-workers 0
 
-# 第 8 阶段：检查划分、checkpoint、日志、逐词结果和有限指标。
-echo "[8/8] 汇总并校验端到端输出"
+# Stage 8: check splits, checkpoints, logs, word-level results, and finite metrics.
+echo "[8/8] Summarize and validate end-to-end outputs"
 python "$VALIDATE_OUTPUT_SCRIPT" \
     --selection-report "$SELECTION_REPORT" \
     --data-root "$DATA_ROOT" \
@@ -241,6 +241,6 @@ python "$VALIDATE_OUTPUT_SCRIPT" \
     --output-txt "$FINAL_REPORT_TXT"
 
 echo "SMOKE_TEST_PASS"
-echo "完整性报告：$PACKAGE_REPORT"
-echo "最终 JSON 报告：$FINAL_REPORT_JSON"
-echo "最终 TXT 报告：$FINAL_REPORT_TXT"
+echo "Package integrity report: $PACKAGE_REPORT"
+echo "Final JSON report: $FINAL_REPORT_JSON"
+echo "Final TXT report: $FINAL_REPORT_TXT"

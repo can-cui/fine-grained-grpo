@@ -1,11 +1,11 @@
 #!/bin/bash
 # ============================================================================
-# 音频停顿预测 V4：使用 checkpoint_best 对三组 valid/test 统一推理。
-# 直接运行：bash sh03_infer_pause_from_wav.sh
-# 重要约束：阈值固定为 0.5；本脚本不根据 test 选择阈值。
+# Audio pause prediction V4: run unified inference on three valid/test groups using checkpoint_best.
+# Run directly: bash sh03_infer_pause_from_wav.sh
+# Important: the threshold is fixed at 0.5; this script does not select a threshold based on test data.
 # ============================================================================
 
-# ==================== 需要修改的地方 ====================
+# ==================== Edit these settings ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 DATA_ROOT="/ng-mix02/tts/permanent/yhchen70/data/extracted_pause_training_data/pause_lmdb_v2_shared_dual_eval"
 EXPERIMENT_ROOT="/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2"
@@ -18,7 +18,7 @@ CONDA_ACTIVATE="/home/tts/cancui11/miniconda3/bin/activate"
 CONDA_ENV="torch20_fair_fromyjdong4"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== The settings below usually do not need changes ==================
 set -euo pipefail
 source "$CONDA_ACTIVATE" "$CONDA_ENV"
 
@@ -41,28 +41,28 @@ SPLITS=(
 
 python "$RUNTIME_CHECK_SCRIPT" --package-root "$PACKAGE_ROOT"
 if [[ ! -f "$CHECKPOINT" ]]; then
-    echo "错误：找不到 checkpoint：$CHECKPOINT" >&2
+    echo "Error: checkpoint not found: $CHECKPOINT" >&2
     exit 1
 fi
 if [[ ! -s "$WAV2VEC_JIT_PATH" || ! -s "$WAV2VEC_META_PATH" ]]; then
-    echo "错误：缺少本实验训练所用 wav2vec TorchScript 资产。请先运行 sh02。" >&2
+    echo "Error: wav2vec TorchScript assets from this experiment are missing. Run sh02 first." >&2
     exit 1
 fi
 for split in "${SPLITS[@]}"; do
     if [[ ! -d "$DATA_ROOT/$split" || ! -f "$DATA_ROOT/$split.key" ]]; then
-        echo "错误：缺少正式评测 split：$DATA_ROOT/$split" >&2
+        echo "Error: official evaluation split is missing: $DATA_ROOT/$split" >&2
         exit 1
     fi
 done
 
-# 第 1 阶段：对六个固定 split 逐一输出概率和固定阈值指标。
-echo "[1/1] 使用 $CHECKPOINT_NAME 推理六个正式 split"
+# Step 1: Output probabilities and fixed-threshold metrics for each of the six fixed splits.
+echo "[1/1] Run inference on the six official splits using $CHECKPOINT_NAME"
 mkdir -p "$OUTPUT_ROOT"
 cd "$CODE_ROOT"
 for split in "${SPLITS[@]}"; do
     split_output="$OUTPUT_ROOT/$split"
     mkdir -p "$split_output"
-    echo "推理 split=$split"
+    echo "Running inference on split=$split"
     CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
         python "$INFER_SCRIPT" \
         --user-dir "$USER_DIR" \
@@ -77,5 +77,5 @@ for split in "${SPLITS[@]}"; do
         --num-workers "$NUM_WORKERS"
 done
 
-echo "完成。六 split 推理结果：$OUTPUT_ROOT"
-echo "下一步：运行 bash sh06_scan_pause_thresholds.sh。"
+echo "Done. Inference results for all six splits: $OUTPUT_ROOT"
+echo "Next: run bash sh06_scan_pause_thresholds.sh."

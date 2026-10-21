@@ -424,10 +424,10 @@ def decode_datum_arrays(datum, vocab, decode_wav=True):
     if len(datum.fa) == 0 or len(datum.fa) % np.dtype(np.float32).itemsize != 0:
         raise SampleError(f"datum.fa 无法按 float32 解析：字节数={len(datum.fa)}")
 
-    # 已通过真实 LMDB 样本确认存在两种布局：
-    # 1. 截图原格式 int16_x3，每个逻辑音素 3 个 int16；
-    # 2. 新语料格式 int16_x6，每个逻辑音素 6 个 int16，第 0 列为实际音素 ID。
-    # 两种格式都使用每个逻辑音素一个 float32 FA 时间，严格按数量判定，不猜测或截断。
+    # Real LMDB samples confirm two layouts:
+    # 1. Original screenshot format int16_x3: 3 int16 values per logical phoneme.
+    # 2. New corpus format int16_x6: 6 int16 values per logical phoneme; column 0 is the actual phoneme ID.
+    # Both formats use one float32 FA timestamp per logical phoneme. Determine the format strictly by count; do not guess or truncate.
     audio_fa = np.copy(np.frombuffer(datum.fa, dtype=np.float32).reshape(-1))
     if phoneme_raw.size % 3 == 0 and phoneme_raw.size // 3 == len(audio_fa):
         phoneme_array = np.copy(phoneme_raw.reshape(-1, 3))
@@ -445,8 +445,8 @@ def decode_datum_arrays(datum, vocab, decode_wav=True):
     if len(phone_names) < 2:
         raise SampleError("去掉句首 ENsil 前的音素序列长度不足")
 
-    # audio_fa[0] 是被截图原脚本一并切掉的句首 ENsil 结束时间。
-    # V4 需要保留该边界，确保第一个词的声学窗口不包含句首静音。
+    # audio_fa[0] is the end time of the initial ENsil, which the original script shown in the screenshot also removed.
+    # V4 must retain this boundary so the first word's acoustic window excludes leading silence.
     leading_silence_end_seconds = float(audio_fa[0])
     if not math.isfinite(leading_silence_end_seconds) or leading_silence_end_seconds < 0:
         raise SampleError(f"句首静音结束时间非法：{leading_silence_end_seconds}")
@@ -485,7 +485,7 @@ def extract_word_pause_like_screenshot(text, phones, audio_fa, pause_threshold):
                 word_end_time.append(None)
             continue
 
-        # 截图原式为 token.split(">")，正常词只能包含一个 >。
+        # The original expression shown in the screenshot was token.split(">"); a normal word can contain only one >.
         parts = token.split(">")
         if len(parts) != 2:
             raise SampleError(f"词 token 的 > 数量不是 1：{token!r}")
@@ -505,7 +505,7 @@ def extract_word_pause_like_screenshot(text, phones, audio_fa, pause_threshold):
     pause_label = [0] * len(word_list)
     pause_durations = []
     for index, word in enumerate(word_list):
-        # 截图原逻辑：第一个无持续时间，最后一个对应句末 ENsil，均跳过。
+        # Original logic shown in the screenshot: skip the first item (no duration) and the last item (sentence-final ENsil).
         if index == 0 or index == len(word_list) - 1:
             continue
         if word_end_time[index] is None or word_end_time[index - 1] is None:
@@ -515,9 +515,9 @@ def extract_word_pause_like_screenshot(text, phones, audio_fa, pause_threshold):
             pause_label[index] = 1
             pause_durations.append(float(duration))
 
-    # 原脚本在这里进入 pdb；批处理不能交互，改为明确记录该样本错误。
-    # 截图原脚本在这里用 pdb 检查 #。批处理不能交互，因此记录数量后，
-    # 继续执行截图紧随其后的 special_pause 清理逻辑；# 会被删除并归并到前一词。
+    # The original script entered pdb here; batch processing is non-interactive, so record this sample's error explicitly.
+    # The original script shown in the screenshot used pdb to inspect #. Since batch processing is non-interactive, record the count,
+    # then continue with the following special_pause cleanup logic; # is removed and merged into the preceding word.
     hash_marker_count = word_list.count("#")
 
     new_word_list = []
@@ -961,7 +961,7 @@ def main():
                                     label_audit["tagged_text"],
                                     pause_token=label_pause_token,
                                 )
-                                # 此字段只用于统计展示；训练标签只来自 Excel 第二列。
+                                # This field is for reporting only; training labels come exclusively from the second Excel column.
                                 pause_durations = []
                             if external_wav_root:
                                 wav_path = Path(external_wav_root) / label_audit["wav_id"]

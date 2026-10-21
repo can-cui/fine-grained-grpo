@@ -1,21 +1,21 @@
 #!/bin/bash
 # ============================================================================
-# 音频停顿预测 V4：评测 epoch 2-30 的三组 valid/test 变化规律。
+# Audio pause prediction V4: evaluate trends across the three valid/test groups for epochs 2-30.
 #
-# 主要阶段：
-#   1. 依次加载偶数 epoch 的 checkpoint2 至 checkpoint30；
-#   2. 每个 checkpoint 评测三组 valid/test 共六个 split；
-#   3. 用固定阈值汇总 Precision、Recall、F1、Accuracy；
-#   4. 输出 JSON、TSV 和 epoch 折线统计图。
+# Main steps:
+#   1. Load checkpoints for even-numbered epochs from checkpoint2 through checkpoint30.
+#   2. Evaluate all six splits (three valid/test groups) for each checkpoint.
+#   3. Summarize Precision, Recall, F1, and Accuracy using a fixed threshold.
+#   4. Output JSON, TSV, and epoch trend plots.
 #
-# 直接运行：
+# Run directly:
 #   bash sh07_evaluate_pause_checkpoints.sh
 #
-# 重要约束：不同 epoch 使用完全相同的数据与阈值，不逐 epoch 调参。
-# 建议不要与同一张 GPU 上的训练任务同时运行。
+# Important: use exactly the same data and threshold for every epoch; do not tune per epoch.
+# Avoid running this at the same time as a training job on the same GPU.
 # ============================================================================
 
-# ==================== 需要修改的地方 ====================
+# ==================== Edit these settings ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 DATA_ROOT="/ng-mix02/tts/permanent/yhchen70/data/extracted_pause_training_data/pause_lmdb_v2_shared_dual_eval"
 EXPERIMENT_ROOT="/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2"
@@ -30,7 +30,7 @@ CONDA_ACTIVATE="/home/tts/cancui11/miniconda3/bin/activate"
 CONDA_ENV="torch20_fair_fromyjdong4"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== The settings below usually do not need changes ==================
 set -euo pipefail
 
 source "$CONDA_ACTIVATE" "$CONDA_ENV"
@@ -49,36 +49,36 @@ read -r -a EPOCH_ARRAY <<< "$EPOCHS"
 
 python "$RUNTIME_CHECK_SCRIPT" --package-root "$PACKAGE_ROOT"
 if [[ ! -f "$INFER_SCRIPT" || ! -f "$SUMMARY_SCRIPT" ]]; then
-    echo "错误：缺少多 checkpoint 推理或汇总脚本" >&2
+    echo "Error: multi-checkpoint inference or summary script is missing" >&2
     exit 1
 fi
 if [[ ! -s "$WAV2VEC_JIT_PATH" || ! -s "$WAV2VEC_META_PATH" ]]; then
-    echo "错误：缺少 wav2vec TorchScript 资产" >&2
+    echo "Error: wav2vec TorchScript assets are missing" >&2
     exit 1
 fi
 for split in "${SPLITS[@]}"; do
     if [[ ! -d "$DATA_ROOT/$split" || ! -f "$DATA_ROOT/$split.key" ]]; then
-        echo "错误：找不到对照 split：$DATA_ROOT/$split" >&2
-        echo "请先运行 V2 的 bash sh01_prepare_pause_training_data.sh" >&2
+        echo "Error: comparison split not found: $DATA_ROOT/$split" >&2
+        echo "Run V2's bash sh01_prepare_pause_training_data.sh first." >&2
         exit 1
     fi
 done
 for epoch in "${EPOCH_ARRAY[@]}"; do
     CHECKPOINT="$CHECKPOINT_ROOT/checkpoint${epoch}.pt"
     if [[ ! -f "$CHECKPOINT" ]]; then
-        echo "错误：找不到 checkpoint：$CHECKPOINT" >&2
+        echo "Error: checkpoint not found: $CHECKPOINT" >&2
         exit 1
     fi
 done
 
-# 第 1 阶段：逐 checkpoint、逐 split 保存概率与 0.5 基础指标。
-echo "[1/2] 开始评测 checkpoint：$EPOCHS"
+# Step 1: Save probabilities and baseline metrics at 0.5 for each checkpoint and split.
+echo "[1/2] Start evaluating checkpoints: $EPOCHS"
 mkdir -p "$INFERENCE_ROOT" "$REPORT_ROOT"
 cd "$CODE_ROOT"
 for epoch in "${EPOCH_ARRAY[@]}"; do
     CHECKPOINT="$CHECKPOINT_ROOT/checkpoint${epoch}.pt"
     EPOCH_ROOT="$INFERENCE_ROOT/epoch_$(printf '%03d' "$epoch")"
-    echo "评测 epoch=$epoch"
+    echo "Evaluating epoch=$epoch"
     for split in "${SPLITS[@]}"; do
         SPLIT_OUTPUT="$EPOCH_ROOT/$split"
         mkdir -p "$SPLIT_OUTPUT"
@@ -98,15 +98,15 @@ for epoch in "${EPOCH_ARRAY[@]}"; do
     done
 done
 
-# 第 2 阶段：对所有 epoch 使用固定阈值重算指标并生成折线图。
-echo "[2/2] 汇总多 checkpoint 指标并生成折线图"
+# Step 2: Recalculate metrics for all epochs using the fixed threshold and generate trend plots.
+echo "[2/2] Aggregate metrics across checkpoints and generate line plots"
 python "$SUMMARY_SCRIPT" \
     --series-root "$INFERENCE_ROOT" \
     --output-root "$REPORT_ROOT" \
     --epochs "${EPOCH_ARRAY[@]}" \
     --threshold "$THRESHOLD"
 
-echo "完成。逐 checkpoint 推理结果：$INFERENCE_ROOT"
-echo "指标 TSV：$REPORT_ROOT/pause_checkpoint_series_metrics.tsv"
-echo "完整 JSON：$REPORT_ROOT/pause_checkpoint_series_metrics.json"
-echo "折线图目录：$REPORT_ROOT"
+echo "Done. Per-checkpoint inference results: $INFERENCE_ROOT"
+echo "Metrics TSV: $REPORT_ROOT/pause_checkpoint_series_metrics.tsv"
+echo "Full JSON: $REPORT_ROOT/pause_checkpoint_series_metrics.json"
+echo "Line plot directory: $REPORT_ROOT"

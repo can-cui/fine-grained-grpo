@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""统计 JSONL 中“至少含一个正停顿标签”的样本数量与比例。"""
+"""Count and report the number and proportion of samples with at least one positive pause label."""
 
 import argparse
 import json
@@ -8,18 +8,18 @@ from pathlib import Path
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="统计 all_pause_data.jsonl 的样本级停顿占比，并复核标签级正停顿比例。"
+        description="Report the utterance-level pause ratio in all_pause_data.jsonl and verify the positive-label ratio."
     )
-    parser.add_argument("--manifest", required=True, help="all_pause_data.jsonl 路径")
-    parser.add_argument("--output", required=True, help="统计结果 TXT 路径")
+    parser.add_argument("--manifest", required=True, help="Path to all_pause_data.jsonl")
+    parser.add_argument("--output", required=True, help="Path for the statistics TXT file")
     return parser.parse_args()
 
 
 def normalize_binary_labels(raw_labels, utt_id, line_number):
     if not isinstance(raw_labels, list):
         raise ValueError(
-            f"第 {line_number} 行 {utt_id}: pause_label 必须是 list，"
-            f"实际为 {type(raw_labels).__name__}"
+            f"Line {line_number}, {utt_id}: pause_label must be a list; "
+            f"got {type(raw_labels).__name__}"
         )
 
     labels = []
@@ -28,8 +28,8 @@ def normalize_binary_labels(raw_labels, utt_id, line_number):
             value = int(value)
         if not isinstance(value, int) or value not in (0, 1):
             raise ValueError(
-                f"第 {line_number} 行 {utt_id}: pause_label[{index}]={value!r}，"
-                "只允许整数 0 或 1"
+                f"Line {line_number}, {utt_id}: pause_label[{index}]={value!r}; "
+                "only integer 0 or 1 is allowed"
             )
         labels.append(value)
     return labels
@@ -49,13 +49,13 @@ def summarize_manifest(manifest_path):
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(f"第 {line_number} 行不是合法 JSON: {exc}") from exc
+                raise ValueError(f"Line {line_number} is not valid JSON: {exc}") from exc
 
             utt_id = record.get("utt_id")
             if not isinstance(utt_id, str) or not utt_id:
-                raise ValueError(f"第 {line_number} 行缺少有效 utt_id")
+                raise ValueError(f"Line {line_number} is missing a valid utt_id")
             if utt_id in seen_utt_ids:
-                raise ValueError(f"第 {line_number} 行出现重复 utt_id: {utt_id}")
+                raise ValueError(f"Duplicate utt_id on line {line_number}: {utt_id}")
             seen_utt_ids.add(utt_id)
 
             labels = normalize_binary_labels(record.get("pause_label"), utt_id, line_number)
@@ -84,22 +84,22 @@ def summarize_manifest(manifest_path):
 def format_report(manifest_path, summary):
     return "\n".join(
         [
-            "音频停顿训练数据：样本级停顿统计",
-            f"输入 manifest: {manifest_path}",
-            f"总样本数: {summary['total_samples']}",
-            f"含至少一个停顿的样本数: {summary['samples_with_pause']}",
-            f"不含停顿的样本数: {summary['samples_without_pause']}",
-            f"含停顿样本比例: {summary['sample_ratio']:.8f}",
-            f"含停顿样本百分比: {summary['sample_ratio'] * 100.0:.6f}%",
+            "Audio pause training data: utterance-level pause statistics",
+            f"Input manifest: {manifest_path}",
+            f"Total utterances: {summary['total_samples']}",
+            f"Utterances with at least one pause: {summary['samples_with_pause']}",
+            f"Utterances without pauses: {summary['samples_without_pause']}",
+            f"Utterance pause ratio: {summary['sample_ratio']:.8f}",
+            f"Utterance pause percentage: {summary['sample_ratio'] * 100.0:.6f}%",
             "",
-            "以下为标签级复核统计：",
-            f"标签总数: {summary['total_labels']}",
-            f"正停顿标签数: {summary['positive_labels']}",
-            f"负停顿标签数: {summary['negative_labels']}",
-            f"正停顿标签比例: {summary['label_ratio']:.8f}",
-            f"正停顿标签百分比: {summary['label_ratio'] * 100.0:.6f}%",
+            "Label-level verification statistics:",
+            f"Total labels: {summary['total_labels']}",
+            f"Positive pause labels: {summary['positive_labels']}",
+            f"Negative pause labels: {summary['negative_labels']}",
+            f"Positive pause-label ratio: {summary['label_ratio']:.8f}",
+            f"Positive pause-label percentage: {summary['label_ratio'] * 100.0:.6f}%",
             "",
-            "公式：含停顿样本比例 = 含至少一个 pause_label=1 的样本数 / 总样本数",
+            "Formula: utterance pause ratio = utterances with at least one pause_label=1 / total utterances",
         ]
     ) + "\n"
 
@@ -109,14 +109,14 @@ def main():
     manifest_path = Path(args.manifest).expanduser().resolve()
     output_path = Path(args.output).expanduser().resolve()
     if not manifest_path.is_file():
-        raise FileNotFoundError(f"找不到输入 manifest: {manifest_path}")
+        raise FileNotFoundError(f"Input manifest not found: {manifest_path}")
 
     summary = summarize_manifest(manifest_path)
     report = format_report(manifest_path, summary)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")
     print(report, end="")
-    print(f"统计结果已写入: {output_path}")
+    print(f"Statistics written to: {output_path}")
 
 
 if __name__ == "__main__":

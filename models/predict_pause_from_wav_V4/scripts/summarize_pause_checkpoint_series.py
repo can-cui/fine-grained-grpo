@@ -131,7 +131,7 @@ def plot_metric_grid(rows, epochs, output_path, title):
     axes[1, 0].set_xlabel("Epoch")
     axes[1, 1].set_xlabel("Epoch")
     handles, labels = axes[0, 0].get_legend_handles_labels()
-    # 总标题位于最上层，图例单独占下一层，子图顶部再留出安全间距。
+    # Place the overall title at the top, the legend on its own row, and leave extra space above the subplots.
     fig.suptitle(title, y=0.985, fontsize=15)
     fig.legend(
         handles,
@@ -169,7 +169,7 @@ def plot_split_pair_metrics(rows, epochs, split_pair, output_path, title):
         axis.set_xlabel("Epoch")
         axis.grid(True, alpha=0.3)
     handles, labels = axes[0].get_legend_handles_labels()
-    # 标题和 valid/test 图例分层放置，避免顶部文字互相遮挡。
+    # Place the title and valid/test legends on separate rows to prevent overlap at the top.
     fig.suptitle(title, y=0.985, fontsize=15)
     fig.legend(
         handles,

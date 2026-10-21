@@ -54,34 +54,34 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
 
     kept_samples = []
     csv_rows = []
-    error_rows = []          # 过阈值但 rising<->falling 互相误判的词 (precision 算错的那批)
+    error_rows = []          # Words above threshold but misclassified between rising and falling (the errors affecting precision)
     n_total = 0
     n_kept = 0
-    n_drop_gray = 0          # 因置信度不足被丢的句子数
-    n_drop_mismatch = 0      # 因预测与标签矛盾被丢的句子数
-    n_drop_no_tone = 0       # 因无 tone 词被丢的句子数
+    n_drop_gray = 0          # Number of sentences dropped due to insufficient confidence
+    n_drop_mismatch = 0      # Number of sentences dropped due to prediction-label conflicts
+    n_drop_no_tone = 0       # Number of sentences dropped because they contain no tone words
     n_words_total = 0
     n_words_pass = 0
 
-    # 全集各类词总数 (分母)
+    # Total number of words in each class across the full dataset (denominator)
     n_total_rising = 0
     n_total_falling = 0
     n_total_flat = 0
 
-    # 保留集各类词数
+    # Number of retained words in each class
     n_kept_rising = 0
     n_kept_falling = 0
     n_kept_flat = 0
 
-    # 含 >=1 个该类词的保留句子数
+    # Number of retained sentences containing at least one word of this class
     n_kept_with_rising = 0
     n_kept_with_falling = 0
     n_kept_with_flat = 0
 
-    # precision 统计 (纯按阈值预测 vs 真值, 不受整句去留影响):
-    #   预测 c = argmax(P_r, P_f, P_fl)
-    #   若 P(c) >= T[c], 预测为 c; 否则拒识(不计入)
-    #   rising_precision  = #(预测rising 且 真值rising)  / #(预测rising)
+    # Precision statistics (thresholded predictions vs. ground truth; independent of whether the whole sentence is retained):
+    #   Predict c = argmax(P_r, P_f, P_fl)
+    #   If P(c) >= T[c], predict c; otherwise reject (do not count it)
+    #   rising_precision = #(predicted rising and true rising) / #(predicted rising)
     rising_pred = 0
     rising_pred_correct = 0
     falling_pred = 0
@@ -131,7 +131,7 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
                         n_drop_no_tone += 1
                     continue
 
-                # 全集各类词数统计 + precision 统计 (遍历所有 tone 词)
+                # Count words in each class across the full dataset and calculate precision (iterate over all tone words)
                 for j in tone_idx.tolist():
                     label = int(tone_target[i, j].item())
                     pr = float(p_rising[i, j].item())
@@ -145,9 +145,9 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
                     elif label == FLAT:
                         n_total_flat += 1
 
-                    # argmax 候选
+                    # argmax candidate
                     cand = RISING if pr >= pf and pr >= pfl else (FALLING if pf >= pfl else FLAT)
-                    # 过阈值才算一次"机标"(模型)预测; 预测 != 人标(真值) 即记一条误判
+                    # Count an above-threshold result as a machine (model) prediction; record an error when it differs from the human label (ground truth)
                     passed = ((cand == RISING and pr >= T_r) or
                               (cand == FALLING and pf >= T_f) or
                               (cand == FLAT and pfl >= T_fl))
@@ -165,13 +165,13 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
                             flat_pred_correct += 1
 
                     if passed and label != cand and 0 <= label < 3:
-                        # error_type 方向为 机标(模型预测)->人标(真值)
+                        # error_type direction is machine label (model prediction) -> human label (ground truth)
                         error_rows.append({
                             "id": uid,
                             "word_idx": j,
                             "word": words[j] if j < len(words) else "",
-                            "manual_label": TONE_NAMES[label],   # 人标 (真值)
-                            "pred_label": TONE_NAMES[cand],      # 机标 (模型预测)
+                            "manual_label": TONE_NAMES[label],   # Human label (ground truth)
+                            "pred_label": TONE_NAMES[cand],      # Machine label (model prediction)
                             "error_type": f"{TONE_NAMES[cand]}->{TONE_NAMES[label]}",
                             "p_rising": f"{pr:.4f}",
                             "p_falling": f"{pf:.4f}",
@@ -179,7 +179,7 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
                             "sentence": sentence,
                         })
 
-                # 整句判定
+                # Sentence-level decision
                 sentence_ok = True
                 drop_reason = None
                 sent_rising = 0
@@ -225,10 +225,10 @@ def filter_dataset(model, loader, device, data, thresholds, keep_no_tone=False):
                     if sent_flat > 0:
                         n_kept_with_flat += 1
 
-                    # 准备 csv 行 (所有保留的 tone 词)
+                    # Prepare CSV rows (all retained tone words)
                     for j in tone_idx.tolist():
                         label = int(tone_target[i, j].item())
-                        # word_boundaries[0] 是整句 [0, total_frames], 从 [1] 开始是每个词
+                        # word_boundaries[0] covers the full sentence [0, total_frames]; each word starts at index 1
                         if word_boundaries and len(word_boundaries) > j + 1:
                             word_boundary = word_boundaries[j + 1]
                             start_frame, end_frame = word_boundary[0], word_boundary[1]
@@ -351,7 +351,7 @@ def main():
     print(f"[load] input dataset from {args.input}")
     data = load_json(args.input)
     dataset = IntonationDataset(data, stats, tokenizer)
-    # 预加载一次 loader, 所有组合复用 (DataLoader 可重复迭代)
+    # Preload the loader once and reuse it for all combinations (the DataLoader is re-iterable)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False,
                         collate_fn=collate_fn, num_workers=4)
 
@@ -372,7 +372,7 @@ def main():
             json.dump(kept_samples, fp, ensure_ascii=False, indent=2)
         tmp_path.replace(out_path)
 
-        # 可选: 保存 csv
+        # Optional: save CSV
         if args.save_csv:
             csv_path = output_dir / f"words_r{_fmt_thr(r)}_f{_fmt_thr(f)}_fl{_fmt_thr(fl)}.csv"
             with open(csv_path, "w", encoding="utf-8", newline="") as fp:
@@ -382,9 +382,9 @@ def main():
                 writer.writeheader()
                 writer.writerows(csv_rows)
 
-        # 保存误判词: 过阈值但 机标(模型预测) != 人标(真值) 的全部 6 种跨类组合
+        # Save misclassified words: all 6 cross-class combinations where an above-threshold machine prediction differs from the human label
         err_path = output_dir / f"errors_r{_fmt_thr(r)}_f{_fmt_thr(f)}_fl{_fmt_thr(fl)}.txt"
-        # 机标->人标 的全部 6 种方向 (pred->label)
+        # All 6 machine-label -> human-label directions (pred -> label)
         directions = [
             ("rising", "falling"), ("rising", "flat"),
             ("falling", "rising"), ("falling", "flat"),
@@ -432,7 +432,7 @@ def main():
 
         sweep_rows.append((r, f, fl, fstats, out_path, len(kept_samples)))
 
-    # 对比表
+    # Comparison table
     print("\n" + "=" * 140)
     print("Sweep comparison")
     print("=" * 140)
@@ -449,7 +449,7 @@ def main():
               f"{st['rising_keep_rate']:>8.4f}{st['falling_keep_rate']:>8.4f}{st['flat_keep_rate']:>9.4f}  "
               f"{st['n_kept_rising']:>9d}{st['n_kept_falling']:>10d}{st['n_kept_flat']:>8d}")
 
-    # 同时把对比表写一份 csv 到输出目录
+    # Also save the comparison table as a CSV in the output directory
     summary_csv = output_dir / "sweep_summary.csv"
     with open(summary_csv, "w", encoding="utf-8") as f:
         f.write("rising_threshold,falling_threshold,flat_threshold,n_total,n_kept,keep_rate,"

@@ -1,20 +1,20 @@
 #!/bin/bash
 # ============================================================================
-# 音频停顿预测 V4：在线运行冻结 wav2vec，只训练单层 Linear 停顿分类头。
+# Audio pause prediction V4: run wav2vec online with its weights frozen; train only a single-layer Linear pause classification head.
 #
-# 主要阶段：
-#   1. 检查正式 train/valid LMDB 和训练入口；
-#   2. 缺少永久 wav2vec TorchScript 资产时自动导出；
-#   3. 校验模型资产并在单张 GPU 上执行 30 epoch 正式训练；
-#   4. 每个 epoch 保存、验证，并按 valid pause_recall 选择最佳 checkpoint。
+# Main steps:
+#   1. Check the formal train/valid LMDBs and training entry point.
+#   2. Export the permanent wav2vec TorchScript asset if it is missing.
+#   3. Validate the model asset and run 30 epochs of formal training on one GPU.
+#   4. Save and validate each epoch, then select the best checkpoint by valid pause_recall.
 #
-# 直接运行：
+# Run directly:
 #   bash sh02_train_pause_from_wav.sh
 #
-# 重要约束：不使用离线 wav2vec .npy；wav2vec 始终冻结，仅更新 Linear(768,1)。
+# Important: do not use offline wav2vec .npy files; keep wav2vec frozen and update only Linear(768,1).
 # ============================================================================
 
-# ==================== 需要修改的地方 ====================
+# ==================== Edit these settings ====================
 PACKAGE_ROOT="/train29/tts/permanent/yhchen70/yrfs5/projects/En_phrase/En-L2L3predict/pre_l123_from_wav-master/variation/predict_pause_from_wav_V4"
 DATA_ROOT="/ng-mix02/tts/permanent/yhchen70/data/extracted_pause_training_data/pause_lmdb_v2_shared_dual_eval"
 EXPERIMENT_ROOT="/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2"
@@ -39,10 +39,10 @@ VALIDATE_INTERVAL="1"
 TRAIN_SEED="20260807"
 # ========================================================
 
-# ================== 下面一般不用修改 ==================
+# ================== The settings below usually do not need changes ==================
 set -euo pipefail
 
-# Conda 激活脚本在 nounset 下可能读取未定义变量，激活期间临时关闭 nounset。
+# The Conda activation script may read undefined variables under nounset; temporarily disable nounset during activation.
 set +u
 source "$NEW_CONDA_ACTIVATE" "$NEW_CONDA_ENV"
 set -u
@@ -58,15 +58,15 @@ TRAIN_LOG="$LOG_DIR/train.log"
 
 python "$RUNTIME_CHECK_SCRIPT" --package-root "$PACKAGE_ROOT"
 if [[ ! -d "$DATA_ROOT/train" || ! -d "$DATA_ROOT/valid_m2_manual" || ! -d "$DATA_ROOT/valid_m2_mfa" || ! -d "$DATA_ROOT/valid_lmdb_mfa" ]]; then
-    echo "错误：DATA_ROOT 中缺少 train 或三组正式 valid LMDB：$DATA_ROOT" >&2
+    echo "Error: DATA_ROOT is missing train or one of the three official validation LMDBs: $DATA_ROOT" >&2
     exit 1
 fi
 if [[ ! -f "$EXPORT_SCRIPT" ]]; then
-    echo "错误：找不到 wav2vec 导出/校验脚本：$EXPORT_SCRIPT" >&2
+    echo "Error: wav2vec export/validation script not found: $EXPORT_SCRIPT" >&2
     exit 1
 fi
 
-# 第 1 阶段：缺少永久模型资产时，在原 Python 3.6 环境中自动导出。
+# Step 1: If the permanent model asset is missing, export it automatically in the original Python 3.6 environment.
 WAV2VEC_NEEDS_EXPORT="0"
 if [[ ! -s "$WAV2VEC_JIT_PATH" || ! -s "$WAV2VEC_META_PATH" ]]; then
     WAV2VEC_NEEDS_EXPORT="1"
@@ -89,10 +89,10 @@ fi
 
 if [[ "$WAV2VEC_NEEDS_EXPORT" == "1" ]]; then
     if [[ ! -d "$ORIGINAL_WAV2VEC_PROJECT" || ! -f "$WAV2VEC_CHECKPOINT" ]]; then
-        echo "错误：缺少永久资产，且找不到原 wav2vec 工程或 checkpoint。" >&2
+        echo "Error: permanent assets are missing, and the original wav2vec project or checkpoint could not be found." >&2
         exit 1
     fi
-    echo "[1/3] 导出冻结 wav2vec TorchScript 模型资产"
+    echo "[1/3] Export frozen wav2vec TorchScript assets"
     set +u
     source "$OLD_CONDA_ACTIVATE" "$OLD_CONDA_ENV"
     set -u
@@ -107,11 +107,11 @@ if [[ "$WAV2VEC_NEEDS_EXPORT" == "1" ]]; then
         --trace-device cuda
 fi
 
-# 第 2 阶段：回到训练环境，检查跨版本加载、SHA256 和变长输出。
+# Step 2: Return to the training environment and check cross-version loading, SHA256, and variable-length outputs.
 set +u
 source "$NEW_CONDA_ACTIVATE" "$NEW_CONDA_ENV"
 set -u
-echo "[2/3] 校验 wav2vec TorchScript 模型资产"
+echo "[2/3] Validate wav2vec TorchScript assets"
 CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" python "$EXPORT_SCRIPT" \
     --output-model "$WAV2VEC_JIT_PATH" \
     --output-meta "$WAV2VEC_META_PATH" \
@@ -119,13 +119,13 @@ CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" python "$EXPORT_SCRIPT" \
     --feature-dim 768 \
     --validate-only
 
-# 第 3 阶段：只解冻 wav2vec 最后两层并使用双学习率训练。
+# Step 3: Unfreeze only the last two wav2vec layers and train with two learning rates.
 mkdir -p "$CHECKPOINT_DIR" "$LOG_DIR"
 
-echo "[3/3] 开始训练音频停顿预测 V4 部分解冻实验"
-echo "训练参数：GPU=1，batch_size=$MAX_SENTENCES，update_freq=$UPDATE_FREQ，epoch=$MAX_EPOCH"
-echo "学习率：分类头=$LEARNING_RATE，wav2vec=$WAV2VEC_LEARNING_RATE，解冻最后=$UNFREEZE_LAST_N 层"
-echo "保存/验证间隔：$SAVE_INTERVAL/$VALIDATE_INTERVAL epoch，随机种子：$TRAIN_SEED"
+echo "[3/3] Start V4 partial-unfreezing experiment for audio pause prediction"
+echo "Training parameters: GPU=1, batch_size=$MAX_SENTENCES, update_freq=$UPDATE_FREQ, epochs=$MAX_EPOCH"
+echo "Learning rates: classifier=$LEARNING_RATE, wav2vec=$WAV2VEC_LEARNING_RATE, last layers to unfreeze=$UNFREEZE_LAST_N"
+echo "Save/validation intervals: $SAVE_INTERVAL/$VALIDATE_INTERVAL epochs; random seed: $TRAIN_SEED"
 cd "$CODE_ROOT"
 CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     python -u "$TRAIN_SCRIPT" "$DATA_ROOT" \
@@ -160,6 +160,6 @@ CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES_VALUE" \
     --skip-invalid-size-inputs-valid-test \
     2>&1 | tee "$TRAIN_LOG"
 
-echo "完成。checkpoint：$CHECKPOINT_DIR"
-echo "训练日志：$TRAIN_LOG"
-echo "下一步：运行 bash sh03_infer_pause_from_wav.sh"
+echo "Done. Checkpoints: $CHECKPOINT_DIR"
+echo "Training log: $TRAIN_LOG"
+echo "Next: run bash sh03_infer_pause_from_wav.sh"

@@ -95,7 +95,7 @@ def main():
                 if not records_equivalent(records[utt_id], record):
                     raise ValueError(f"发现内容冲突的重复 utt_id：{utt_id}")
                 duplicate_count += 1
-                # 输入顺序为旧单进程目录、再到新分片目录；优先保留后者的有效 WAV 路径。
+                # Inputs are ordered with the old single-process directory before the new shard directories; prefer a valid WAV path from the latter.
             records[utt_id] = record
 
     if leading_boundary_errors:
@@ -133,7 +133,7 @@ def main():
             source_index = row.get("source_index")
             if source_index in reports:
                 duplicate_source_report_count += 1
-            # 与 manifest 一样，旧目录在前、新分片在后，保留后一次完整运行的报告。
+            # As with the manifest, the old directory comes first and the new shards later; keep the report from the latest complete run.
             reports[source_index] = row
     with (output_root / "source_report.jsonl").open("w", encoding="utf-8", newline="\n") as handle:
         for source_index in sorted(reports, key=lambda value: (-1 if value is None else value)):

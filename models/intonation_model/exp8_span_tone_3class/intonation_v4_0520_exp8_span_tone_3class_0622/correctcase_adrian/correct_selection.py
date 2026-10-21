@@ -1,19 +1,19 @@
 """
-sample_demo.py — 从 correctcase.txt 按 tone 抽样做 demo
+sample_demo.py — Sample examples by tone from correctcase.txt
 
-规则:
-  - 纯句: 整句只含同一种 tone 标签 (rising/falling/flat) 才参与该类抽样
-    (同时含多种 tone 的句子被排除, 保证三类互不重叠)
-  - 每类随机抽 10 句
-  - 每类一个文件夹, 里面存:
-      <tone>/<tone>_samples.txt   : id <TAB> 带标签text
-      <tone>/wav/<匹配到的wav>     : 从 wav 源目录拷贝过来的 wav
+Rules:
+  - A sentence is eligible for a tone only if all its labels have that tone (rising/falling/flat).
+    Sentences with multiple tones are excluded so the three classes do not overlap.
+  - Randomly sample 10 sentences per class.
+  - Create one directory per class containing:
+      <tone>/<tone>_samples.txt   : id <TAB> labeled text
+      <tone>/wav/<matched wav>    : wav copied from the source directory
 
-id 匹配:
-  - correctcase.txt 的 id 是纯数字 (如 10010301)
-  - wav 文件名形如 EnUs_kaoshiyuan_male_50000332.wav, 用末尾数字匹配
+ID matching:
+  - IDs in correctcase.txt are numeric (e.g. 10010301).
+  - WAV names such as EnUs_kaoshiyuan_male_50000332.wav are matched by their trailing digits.
 
-用法:
+Usage:
     python sample_demo.py \\
         --correctcase /train29/tts/permanent/jyxu24/intonation_v4_0520_exp8_span_tone_3class_0622/correctcase_adrian/correctcase.txt \\
         --wav-dir     /yrfs5/tts/mezhao/kaoshiyuan_project/data/Adrian/24k_rename_wav \\
@@ -31,7 +31,7 @@ TAG_RE = re.compile(r"【\s*(Rising|Falling|Flat)\s*】", re.IGNORECASE)
 
 
 def num_key(s):
-    """提取末尾连续数字, 去前导零。'EnUs_..._50000332' -> '50000332'。"""
+    """Extract trailing consecutive digits and remove leading zeros: 'EnUs_..._50000332' -> '50000332'."""
     m = re.search(r"(\d+)\s*$", str(s))
     if not m:
         return str(s)
@@ -39,8 +39,8 @@ def num_key(s):
 
 
 def parse_correctcase(path):
-    """读 correctcase.txt -> list of (id, text, tone_set)。
-    每行: id<空白>text(含标签)。"""
+    """Read correctcase.txt into a list of (id, text, tone_set) tuples.
+    Each line contains id<whitespace>text (including tone labels)."""
     rows = []
     with open(path, "r", encoding="utf-8") as f:
         for raw in f:
@@ -52,12 +52,12 @@ def parse_correctcase(path):
             text = parts[1] if len(parts) > 1 else ""
             tags = {t.lower() for t in TAG_RE.findall(text)}
             rows.append((uid, text, tags))
-    print(f"[correctcase] 读取 {len(rows)} 句 from {path}")
+    print(f"[correctcase] Read {len(rows)} sentences from {path}")
     return rows
 
 
 def build_wav_index(wav_dir):
-    """扫描 wav 目录 -> {数字key: Path}。"""
+    """Scan the WAV directory and return {numeric_key: Path}."""
     wav_dir = Path(wav_dir)
     index = {}
     n_dup = 0
@@ -66,16 +66,16 @@ def build_wav_index(wav_dir):
         if key in index:
             n_dup += 1
         index[key] = p
-    print(f"[wav] 索引 {len(index)} 个 wav from {wav_dir}" + (f"  (末尾数字重复 {n_dup})" if n_dup else ""))
+    print(f"[wav] Indexed {len(index)} WAV files from {wav_dir}" + (f"  (duplicate trailing digits: {n_dup})" if n_dup else ""))
     return index
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--correctcase", required=True, help="correctcase.txt 路径")
-    parser.add_argument("--wav-dir", required=True, help="wav 源目录")
-    parser.add_argument("--out-dir", default=".", help="输出根目录 (默认当前路径)")
-    parser.add_argument("--n", type=int, default=10, help="每类抽样数")
+    parser.add_argument("--correctcase", required=True, help="Path to correctcase.txt")
+    parser.add_argument("--wav-dir", required=True, help="Source WAV directory")
+    parser.add_argument("--out-dir", default=".", help="Output root directory (defaults to the current directory)")
+    parser.add_argument("--n", type=int, default=10, help="Number of samples per class")
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
@@ -84,7 +84,7 @@ def main():
     rows = parse_correctcase(args.correctcase)
     wav_index = build_wav_index(args.wav_dir)
 
-    # 按纯句分类
+    # Classify by sentence only
     pure = {t: [] for t in TONES}
     for uid, text, tags in rows:
         if len(tags) == 1:
@@ -95,18 +95,18 @@ def main():
 
     for tone in TONES:
         pool = pure[tone]
-        print(f"\n[{tone}] 纯句池: {len(pool)} 句")
+        print(f"\n[{tone}] Pure-sentence pool: {len(pool)} sentences")
 
         k = min(args.n, len(pool))
         if k < args.n:
-            print(f"  [warn] 纯 {tone} 句只有 {len(pool)} 句, 不足 {args.n}, 全取")
+            print(f"  [warn] Only {len(pool)} pure {tone} sentences are available, fewer than {args.n}; using all")
         picked = random.sample(pool, k) if k > 0 else []
 
         tone_dir = out_root / tone
         wav_out = tone_dir / "wav"
         wav_out.mkdir(parents=True, exist_ok=True)
 
-        # 写 txt
+        # Write the text file
         txt_path = tone_dir / f"{tone}_samples.txt"
         n_wav_ok = 0
         n_wav_miss = 0
@@ -120,11 +120,11 @@ def main():
                     n_wav_ok += 1
                 else:
                     n_wav_miss += 1
-                    print(f"  [warn] id={uid} (key={key}) 找不到对应 wav")
-        print(f"  抽样 {len(picked)} 句 -> {txt_path}")
-        print(f"  wav 拷贝: {n_wav_ok} 成功, {n_wav_miss} 缺失 -> {wav_out}")
+                    print(f"  [warn] No matching WAV found for id={uid} (key={key})")
+        print(f"  Sampled {len(picked)} sentences -> {txt_path}")
+        print(f"  WAV copies: {n_wav_ok} succeeded, {n_wav_miss} missing -> {wav_out}")
 
-    print(f"\n[done] demo 抽样完成, 输出在 {out_root.resolve()}")
+    print(f"\n[done] Demo sampling complete; output is in {out_root.resolve()}")
 
 
 if __name__ == "__main__":

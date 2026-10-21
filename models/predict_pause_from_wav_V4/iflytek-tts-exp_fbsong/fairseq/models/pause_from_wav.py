@@ -70,7 +70,7 @@ class PauseFromWavModel(BaseFairseqModel):
 
     def configure_unfrozen_wav2vec_layers(self, last_n):
         if last_n <= 0:
-            raise ValueError("unfreeze-last-n 必须大于 0")
+            raise ValueError("unfreeze-last-n must be greater than 0")
         pattern = re.compile(r"(?:^|\.)encoder\.transformer\.layers\.(\d+)\.")
         indexed = []
         for name, parameter in self.wav2vec.named_parameters():
@@ -81,8 +81,8 @@ class PauseFromWavModel(BaseFairseqModel):
         if len(layer_indices) < last_n:
             examples = [name for name, _parameter in list(self.wav2vec.named_parameters())[:20]]
             raise RuntimeError(
-                "TorchScript 中无法定位足够的 encoder.transformer.layers；"
-                "检测到层={}，参数名前20项={}".format(layer_indices, examples)
+                "Could not locate enough encoder.transformer.layers in TorchScript; "
+                "detected layers={}, first 20 parameter names={}".format(layer_indices, examples)
             )
         selected = layer_indices[-last_n:]
         trainable_names = []
@@ -92,7 +92,7 @@ class PauseFromWavModel(BaseFairseqModel):
                 parameter._pause_lr_group = "wav2vec"
                 trainable_names.append(name)
         if not trainable_names:
-            raise RuntimeError("未找到需要解冻的 wav2vec 参数")
+            raise RuntimeError("No wav2vec parameters were found to unfreeze")
         print(json.dumps({
             "wav2vec_unfrozen_layer_indices": selected,
             "wav2vec_unfrozen_parameter_tensors": len(trainable_names),
@@ -146,7 +146,7 @@ class PauseFromWavModel(BaseFairseqModel):
     def normalize_word_frame_windows(
         starts, ends, word_lengths, feature_lengths, maximum_frame
     ):
-        """把词窗口限制在逐句有效帧内，并为极短真实词保留一个声学帧。"""
+        """Constrain each word window to the utterance's valid frames and retain one acoustic frame for very short real words."""
         if maximum_frame <= 0:
             raise ValueError("wav2vec returned no feature frames")
         if starts.shape != ends.shape or starts.dim() != 2:
@@ -165,8 +165,8 @@ class PauseFromWavModel(BaseFairseqModel):
         starts = torch.where(real_words, starts, torch.zeros_like(starts))
         ends = torch.where(real_words, ends, torch.ones_like(ends))
 
-        # 小于 wav2vec 帧移的合法词窗口可能在卷积降采样后映射为同一边界。
-        # 这种窗口使用其起点所在的一个有效帧，避免整批训练因单条极短词中断。
+        # A valid word window shorter than the wav2vec frame shift may map to the same boundary after convolutional downsampling.
+        # Use the single valid frame at its start for such a window, preventing one extremely short word from interrupting the entire batch.
         empty_real_windows = real_words & (ends <= starts)
         ends = torch.where(empty_real_windows, starts + 1, ends)
         return starts, ends
@@ -181,9 +181,9 @@ class PauseFromWavModel(BaseFairseqModel):
         **unused
     ):
         self.wav2vec.eval()
-        # 该资产在 CUDA 上 trace，TorchScript 内部的卷积长度计算及 attention
-        # mask 都与声学特征位于同一 CUDA 设备。因此 Fairseq 移动后的 waveform
-        # 与 waveform_lengths 均直接输入；不得单独将 lengths 移回 CPU。
+        # This asset is traced on CUDA, so TorchScript's convolution-length calculations and attention
+        # mask are on the same CUDA device as the acoustic features. Therefore, pass the waveform
+        # and waveform_lengths moved by Fairseq directly; do not move lengths back to the CPU separately.
         features, feature_lengths = self.wav2vec(waveform, waveform_lengths)
         if features.size(-1) != self.feature_dim:
             raise ValueError("wav2vec output feature dimension changed")
@@ -220,5 +220,5 @@ def pause_from_wav_w2v_unfreeze_last2(args):
 
 @register_model_architecture("pause_from_wav", "pause_from_wav_linear")
 def pause_from_wav_linear(args):
-    """保留旧 arch 名称，仅用于读取早期配置；数据接口仍为在线 waveform。"""
+    """Keep the legacy arch name for loading older configurations; the data interface still uses online waveforms."""
     pause_from_wav_w2v_unfreeze_last2(args)

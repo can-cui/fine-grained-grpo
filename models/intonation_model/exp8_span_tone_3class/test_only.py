@@ -1,20 +1,20 @@
 """
-test_only.py — exp8_3class: 独立测试脚本（三分类版本）
+test_only.py — exp8_3class: Standalone evaluation script (three-class version)
 
-功能:
-  加载训练好的 best model，在测试集上评估
-  输出 rising/falling/flat 各自的 P/R/F1/Accuracy + 总体指标 + 混淆矩阵
-  生成 result.json 和 summary.txt
+Functionality:
+  Load the best trained model and evaluate it on the test sets.
+  Report per-class P/R/F1/accuracy for rising/falling/flat, overall metrics, and confusion matrices.
+  Generate result.json and summary.txt.
 
-测试集:
-  - 路径需要在 TEST_PATHS 中配置
+Test sets:
+  - Configure paths in TEST_PATHS.
 
-用法:
+Usage:
     python test_only.py \\
-        --ckpt    <你填模型路径>             \\
-        --vocab   <你填 vocab.json 路径>     \\
-        --stats   <你填 stats.npz 路径>      \\
-        --output-dir <你填输出目录>
+        --ckpt    <path to model checkpoint> \\
+        --vocab   <path to vocab.json>       \\
+        --stats   <path to stats.npz>        \\
+        --output-dir <output directory>
 """
 import argparse
 import json
@@ -33,12 +33,12 @@ from model import IntonationV4Model
 
 
 TEST_PATHS = {
-    "Angel_vc":   "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Angel_F_CZ.json",  # 你自己填路径
-    "Matt_vc":   "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Matt_M_TY.json",  # 你自己填路径
-    "vc_all_train":   "/train29/tts/permanent/jyxu24/vc_data/split/train.json",  # 你自己填路径
+    "Angel_vc":   "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Angel_F_CZ.json",  # Fill in the path
+    "Matt_vc":   "/train29/tts/permanent/jyxu24/vc_data/vc_dataset/dataset_final_output_Matt_M_TY.json",  # Fill in the path
+    "vc_all_train":   "/train29/tts/permanent/jyxu24/vc_data/split/train.json",  # Fill in the path
     "vc_all_val": "/train29/tts/permanent/jyxu24/vc_data/split/test.json",
     "Felix": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Felix_data.json", 
-    "Lyra": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Lyra_data.json" # 你自己填路径
+    "Lyra": "/train29/tts/permanent/jyxu24/0605_new_golden_data_24k/Lyra_data.json" # Fill in the path
 }
 
 TONE_NAMES = ["rising", "falling", "flat"]
@@ -228,7 +228,7 @@ def evaluate_with_badcases(model, loader, device):
 
 def format_metrics(tag, metrics, bad_cases=None):
     lines = []
-    lines.append(f"\n[{tag}]  样本数: {metrics['n_sents']}, tone标注词数: {metrics['n_tone_words']}, break词数: {metrics['n_break_words']}")
+    lines.append(f"\n[{tag}]  Utterances: {metrics['n_sents']}, tone-labeled words: {metrics['n_tone_words']}, break words: {metrics['n_break_words']}")
 
     lines.append(f"  === Break (binary) ===")
     lines.append(f"    Accuracy  : {metrics['break_acc']:.4f}")
@@ -260,8 +260,8 @@ def format_metrics(tag, metrics, bad_cases=None):
         lines.append(f"      gt={TONE_NAMES[i]:<8} {vals}")
 
     lines.append(f"  === Joint ===")
-    lines.append(f"    word_joint_acc : {metrics['word_joint_acc']:.4f}  (有tone标注的词, break+tone 都对)")
-    lines.append(f"    word_all_acc   : {metrics['word_all_acc']:.4f}  (所有valid词)")
+    lines.append(f"    word_joint_acc : {metrics['word_joint_acc']:.4f}  (tone-labeled words with both break and tone correct)")
+    lines.append(f"    word_all_acc   : {metrics['word_all_acc']:.4f}  (all valid words)")
     lines.append(f"    sent_break_acc : {metrics['sent_break_acc']:.4f}")
     lines.append(f"    sent_tone_acc  : {metrics['sent_tone_acc']:.4f}")
     lines.append(f"    sent_joint_acc : {metrics['sent_joint_acc']:.4f}")
@@ -277,17 +277,17 @@ def format_metrics(tag, metrics, bad_cases=None):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ckpt", required=True, help="训练好的 best model checkpoint 路径")
-    parser.add_argument("--vocab", required=True, help="vocab.json 路径")
-    parser.add_argument("--stats", required=True, help="stats.npz 路径")
-    parser.add_argument("--output-dir", required=True, help="输出目录（保存 result.json 和 summary.txt）")
+    parser.add_argument("--ckpt", required=True, help="Path to the trained best-model checkpoint")
+    parser.add_argument("--vocab", required=True, help="Path to vocab.json")
+    parser.add_argument("--stats", required=True, help="Path to stats.npz")
+    parser.add_argument("--output-dir", required=True, help="Output directory for result.json and summary.txt")
     parser.add_argument("--batch-size", type=int, default=C.BATCH_SIZE)
     parser.add_argument("--encoder-type", type=str, default=C.ENCODER_TYPE,
                         choices=["bilstm", "bilstm_residual", "transformer"])
     parser.add_argument("--save-bad-cases", action="store_true",
-                        help="是否在 result.json 中保存 bad cases (默认不保存以减小文件)")
+                        help="Whether to save bad cases in result.json (disabled by default to keep the file small)")
     parser.add_argument("--save-tone-badcases-txt", type=str, default="",
-                        help="保存 tone bad cases 到单独的 txt 文件（留空则不保存）")
+                        help="Save tone bad cases to a separate TXT file (leave empty to disable)")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -309,7 +309,7 @@ def main():
     ckpt = torch.load(args.ckpt, map_location=device)
     model.load_state_dict(ckpt["state_dict"])
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"  参数量: {n_params / 1e6:.2f}M, encoder_type={args.encoder_type}")
+    print(f"  Parameter count: {n_params / 1e6:.2f}M, encoder_type={args.encoder_type}")
     if "epoch" in ckpt:
         print(f"  ckpt epoch: {ckpt['epoch']}, best_score: {ckpt.get('best_score', 'N/A')}")
 
@@ -324,13 +324,13 @@ def main():
 
     for name, path in TEST_PATHS.items():
         if not path or not Path(path).exists():
-            print(f"\n[skip] {name}: 文件不存在或路径为空 {path}")
+            print(f"\n[skip] {name}: File does not exist or path is empty: {path}")
             summary_lines.append(f"\n[{name}]  SKIPPED (file not found or empty path: {path})")
             continue
 
         print(f"\n[eval] {name} <- {path}")
         test_data = load_json(path)
-        print(f"  样本数: {len(test_data)}")
+        print(f"  Number of samples: {len(test_data)}")
 
         test_dataset = IntonationDataset(test_data, stats, tokenizer)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False,
@@ -363,7 +363,7 @@ def main():
         f.write("\n".join(summary_lines))
     print(f"[save] {summary_txt}")
 
-    # 保存 tone bad cases 到单独文件
+    # Save tone bad cases to a separate file
     if args.save_tone_badcases_txt:
         tone_badcases_path = Path(args.save_tone_badcases_txt)
         tone_badcases_path.parent.mkdir(parents=True, exist_ok=True)
@@ -412,7 +412,7 @@ def main():
 
         print(f"[save] tone bad cases -> {tone_badcases_path}")
 
-    print(f"\n[done] 测试完成")
+    print(f"\n[done] Evaluation complete")
 
 
 if __name__ == "__main__":
