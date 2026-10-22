@@ -1,25 +1,25 @@
-# Huper 音素识别
+# Huper Phoneme Recognition
 
-本目录提供离线 CTC 音素识别：输入 WAV，输出模型标签对应的音素序列。推理会把音频转成单声道 16 kHz，加载本地 Hugging Face `AutoProcessor` 和 `AutoModelForCTC`，执行贪心解码；无需联网下载模型。
+This directory provides offline CTC phoneme recognition. It accepts WAV audio and returns the phoneme sequence represented by the model labels. Inference converts audio to mono 16 kHz, loads a local Hugging Face `AutoProcessor` and `AutoModelForCTC`, and uses greedy decoding. It does not download model files from the network.
 
-## 脚本用途
+## Script Overview
 
-- `scripts/infer_huper.py`：单个 WAV 或 WAV 目录推理；每个音频输出一个同名 `.txt`。
-- `scripts/infer_huper_to_tsv.py`：批量推理并输出 `id / text / asr_phoneme_output` 三列 TSV；音频按文件名排序，文本文件须逐行对应。
-- `scripts/infer_huper_to_csv.py`：批量输出 CSV，可用含 `id,text` 列的 metadata CSV 填入文本。
-- `run_single.sh`、`run_batch.sh`：`infer_huper.py` 的快捷包装。
-- `run_label0_50_csv.sh`：TSV 推理包装；`run_huper_tsv.sh` 是旧实验快捷入口，默认参数仍含旧服务器绝对路径，建议直接使用通用包装。
-- `run_ky.sh`、`submit_huper_ky.sh`：KY 集群提交脚本，依赖集群命令和原服务器配置，不适用于普通本机终端。
-- `check_offline.sh`、`scripts/check_env_and_model.py`：检查离线环境/模型文件。
-- `text_to_huper_phones.py`：使用 CMU 发音词典将英文文本转为参考音素序列（G2P），不运行声学模型；输入输出路径需在脚本常量中配置。
+- `scripts/infer_huper.py`: infer on one WAV file or a WAV directory; writes a `.txt` file for each audio file.
+- `scripts/infer_huper_to_tsv.py`: batch inference to a three-column TSV (`id`, `text`, `asr_phoneme_output`). WAV files are sorted by filename and paired line-by-line with the text file.
+- `scripts/infer_huper_to_csv.py`: batch inference to CSV; an optional metadata CSV with `id` and `text` columns supplies transcript text.
+- `run_single.sh` and `run_batch.sh`: convenience wrappers around `infer_huper.py`.
+- `run_label0_50_csv.sh`: TSV inference wrapper. `run_huper_tsv.sh` is a legacy experiment wrapper whose defaults still contain old server paths; use the generic entry point instead.
+- `run_ky.sh` and `submit_huper_ky.sh`: KY cluster submission scripts; they depend on cluster commands and original server configuration and are not intended for a regular local terminal.
+- `check_offline.sh` and `scripts/check_env_and_model.py`: validate the offline environment and model files.
+- `text_to_huper_phones.py`: convert English text to reference phoneme sequences (G2P) with the CMU pronunciation dictionary; it does not run the acoustic model. Configure its input and output paths in the script.
 
-## 准备模型与环境
+## Model and Environment
 
-默认模型目录为 `models/phone_asr/model/huper_recognizer/`，但当前仓库实际提供的模型目录名为 `model/best_by_target_metrics_0623/`。后者包含 `model.safetensors`、配置、processor 和词表；运行时请通过 `--model-dir` 显式指定该目录。需安装兼容版本的 `torch`、`transformers`、`numpy`、`soundfile` 和 `scipy`（可参考 `environment_gpu.yml` 或 `requirements_min.txt`）。GPU 不可用时传入 `cpu`。
+The default model directory is `models/phone_asr/model/huper_recognizer/`, but the model included in this repository is under `model/best_by_target_metrics_0623/`. It contains `model.safetensors`, configuration, processor files, and vocabulary. Pass this directory explicitly with `--model-dir`. Install compatible versions of `torch`, `transformers`, `numpy`, `soundfile`, and `scipy` (see `environment_gpu.yml` or `requirements_min.txt`). Use `cpu` if CUDA is unavailable.
 
-## 直接推理
+## Direct Inference
 
-从仓库根目录直接运行单个文件或目录。请显式传入本仓库收录的模型目录（快捷脚本默认使用另一个目录名）：
+Run single-file or directory inference from the repository root, explicitly selecting the model included here (the shortcut wrappers default to a different model directory name):
 
 ```bash
 python models/phone_asr/scripts/infer_huper.py \
@@ -30,7 +30,7 @@ python models/phone_asr/scripts/infer_huper.py \
   --device cpu
 ```
 
-批量 TSV 推理（WAV 文件名排序后与文本逐行配对，行数必须一致）：
+For batch TSV inference, WAV files are sorted by filename and paired with one transcript line each. The number of lines must match the number of WAV files:
 
 ```bash
 python models/phone_asr/scripts/infer_huper_to_tsv.py \
@@ -40,4 +40,4 @@ python models/phone_asr/scripts/infer_huper_to_tsv.py \
   --output-txt /path/to/predictions.tsv --device cpu
 ```
 
-CSV 入口参数可用 `python models/phone_asr/scripts/infer_huper_to_csv.py --help` 查看。输出音素使用模型原生标签；TSV 入口会将 CTC 词边界符 `|` 替换为空格。
+See `python models/phone_asr/scripts/infer_huper_to_csv.py --help` for the CSV entry point options. The TSV entry point replaces the model's CTC word-boundary marker (`|`) with spaces.
