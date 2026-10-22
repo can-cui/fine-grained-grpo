@@ -18,10 +18,7 @@ STATS_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/in
 WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
 
-# # Path to calc_fbk (used to extract filter-bank features from 24 kHz audio)
-# CALC_FBK_DIR = "/train34/tts/permanent/cancui11/RL/original/src_format_code_silu_rms_split_rope_expand_lang_v3_code_en_edu_add_emo_tag_sep_ratio"
-# sys.path.insert(0, CALC_FBK_DIR)
-# from inference import calc_fbk
+
 def safe_log10(x: torch.Tensor, clip_val: float = 1e-7) -> torch.Tensor:
     """
     Computes the element-wise logarithm of the input tensor with clipping to avoid near-zero values.
@@ -72,7 +69,7 @@ import whisperx
 
 
 # Import the exp8 configuration and model
-sys.path.insert(0, "/train34/tts/permanent/cancui11/RL/models/exp8_span_tone_3class")
+sys.path.insert(0, "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class")
 import config3c as C
 from data_utils import WordTokenizer, load_stats
 from reward_model3c import IntonationV4Model, span_pool
@@ -194,7 +191,7 @@ class IntonationASR(torch.nn.Module):
         # self.whisperx_model = whisperx.load_model("large-v3", "cuda", compute_type="int8_float16")
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
+            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
         )
 
         self.max_frames = MAX_FRAMES
@@ -244,9 +241,6 @@ class IntonationASR(torch.nn.Module):
 
         if not torch.is_tensor(intos):
             intos = torch.tensor(intos, device=pred_tone.device)
-
-        assert len(pred_tone) == len(intos), /
-            f"Length mismatch: pred={len(pred_tone)}, gt={len(intos)}"
 
         valid_mask = (intos != -1)
         mismatch_count = (pred_tone[valid_mask] != intos[valid_mask]).sum().item()
@@ -323,7 +317,7 @@ class IntonationASR(torch.nn.Module):
         fbank = fbank.float().transpose(0, 1).unsqueeze(0).cuda()  # (1, frames, 80)
         # import pdb;pdb.set_trace()
         # Normalize filter-bank features
-        fbank = (fbank - torch.from_numpy(self.stats["fbank_mean"]).to(fbank.device).float()) / /
+        fbank = (fbank - torch.from_numpy(self.stats["fbank_mean"]).to(fbank.device).float()) / \
                 (torch.from_numpy(self.stats["fbank_std"]).to(fbank.device).float() + 1e-8)
 
         T = fbank.size(1)

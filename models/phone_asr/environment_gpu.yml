@@ -1,0 +1,17 @@
+name: phoneme_huper
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pytorch=2.5.1
+  - torchaudio
+  - pytorch-cuda=12.4
+  - numpy
+  - scipy
+  - soundfile
+  - psutil
+  - safetensors
+  - transformers
+  - huggingface_hub

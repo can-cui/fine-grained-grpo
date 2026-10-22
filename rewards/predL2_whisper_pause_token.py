@@ -16,7 +16,7 @@ WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3c
 
 # Path to the pause prediction model
 PAUSE_PACKAGE_ROOT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4"
-PAUSE_CHECKPOINT = "/ng-mix02/tts/permanent/yhchen70/model/pause_v4_experiments/pause_from_wav_w2v_unfreeze_last2/checkpoints/checkpoint_last.pt"
+PAUSE_CHECKPOINT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/checkpoints/checkpoint_last.pt"
 WAV2VEC_JIT_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.pt"
 WAV2VEC_META_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.meta.json"
 PAUSE_USER_DIR = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/pause_user_dir"
@@ -202,7 +202,7 @@ class PausePredWhisperToken(torch.nn.Module):
 
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
+            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
         )
 
         # Load the pause prediction model

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"self.mel_spec_func\\\\s*=\" /train34/tts/permanent/cancui11/RL/original/src_format_code_silu_rms_split_rope_expand_lang_v3_code_en_edu_add_emo_tag_sep_ratio/data/*.py)",
+      "Bash(grep -n \"self.preemphasis\\\\s*=\" /train34/tts/permanent/cancui11/RL/original/src_format_code_silu_rms_split_rope_expand_lang_v3_code_en_edu_add_emo_tag_sep_ratio/data/*.py)",
+      "Bash(grep -rn \"MelSpectrogram\\\\|mel_spec\" /train34/tts/permanent/cancui11/RL/original/src_format_code_silu_rms_split_rope_expand_lang_v3_code_en_edu_add_emo_tag_sep_ratio/data/*.py)"
+    ]
+  }
+}

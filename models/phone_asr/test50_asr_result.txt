@@ -1,0 +1,50 @@
+01	The new policy had a surprisingly positive effect.	DH IH N UW P AA L AH S IY HH AE DX AH S AH P R AY Z IH NG L IY P AA Z IH T IH V IH F EH T
+02	The bright lights created a dramatic visual affect.	DH AH B R AY L AY S K R IY EY DX IH D AH D R ER M AE DX IH K V IH ZH UW L AH F EH T
+03	Their marketing campaign achieved a powerful advertising effect.	DH EH ER M AA R K IH DX IH NG K M P EY N IH CH IY V D AH P AW R ER F L AE V ER T AY Z IH NG AH F AE T
+04	The artist used shadows for a mysterious affect.	DH IY AA R DX IH S T Y UW Z SH AE DX OW Z S F AA AH M IH S T IH R IY IH S IH F EH T
+05	Their cooperation generated an excellent team-building effect.	DH EH R ER K OW W AA P ER R EY SH IH N JH EH N ER R EY DX IH D IH N EH K S AH L IH N T IY M B IH EH L D IH NG IH F EH T
+06	The announcement produced an unexpected economic effect.	DH IY IH N AW N S M IH N P ER D UW S T IH N AH N IH K S P EH T IH D EH K IH N AA M IH K IH F EH T
+07	We underestimated the butterfly affect.	W IY AH N D ER EH S T IH M EY DX IH DH AH B AH DX ER F L AY IH F EH T
+08	The medicine had no visible effect.	DH AH M EH DX IH S IH N HH AE N OW V IH Z AH B L IH F EH T
+09	Their investment strategy delivered a profitable financial effect.	DH EH R ER IH N V EH S M IH N S T R AE DX IH JH IY D IH AH L IH V ER D AH P R AA F IH DX AH B L F AY N AE N CH L IH F EH T
+10	Bright decorations added a festive holiday effect.	B R AY D EH K ER R EY SH IH N Z AE DX IH DX AH F EH S T IH V HH AA L AH IH D EY IH F EH T
+11	Consistent practice can produce a noticeable learning affect.	K M N S IH S T IH N P R AE T IH S K IH N P R ER D UW S IH N OW DX IH S AH B L ER N IH NG IH F EH T
+12	The revised schedule produced a time-saving effect.	DH AH R ER V AY Z T S K EH JH UW L P ER D UW S T AH T AY M S EY V IH NG AH F EH T
+13	The surprise ending produced a memorable storytelling affect.	DH AH IY S AH P R AY Z EH N D IH NG P R ER D UW S T AH M EH M R ER AH B L S T AA R IY T EH L IH NG IH F EH T
+14	The upgrade delivered an impressive performance affect.	DH IY AH G R EY D IH AH L IH V ER D IH N IH M P R EH S IH V P ER F AA R M IH N S AH F EH T
+15	She said the package would arrive by noon.	SH IY S EH DH AH P AE K IH JH W UH DX AH R AY V B AY N UW N
+16	They play well despitethe heavy rain.	DH EY P L EY D W EH L D IH S B AY DH IH HH AE V IY R EY N
+17	I need a minute to think this through.	AY N IY DX AH M IH N IH T IH TH IH NG DH IH S TH R UW
+18	She wants to drink more water.	SH IY W AH N S T IH D R IH NG M AA R W AA DX ER
+19	He is a very good teacher.	HH IY IH Z AH V EH R IY G UH T IY CH ER
+20	Her favorite animal is a bear.	HH ER F EY V R ER IH T AE N IH M L IH Z AH B EH ER
+21	We kept the lights on until midnight.	W IY K EH DH AH L AY S AA N AH N T IH L M IH N AY T
+22	I bought the blue one instead of the red one.	AY B AA DH AH B L UW W AH N IH N S T EH DX AH V DH AH R EH D W AH N
+23	I wrote the address on the back of the receipt.	AY HH R OW DH IY AE D R EH S AA N DH AH B AE K AH V DH AH R IH S IY T
+24	The black book on the desk is mine.	DH AH B L AE B UH K AA N DH AH D EH AE S K IH Z M AY N
+25	Her snack after the meeting, disappeared quickly.	HH ER S N AE K AE F T ER DH AH M IY DX IH NG D IH S AH P Y IH ER K W IH K L IY
+26	I like dark coffee when the weather turns cold.	AY HH L AY D AA R K AA F IY W IH N DH AH W EH DH ER T ER N Z K OW L D
+27	Watch the step, because it's still wet.	W AA CH DH AH S T EH P B IH K AH Z IH S T IH L W EH T
+28	The lunch on my tray isn't for me.	DH AH L AH N CH AA N M AY T R EY IH Z IH N F AA R M IY
+29	Please bathethe dog before bringing him inside.	P L IY Z B EY DH AH D AA G B IH F AA R B R IH NG IH NG HH IH M IH N S AY D
+30	The fish in that tank are older than they look.	DH AH F IH SH IH N DH AE T AE NG K AA R OW L D ER DH IH N DH EY L UH K
+31	Don't worry, Alice. just pay as much as you can, and I'll make up the rest.	D OW W ER IY AE L AH S JH IH S P EY IH Z M AH CH IH Z Y UW K IH N IH N AA L M EY K AH DH AH R EH S T
+32	Ah, I wish I didn't touch it	AY W IH SH AY D IH N T AH CH IH T
+33	Okay, I just need to check on a couple of things.	OW K EY AY JH IH S N IY T IH CH EH K AA N AH K AH P L AH V TH IH NG K S
+34	Okay, but I'm afraid you won't be able to collect it until next Friday. We've been very busy recently.	OW K EY B AH DX AY M AH F R EY D Y UW W OW N B IY EY B L T UW K AH L EH T IH D IH N T IH L N EH K S T F R AY DX EY W IY V B IH N V EH R IY B IH Z IY R IY S IH N L IY
+35	Oh, that'll make a difference in the price. Hold on and let me find out	OW DH AE DX L M EY K IH D IH F R IH N S IH N DH AH P R AY S HH OW L D AA N IH N L EH M IY F AY N D AW L
+36	No, it has been rescheduled for next Monday.	N OW IH DX HH EH Z B IH N R IY S K EH JH L D F ER N EH K S T M AH N D EY
+37	Donna, have you booked the flight to London for me?	D AA N AH HH AE V Y UW B UH DH AH F L AY T UW L AH N D IH N F AA R M IY
+38	It wasn't hard at all. It was much easier than preparing for the test	IH HH W AH Z IH N HH AA R DX IH DX AA L IH W AH Z M AH CH IY Z IY ER DH IH M P R ER P EH R IH NG F ER DH IH T EH S
+39	Yeah, I can see that. Go and get relaxed	Y EH AY K IH N S IY DH AE G OW IH N G IH R IH L AE K S
+40	Really? Why would he do that	R IH L IY W AY W UH DX HH IY D UW DH AE T
+41	I didn't know I was invited	AY D IH N OW AY W AH Z IH N V AY DX IH D
+42	How was it	HH AW W AH Z IH T
+43	Well then, I'll just read here. Thank you.	W EH L DH EH N AA L JH IH S T R EH D HH IH ER TH AE NG K Y UW
+44	Okay, Jane, but be sure to come back to work next week.	OW K EY JH EY N B AH B IY SH ER T IH K AH M B AE T AH W ER K N EH K S T W IY K
+45	Watch out	W AA CH EH L
+46	Look, it's turning red! the chemical reaction is faster than I expected	L UH K IH S T ER N IH NG R EH D DH AH K EH M AH K L R IY AE EH K SH IH N IH Z S F AE S T ER DH IH N AY IH K S P EH T IH D
+47	Yes, I don't want to lose all my happy memories when I'm old	Y EH S AY D OW N W AH N T AH L UW Z AA L M AY HH AE P IY M EH M V ER IY Z W IH N AY M OW L D
+48	What do you do on the weekend	W AH D IY Y UW D UW AA N DH AH W IY K IH N D
+49	Oh? What's she doing? Picking flowers or reading books	OW W AH CH SH IY D UW IH NG P IH K IH NG F L AW ER Z AA R R IY DX IH NG B UH K S
+50	What are you thinking about	W AH DX AA R Y UW TH IH NG K IH NG AH B AW L

@@ -1,0 +1,21 @@
+### 音素级asr推理链说明
+##环境准备
+source /home4/intern/yhchen70/miniconda3/bin/activate phoneme_huper
+
+cd /yrfs5/tts/yhchen70/projects/phoneme_asr
+
+##运行推理脚本run_huper_tsv.sh
+##修改以下路径
+wav_dir，需推理的wav文件夹
+text_txt,音频文本txt路径（每一行对应音频的相应文本）
+output_txt，输出结果路径，输出txt的第一列为id（wav名），第二列为对应文本句，第三列为asr输出音素序列
+cuda、root_src可不用修改
+
+bash run_huper_tsv.sh
+
+##运行text_to_huper_phones.py，将纯文本转化为音素序列，得到Golden音素序列
+##修改以下路径
+INPUT_TXT_PATH，音频文本txt路径（每一行对应音频的相应文本）
+OUTPUT_TXT_PATH，输出结果路径
+
+python text_to_huper_phones.py

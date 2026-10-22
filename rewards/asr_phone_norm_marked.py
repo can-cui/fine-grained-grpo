@@ -274,7 +274,7 @@ class PhoneASR(torch.nn.Module):
 
         # Configure the offline environment
         root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        phoneme_root = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr"
+        phoneme_root = "Fine-Grained-GRPO/models/phone_asr"
         configure_offline_env(phoneme_root)
 
         # Load the phoneme ASR model

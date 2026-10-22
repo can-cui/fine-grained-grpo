@@ -359,7 +359,7 @@ class PhoneASRWordLevelSpeed(torch.nn.Module):
 
         # Configure the offline environment
         root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        phoneme_root = "/train34/tts/permanent/cancui11/RL/models/phoneme_asr"
+        phoneme_root = "Fine-Grained-GRPO/models/phone_asr"
         configure_offline_env(phoneme_root)
 
         # Load the phoneme ASR model
@@ -370,7 +370,7 @@ class PhoneASRWordLevelSpeed(torch.nn.Module):
 
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
+            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
         )
 
         # Speech-rate parameters (consistent with asr_phone_norm_marked_speed.py)

@@ -72,7 +72,7 @@ import whisperx
 
 
 # Import the exp8 configuration and model
-sys.path.insert(0, "/train34/tts/permanent/cancui11/RL/models/exp8_span_tone_3class")
+sys.path.insert(0, "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class")
 import config3c as C
 from data_utils import WordTokenizer, load_stats
 from reward_model3c import IntonationV4Model, span_pool
@@ -199,7 +199,7 @@ class IntonationASR(torch.nn.Module):
 
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='/train34/tts/permanent/cancui11/RL/models/whisperX-main/checkpoints'
+            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
         )
 
         self.max_frames = MAX_FRAMES

@@ -1,0 +1,7 @@
+numpy
+scipy
+soundfile
+psutil
+safetensors
+transformers
+huggingface_hub
