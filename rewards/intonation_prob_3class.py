@@ -10,13 +10,17 @@ import soundfile as sf
 import re
 
 # Path to the intonation prediction model (exp8)
-CKPT_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/checkpoints/best_exp8_span_tone_3class0625.pt"
-VOCAB_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/vocab.json"
-STATS_PATH = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/intonation_v4_0520_exp8_span_tone_3class_0622/stats.npz"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_ROOT = os.path.join(REPO_ROOT, "models")
+EXP8_ROOT = os.path.join(MODEL_ROOT, "intonation_model", "exp8_span_tone_3class")
+INTONATION_MODEL_ROOT = os.path.join(EXP8_ROOT, "intonation_v4_0520_exp8_span_tone_3class_0622")
+CKPT_PATH = os.path.join(INTONATION_MODEL_ROOT, "checkpoints", "best_exp8_span_tone_3class0625.pt")
+VOCAB_PATH = os.path.join(INTONATION_MODEL_ROOT, "vocab.json")
+STATS_PATH = os.path.join(INTONATION_MODEL_ROOT, "stats.npz")
 
 # Path to the WhisperX model
-WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
-WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
+WHISPERX_DIR = os.path.join(EXP8_ROOT, "whisperX-main")
+WHISPERX_MAIN_DIR = WHISPERX_DIR
 
 
 def safe_log10(x: torch.Tensor, clip_val: float = 1e-7) -> torch.Tensor:
@@ -69,7 +73,7 @@ import whisperx
 
 
 # Import the exp8 configuration and model
-sys.path.insert(0, "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class")
+sys.path.insert(0, EXP8_ROOT)
 import config3c as C
 from data_utils import WordTokenizer, load_stats
 from reward_model3c import IntonationV4Model, span_pool
@@ -191,7 +195,7 @@ class IntonationASR(torch.nn.Module):
         # self.whisperx_model = whisperx.load_model("large-v3", "cuda", compute_type="int8_float16")
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
+            "en", "cuda", model_dir=os.path.join(WHISPERX_DIR, "checkpoints")
         )
 
         self.max_frames = MAX_FRAMES

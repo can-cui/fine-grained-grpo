@@ -14,13 +14,15 @@ import re
 from difflib import SequenceMatcher
 
 # Path to the phoneme ASR model
-PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_ROOT = os.path.join(REPO_ROOT, "models")
+PHONEME_MODEL_DIR = os.path.join(MODEL_ROOT, "phone_asr", "model", "best_by_target_metrics_0623")
 TARGET_SAMPLE_RATE = 16000
 SAMPLE_RATE = 16000  # WhisperX uses 16kHz
 
 # Path to the WhisperX model
-WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
-WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
+WHISPERX_DIR = os.path.join(MODEL_ROOT, "intonation_model", "exp8_span_tone_3class", "whisperX-main")
+WHISPERX_MAIN_DIR = WHISPERX_DIR
 
 # Add the paths
 sys.path.insert(0, WHISPERX_DIR)
@@ -358,8 +360,7 @@ class PhoneASRWordLevelSpeed(torch.nn.Module):
         super().__init__()
 
         # Configure the offline environment
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        phoneme_root = "Fine-Grained-GRPO/models/phone_asr"
+        phoneme_root = os.path.join(MODEL_ROOT, "phone_asr")
         configure_offline_env(phoneme_root)
 
         # Load the phoneme ASR model
@@ -370,7 +371,7 @@ class PhoneASRWordLevelSpeed(torch.nn.Module):
 
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
+            "en", "cuda", model_dir=os.path.join(WHISPERX_DIR, "checkpoints")
         )
 
         # Speech-rate parameters (consistent with asr_phone_norm_marked_speed.py)

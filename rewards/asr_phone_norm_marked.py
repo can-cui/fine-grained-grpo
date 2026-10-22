@@ -14,7 +14,9 @@ import re
 from difflib import SequenceMatcher
 
 # Path to the phoneme ASR model
-PHONEME_MODEL_DIR = "Fine-Grained-GRPO/models/phone_asr/model/best_by_target_metrics_0623"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_ROOT = os.path.join(REPO_ROOT, "models")
+PHONEME_MODEL_DIR = os.path.join(MODEL_ROOT, "phone_asr", "model", "best_by_target_metrics_0623")
 TARGET_SAMPLE_RATE = 16000
 
 # Phoneme inventory used by the Huper phoneme model
@@ -273,8 +275,7 @@ class PhoneASR(torch.nn.Module):
         super().__init__()
 
         # Configure the offline environment
-        root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        phoneme_root = "Fine-Grained-GRPO/models/phone_asr"
+        phoneme_root = os.path.join(MODEL_ROOT, "phone_asr")
         configure_offline_env(phoneme_root)
 
         # Load the phoneme ASR model

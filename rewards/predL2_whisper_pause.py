@@ -11,15 +11,18 @@ import re
 import json
 
 # Path to the WhisperX model
-WHISPERX_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
-WHISPERX_MAIN_DIR = "Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_ROOT = os.path.join(REPO_ROOT, "models")
+INTONATION_ROOT = os.path.join(MODEL_ROOT, "intonation_model", "exp8_span_tone_3class")
+WHISPERX_DIR = os.path.join(INTONATION_ROOT, "whisperX-main")
+WHISPERX_MAIN_DIR = WHISPERX_DIR
 
 # Path to the pause prediction model
-PAUSE_PACKAGE_ROOT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4"
-PAUSE_CHECKPOINT = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/checkpoints/checkpoint_last.pt"
-WAV2VEC_JIT_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.pt"
-WAV2VEC_META_PATH = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/assets/wav2vec_small_last_layer_jit.meta.json"
-PAUSE_USER_DIR = "Fine-Grained-GRPO/models/predict_pause_from_wav_V4/pause_user_dir"
+PAUSE_PACKAGE_ROOT = os.path.join(MODEL_ROOT, "predict_pause_from_wav_V4")
+PAUSE_CHECKPOINT = os.path.join(PAUSE_PACKAGE_ROOT, "checkpoints", "checkpoint_last.pt")
+WAV2VEC_JIT_PATH = os.path.join(PAUSE_PACKAGE_ROOT, "assets", "wav2vec_small_last_layer_jit.pt")
+WAV2VEC_META_PATH = os.path.join(PAUSE_PACKAGE_ROOT, "assets", "wav2vec_small_last_layer_jit.meta.json")
+PAUSE_USER_DIR = os.path.join(PAUSE_PACKAGE_ROOT, "pause_user_dir")
 
 # Model configuration
 MAX_FRAMES = 600
@@ -202,7 +205,7 @@ class PausePredWhisper(torch.nn.Module):
 
         # Load the WhisperX alignment model
         self.align_model, self.align_metadata = whisperx.load_align_model(
-            "en", "cuda", model_dir='Fine-Grained-GRPO/models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints'
+            "en", "cuda", model_dir=os.path.join(WHISPERX_DIR, "checkpoints")
         )
 
         # Load the pause prediction model

@@ -1,15 +1,31 @@
 # Linguistically Informed Fine-Grained Reinforcement Learning for TTS
 
-This repository provides the resources accompanying the paper:
+This repository provides selected resources accompanying the paper:
 
 > **Linguistically Informed Fine-Grained Reinforcement Learning with Word-Level Optimization for Text-to-Speech**
 
-The repository collects the key resources used in the fine-grained reinforcement learning experiments, including **reward models and their pretrained weights, reward computation procedures, and manually constructed evaluation sets**.
+The repository shares **pretrained reward-model assets, reward computation code, and manually constructed evaluation sets** used in the fine-grained reinforcement learning experiments.
+
+## Scope and integration
+
+This repository does not provide a complete GRPO trainer or its reward-registration framework. The reward scripts and pretrained assets are intended to be integrated into your own GRPO training project. Import or copy the needed model assets and reward-calculation scripts into that project, then connect them through the registration and reward APIs provided by your GRPO framework.
+
+Run your training command from the repository root, the [`fine-grained-grpo`](https://github.com/can-cui/fine-grained-grpo) directory. The reward scripts resolve model paths relative to their own file locations, so they do not depend on the shell's current working directory.
+
+## WhisperX dependency
+
+WhisperX source code is not bundled in this repository. Install the package in the Python environment used by your GRPO trainer:
+
+```bash
+pip install whisperx
+```
+
+For source code, installation options, and the current CUDA/PyTorch setup guidance, see the upstream [WhisperX GitHub repository](https://github.com/m-bain/whisperX). This project provides the local forced-alignment checkpoint used by its reward scripts under `models/intonation_model/exp8_span_tone_3class/whisperX-main/checkpoints/`.
 
 ## Repository Contents
 
 ```text
-Fine-Grained-GRPO/
+fine-grained-grpo/
 ├── models/
 │   ├── intonation_model/
 │   ├── phone_asr/
@@ -24,8 +40,8 @@ Fine-Grained-GRPO/
 │   └── predL2_whisper_pause_token.py
 └── test/
     ├── intonation/
-    │   ├── tone80.txt
-    │   └── tone80_label.txt
+    │   ├── tone50.txt
+    │   └── tone50_label.txt
     ├── mos/
     │   └── mos50.txt
     ├── pause/
@@ -75,10 +91,10 @@ Except for the MOS set, each evaluation set contains **test texts and their corr
 
 #### `intonation/`
 
-Contains 80 test sentences for evaluating word-level intonation.
+Contains 50 test sentences for evaluating word-level intonation.
 
-- `tone80.txt`: original test sentences.
-- `tone80_label.txt`: test sentences annotated with prosodic boundaries where a rising or falling intonation is expected.
+- `tone50.txt`: original test sentences.
+- `tone50_label.txt`: test sentences annotated with prosodic boundaries where a rising or falling intonation is expected.
 
 For example:
 
